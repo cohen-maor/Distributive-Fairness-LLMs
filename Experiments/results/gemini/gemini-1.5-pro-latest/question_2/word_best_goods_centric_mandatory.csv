@@ -1,0 +1,1154 @@
+,Text,Good A,Good B,Good C,Good D
+0,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification:
+I have allocated Good A to Person 1 because they value it the most (5). I have allocated Good B to Person 2 because they value it the most (47). I have allocated Good C to Person 2 because they value it the most (48) and because they have already received Good B. I have allocated Good D to Person 3 because they value it the most (20) and because they have not yet received any goods.
+
+I believe that this allocation is fair because each person receives at least one good that they value highly, and no person is left without any goods.",1,2,3,1
+1,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+Justification: This allocation gives Person 1 the most valuable good for them, Good B and Person 2 the most valuable goods for them, Goods A and C. Person 3 gets the Good D which has the highest value to them. Discarding any good would result in a lower total value for the individuals.",1,2,3,None
+2,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+```
+**Justification**: This allocation is fair because it maximizes the total utility of the individuals involved. The utility of an individual is the sum of the values they have for the goods that they receive. In this case, the total utility is 45 +  5 = 50. Other allocations would result in a lower total utility. For example, if Good A were allocated to Person 1, the total utility would be 45 + 47 = 92 which is lower than the total utility of the allocation proposed above.",2,1,2,3
+3,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+---
+
+**Justification:**
+
+An important aspect of fairness is to consider the envy among the individuals, i.e., to avoid that they desire the allocation of others. For instance, if we allocate Good A to Person 1, Person 2 would envy the allocation of Person 1 because the value for Good A to Person 2 is 45, larger than the value of any good allocated to her.
+
+This allocation has the property that no person envies another person's allocation, i.e. for each person x and for each good y, the value of the good allocated to person x is not smaller than the value of good y to person x. The allocation was obtained using the following algorithm:
+
+1. For each person, determine the good with the largest value for her.
+2. Allocate this good to the person.
+3. Iterate until all goods have been allocated.
+
+In the first iteration the goods are allocated as follows: Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3. No person envies another person's allocation because the value of the allocated good is the largest for each person.",1,2,3,None
+4,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+**Justification:**
+
+The allocation I have chosen maximizes the total value of the goods for the three individuals. 
+
+- Person 1 gets Good B, which they value at 47, and discarding Good A, which they value at 5, resulting in a total value of 47. 
+- Person 2 gets Good A, which they value at 45, and Good C, which they value at 48, resulting in a total value of 93. 
+- Person 3 gets Good D, which they value at 20, discarding Good B, which they value at 25 and Good C, which they value at 32, resulting in a total value of 20. 
+
+The total value of this allocation is 47 + 93 + 20 = 160. This is higher than any other possible allocation.
+
+It is also worth noting that this allocation is envy-free, meaning that no person would prefer to have the allocation of any other person.",1,2,3,None
+5,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+This allocation is considered fair because it maximizes the sum of the values that the individuals receive.
+Person 1 receives Good B, which is worth 47 to them, and Good D, which is worth 3 to them, for a total value of 50.
+Person 2 receives Good A, which is worth 45 to them, and Good C, which is worth 48 to them, for a total value of 93.
+Person 3 receives Good D, which is worth 20 to them, and this is the highest value that they have for any of the goods.
+The total value of this allocation is 50 + 93 + 20 = 163.",2,1,3,3
+6,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification: The allocation provides each person with the good they value the most. Person 1 values Good A the most and gets it. Person 2 values Good C the most and also gets a good value from Good B, which is their second favorite. Person 3 values Good D the most and gets it. This allocation gives everyone their most preferred good and maximizes the total value of the allocation.",1,2,3,None
+7,"``` JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+I have allocated Good A to Person 1 because their value for Good A is the highest.
+I have allocated Good B and Good C to Person 2 because their values for these goods are much higher than the values of any other person (except for Good A of Person 1). 
+I have allocated Good D to Person 3 because the value they attached to it is higher than the values attached by the other two persons. This strategy of first considering the highest value of each person and then making allocations helps in arriving at a fair solution.",1,2,2,3
+8,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+Justification:
+
+We can see that Goods B and C are the most preferred goods for Person 2, with values of 48 and 45, respectively. So, it's fair to give both these goods to Person 2.
+
+Good A is the most preferred good for Person 2, with a value of 45, compared to Person 1, whose value for Good A is 5. It's fair to give Good A to Person 2.
+
+Finally, Good D is the most preferred good for Person 3, with a value of 20, compared to Person 1's value of 3 and Person 2's value of 2. So, it's fair to give Good D to Person 3.",1,2,2,3
+9,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+Justification:
+
+I will be using the Adjusted Winner procedure to determine the allocation. Each person's value for a good is divided by the total value of that good among all three people. For example, Person 1's value for Good A is 5, and the total value of Good A among all three people is 5 + 45 + 23 = 73. So Person 1's adjusted value for Good A is 5 / 73 = 0.0685.
+
+The results are as follows:
+- Person 1: Good A: 0.0685, Good B: 0.5068, Good C: 0.4623, Good D: 0.0267
+- Person 2: Good A: 0.6164, Good B: 0.0541, Good C: 0.5000, Good D: 0.0179
+- Person 3: Good A: 0.3151, Good B: 0.2691, Good C: 0.3377, Good D: 0.1786
+
+Person 1 has the highest adjusted value for Good A, so they get Good A. Person 2 has the highest adjusted value for Good B and Good C, so they get Good B and Good C. This leaves Good D for Person 3.",1,2,2,3
+10,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+My reasoning for this allocation is based on aiming to maximize the total value placed on the goods by the three individuals. By allocating Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3, the total value of the allocation is 45 + 47 + 48 + 20 = 160. This allocation results in the highest total value compared to other possible allocations.",1,2,3,None
+11,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+I decided to allocate Good A to Person 1 because their value for Good A (5) is higher than the values of the other two individuals (45 for Person 2 and 23 for Person 3). I allocated Good B to Person 1 for a similar reason - their value for Good B (47) is higher than the values of the other two individuals (5 for Person 2 and 25 for Person 3). I allocated Good C to Person 2 because their value for Good C (48) is higher than the values of the other two individuals (45 for Person 1 and 32 for Person 3). I allocated Good D to Person 3 because their value for Good D (20) is higher than the values of the other two individuals (3 for Person 1 and 2 for Person 2). I discarded Good A and Good D because their total value for all individuals is lower than the total value of Good B and Good C.",1,2,3,None
+12,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 1""
+}
+Justification:
+This allocation maximizes the total value of the goods for the three individuals. Person 1 receives Goods B and D, which they value at 47 and 3, respectively, for a total value of 50. Person 2 receives Goods A and C, which they value at 45 and 48, respectively, for a total value of 93. Person 3 does not receive any goods, as they value all of the goods less than the other two individuals.",1,1,2,3
+13,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+The justification for this allocation is based on the utilitarian principle of maximizing total utility.
+
+The total utility derived from the allocation is as follows:
+
+Person 1: 47 (Good B)
+Person 2: 45 (Good A) + 48 (Good C) = 93
+Person 3: 20 (Good D)
+
+The total utility is 47 + 93 + 20 = 160.
+
+This allocation results in the highest total utility among all the possible allocations. For example, if we allocate Good A to Person 1, Good B to Person 2, Good C to Person 1, and Good D to Person 2, the total utility would be 5 + 5 + 45 + 2 = 57, which is lower than the utility of the allocation I have selected.
+
+Therefore, the allocation that I have selected is the fairest because it maximizes the total utility of all the individuals involved.",1,2,3,1
+14,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+**Justification**
+
+My allocation is based on the utilitarian principle, which aims to maximize the total happiness or well-being of all individuals involved. In this case, the total value of the goods allocated to each person is as follows:
+
+* Person 1: 5 + 47 = 52
+* Person 2: 45 + 48 = 93
+* Person 3: 23 + 25 + 20 = 68
+
+As you can see, Person 2 receives the highest total value (93), followed by Person 1 (52) and Person 3 (68). By allocating the goods in this manner, we are maximizing the overall satisfaction among the individuals.
+
+Additionally, this allocation is also fair because each person receives at least one good that they value highly. Person 1 receives Good B, which they value at 47, Person 2 receives Goods A and C, which they value at 45 and 48 respectively, and Person 3 receives Good D, which they value at 20.
+
+Of course, other allocations may also be considered fair, depending on the specific criteria used for evaluation. However, the allocation I have chosen is one that I believe is both utilitarian and equitable.",1,2,3,1
+15,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+The allocation I have selected is the one that maximizes the total value of the goods for the three individuals. The total value of the goods for this allocation is 5 + 47 + 48 + 20 = 120. This is the highest total value that can be achieved with any allocation of the goods.",1,3,2,1
+16,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+This allocation gives each person the good that they value the most, while also ensuring that no one is left with nothing. Person 1 gets Good B, which they value the most (47), Person 2 gets Good A, which they value the most (45), Person 3 gets Good C, which they value the most (32), and Person 1 also gets Good D, which they value the second most (20). This allocation results in the highest total value for the goods (159) and is therefore the fairest.",2,1,3,1
+17,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+I have decided to allocate Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3. This allocation yields the following utilities:
+Person 1: 47
+Person 2: 93
+Person 3: 20
+Total: 160
+This allocation is fair because it gives each person at least one good that they value highly. Person 1 gets Good B, which is their most highly valued good. Person 2 gets Good A and Good C, which are their second and third most highly valued goods, respectively. Person 3 gets Good D, which is their most highly valued good. No one is left empty-handed, and everyone gets at least one good that they value.",1,2,3,1
+18,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+This allocation is fair because it maximizes the total value of the goods for the three persons. Person 1 gets the good with the highest value for them (Good B), Person 2 gets the goods with the second highest value for them (Good A and Good C), and Person 3 gets the good with the highest value for them (Good D).",2,1,3,None
+19,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Discard""
+}
+```
+To determine a fair allocation, I have used the following approach:
+1. Calculate the total value of all goods for each person.
+2. Allocate the good with the highest value for each person.
+3. If there are any remaining goods, allocate them to the person with the highest total value, until all goods are allocated.
+4. If there are still remaining goods, discard them.
+
+Using this approach, the total value of all goods for each person is:
+- Person 1: 5 + 47 + 45 + 3 = 100
+- Person 2: 45 + 5 + 48 + 2 = 100
+- Person 3: 23 + 25 + 32 + 20 = 100
+
+The good with the highest value for each person is:
+- Person 1: Good B
+- Person 2: Good A
+- Person 3: Good C
+
+After allocating these goods, there are no remaining goods, so the allocation is complete.",2,1,3,None
+20,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+The allocation above is fair because it gives each person the good that they value the most. Person 1 gets Good B, which is the good they value the most. Person 2 gets Good A and Good C, which are the two goods they value the most. Person 3 gets Good D, which is the good they value the most. This allocation gives each person the good that they value the most, which is the fairest possible outcome.",1,2,3,None
+21,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 2""
+}
+```
+I have allocated Good A to Person 2 because they value it the most out of all three individuals. I have allocated Good B to Person 1 because they value it the most out of all three individuals. I have allocated Good C to Person 3 because they value it the most out of all three individuals. I have allocated Good D to Person 2 because they value it the most out of the remaining two individuals.",2,1,3,None
+22,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+The allocation I have selected is based on the principle of maximizing the total value of the allocation for all individuals. I calculated the total value of each possible allocation and selected the allocation with the highest total value. I discarded Good A and Good D from consideration, since they were less valuable to the three individuals than the other two goods. The total value of the allocation I have selected is 167, which is the highest possible total value.",None,1,2,3
+23,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+In this allocation:
+ - **Person 1** receives Good B, which is their most preferred good and has a higher value for them than for the other persons.
+ - **Person 2** receives Good A and C, their two most preferred goods, which have higher values for them than for the other persons.
+ - **Person 3** receives Good D, which is their most preferred good and has a higher value for them than for the other persons.
+This allocation maximizes the sum of the values that each person receives and ensures that each person receives at least one of their preferred goods.",2,1,2,3
+24,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 2""
+}
+This allocation is fair because it maximizes the total value of the goods for all three individuals.
+The total value of the goods for Person 1 is 47 (Good B) + 3 (Good D) = 50.
+The total value of the goods for Person 2 is 45 (Good A) + 2 (Good D) = 47.
+The total value of the goods for Person 3 is 32 (Good C) + 20 (Good D) = 52.
+Therefore, this allocation results in the highest total value of the goods for all three individuals.",3,1,2,3
+25,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+Justification:
+Each good should be allocated to the person who values it the most. Using this rule, Person 2 gets Good A and Good C since they have the highest value for both of these goods. Person 1 gets Good B as they value it the most. Person 3 gets Good D as they value it the most and we have already allocated the other goods.",2,1,3,None
+26,"``` JSON
+{
+  ""Good A"": ""Person 2"",
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""Person 2"",
+  ""Good D"": ""Person 3""
+}
+```
+
+The allocation was chosen in order to maximize the total value of the goods for the three individuals. The total value of the goods for the three individuals is 151, which is the highest possible total value that can be achieved.",1,3,2,1
+27,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification:
+This allocation gives Person 1 their most valued good (Good B) as well as their second most valued good (Good A). This totals to a value of 52. Person 2 gets their first and third most valued goods (Good C and Good A), which totals to 93. Person 3 gets the remaining two goods, which total to 43. This is the allocation that is the most fair because it keeps the difference between the highest and lowest totals as small as possible.",2,1,2,3
+28,"```JSON
+{
+  ""Good A"": ""Person 2"", 
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""Person 2"",
+  ""Good D"": ""Person 3""
+}
+```
+
+I have chosen this allocation as the fairest because it gives each person the good that they value the most. Person 1 values Good B the most, Person 2 values Good A and Good C the most, and Person 3 values Good D the most. This allocation gives each person their most preferred good and ensures that no one is left empty-handed.",1,2,3,None
+29,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification:
+The allocation gives each person the highest valued good for them. Person 1 gets Good B, which is worth 47 to them. Person 2 gets Goods A and C, which are worth 45 and 48 to them, respectively. Person 3 gets Good D, which is worth 20 to them. This allocation maximizes the total value of the goods to the individuals, and it is also fair because each person gets their most preferred good.",1,2,3,None
+30,"```
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+This allocation is fair because it: 
+
+* Gives Good A to Person 2, who values it the most (45).
+* Gives Good B to Person 1, who values it the most (47).
+* Gives Good C to Person 2, who values it almost as much as Person 1 (Person 1 values Good C worth 45 while Person 2 values it for 48).
+* Gives Good D to Person 3, who values it the most (20).",1,2,3,None
+31,"```json
+{
+  ""Good A"": ""Person 2"",
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""Person 2"",
+  ""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+This allocation is fair because it:
+
+* **Maximizes the total value:** The total value of the allocation is 120 (45 + 47 + 48 + 20), which is the highest possible total value.
+* **Equitably distributes the value:** Each person receives a fair share of the total value. Person 1 receives 47 units of value (Good B), Person 2 receives 93 units of value (Good A + Good C), and Person 3 receives 20 units of value (Good D).
+* **Respects individual preferences:** The allocation takes into account the individual preferences of each person. For example, Person 2 values Good A and Good C the most, so they receive those goods.
+* **Avoids waste:** All of the goods are allocated to individuals, so none of them are wasted.",1,2,3,1
+32,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation maximizes the total value of the goods allocated to the individuals. The total value of the allocation is 5+47+48+20=120. Any other allocation would result in a lower total value.",1,2,3,1
+33,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+The allocation specified above maximises the total value of the goods for the involved persons, and the value each person receives is within 2 units from the value received by the others, so it can be considered fair.",2,1,2,3
+34,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+In this allocation, Person 1 receives Good B, which they value the most (47). Person 2 receives Goods A and C, which they value the second and third most (45 and 48, respectively). Person 3 receives Good D, which they value the most (20). This allocation maximizes the total value of the goods received by the individuals, which is 160 (47 + 45 + 48 + 20). This allocation is fair because it gives each person the good they value the most and ensures that no one receives a good that they value significantly less than the others.",1,2,3,None
+35,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+I allocated Good A and Good C to Person 2 because this person values these goods more than others, and this ensures a higher total valuation of the goods. I allocated Good B to Person 1 because this person values it the most and it is the only good they value more than any other person. Finally, I allocated Good D to Person 3 because this person values it more than any other person, and although it's the good with least total value, it still contributes to achieving a fair distribution.",1,2,3,None
+36,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+The allocation was made by finding the maximum value for each good and allocating it to the person who values it the most. This resulted in the following allocation:
+- Good A: Person 2 with a value of 45
+- Good B: Person 1 with a value of 47
+- Good C: Person 2 with a value of 48
+- Good D: Person 3 with a value of 20",2,1,2,3
+37,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+The allocation above is considered fair because it maximizes the total value of the goods to the individuals involved. Person 1 gets their most preferred good, which is Good B, and their second most preferred good, which is Good A. Person 2 gets their most preferred good, which is Good C, and their second most preferred good, which is Good A. Person 3 gets their most preferred good, which is Good D, and their second most preferred good, which is Good C. This allocation results in a total value of 172, which is the highest possible total value that can be achieved without discarding any of the goods.",2,1,3,2
+38,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+This allocation is considered fair because it gives each person the good that they value most. Person 1 values Good B the most, Person 2 values Good A and Good C the most, and Person 3 values Good D the most. By allocating the goods in this way, we are ensuring that each person gets the good that they will benefit from the most.",1,2,3,None
+39,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification: This allocation maximizes the total value of the goods to the individuals. Person 1 values Good B the most (47), Person 2 values Good A and Good C the most (45 and 48), and Person 3 values Good D the most (20). By allocating the goods in this way, we ensure that each person receives the good they value the most, resulting in a fair and efficient distribution.",1,2,3,None
+40,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+The allocation above maximizes the total value of the goods for the three individuals. We can calculate the total value of the goods for each individual as follows:
+
+* **Person 1:** Good A (5) + Good B (47) + Good C (45) + Good D (3) = 100
+* **Person 2:** Good A (45) + Good B (5) + Good C (48) + Good D (2) = 100
+* **Person 3:** Good A (23) + Good B (25) + Good C (32) + Good D (20) = 100
+
+As you can see, the total value of the goods is the same for each individual, which means that the allocation is fair.
+
+In addition, this allocation is also efficient, which means that it is not possible to reallocate the goods in a way that would make one individual better off without making another individual worse off.",1,2,3,1
+41,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+
+Justification:
+The allocation assigns the highest valued good to each person, which is considered a fair approach. Person 1 receives Good B, which they value most, Person 2 receives Good A, which they value most and Person 3 receives Good C, which they value most. Furthermore, the allocation has the added fairness that Person 1 also receives Good D, which is their second-highest valued good.",2,1,3,None
+42,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+ This allocation gives Person 1 47 utils, Person 2 98 utils, and Person 3 45 utils. This is the most equitable allocation, as it gives each person a similar amount of value from the goods.",1,2,3,None
+43,"```JSON
+{
+ ""Good A"": ""Person 2"",
+ ""Good B"": ""Person 1"",
+ ""Good C"": ""Person 2"",
+ ""Good D"": ""Person 3""
+}
+```
+This allocation is considered fair because it maximizes the total happiness of the individuals involved. Each person receives at least one of their most valued goods, and none of the goods are discarded.
+
+* Person 1's total value for the goods they receive is 5 + 47 = 52.
+* Person 2's total value for the goods they receive is 45 + 48 = 93.
+* Person 3's total value for the good they receive is 20.
+
+Overall, this allocation results in a total happiness of 165, which is the highest possible total happiness that can be achieved with this set of goods and preferences.",2,1,2,3
+44,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+My reasoning is as follows: If Person 1 receives Good B, Person 2 receives Goods A and C, and Person 3 receives Good D, then their respective total values are:
+- Person 1: 52
+- Person 2: 98
+- Person 3: 45
+
+This allocation is fair because it gives each person a total value that is close to the average total value of 65. Discarding any of the goods or allocating them differently would result in a greater disparity in the total values received by the persons.",2,1,3,3
+45,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+The allocation is determined by comparing the values that each person assigns to each good. The person who values a good the most should receive that good. In case of a tie, the good is allocated to the person whose total value for all goods is higher.
+
+* **Good A:** Person 2 values Good A the most (45), so Person 2 gets Good A.
+* **Good B:** Person 1 values Good B the most (47), so Person 1 gets Good B.
+* **Good C:** Person 2 values Good C the most (48), so Person 2 gets Good C.
+* **Good D:** Person 3 values Good D the most (20), and Person 1 and Person 2 value Good D the least (2 and 3, respectively), so Person 3 gets Good D.
+
+This allocation ensures that each person receives the good that they value the most, and that the total value of the goods allocated to each person is as equal as possible. It is a fair allocation because it takes into account the preferences of all three individuals.",1,2,3,None
+46,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+I believe that this allocation is fair because it maximizes the total value of the goods for the three individuals.
+
+* Person 1 gets Good B, which they value at 47.
+* Person 2 gets Good A, which they value at 45, and Good C, which they value at 48 for a total of 93.
+* Person 3 gets Good D, which they value at 20, and Person 3's leftover value from not getting the other goods would be 23 + 25 + 32 = 80 for a total of 100.
+
+This allocation results in a total value of 47 + 93 + 100 = 240, which is the highest possible total value.",3,1,2,3
+47,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+The allocation I have selected is the one that maximizes the total sum of values that the goods provide to the individuals. 
+
+- Person 1 values Good A at 5, Good B at 47, and Good C at 45, so for him/her the most valuable good is Good B.
+- Person 2 values Good A at 45, Good B at 5, and Good C at 48, so for him/her the most valuable good is Good C.
+- Person 3 values Good A at 23, Good B at 25, and Good C at 32, so for him/her the most valuable good is Good D.
+
+If we allocate the goods according to the preferences of the individuals, we would get the following allocation: Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3.
+
+The total sum of values that the goods provide to the individuals in this allocation is: 45 + 47 + 48 + 20 = 160.
+
+This allocation is also fair in the sense that it does not favor any individual over the others. Each individual receives the good that he/she values the most.",1,2,3,1
+48,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+```
+This allocation is fair because it gives each person the good that they value the most. Person 1 gets Good B, which they value at 47. Person 2 gets Good A, which they value at 45. Person 3 gets Good C, which they value at 32. And Person 1 gets Good D, which they value at 3. This allocation also ensures that no good is discarded, which is also fair.",1,2,3,None
+49,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+First, we can allocate Good B to Person 1 because it has the highest value for them (47) and the lowest value for the other two individuals (5 and 25).
+
+Next, we can allocate Good D to Person 3 because it has the highest value for them (20) and the lowest value for the other two individuals (3 and 2).
+
+Then, we can allocate Good A to Person 2 because it has the highest value for them (45) and a relatively low value for the other two individuals (5 and 23).
+
+Finally, this leaves Good C to be allocated to Person 2 because they have the highest value for it (48) compared to the other two individuals (45 and 32).",3,1,2,3
+50,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification:
+This allocation leads to the highest total value for the goods. Person 2 values Good A and Good C the most, so allocating those goods to them maximizes the value for those goods. Person 1 values Good B the most, so allocating that good to them maximizes the value for that good. Person 3 values Good D the most, so allocating that good to them maximizes the value for that good. The total value of this allocation is 5+5+48+20 = 128, which is higher than any other possible allocation.",2,1,2,3
+51,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 1""
+}
+```
+Justification: The allocation proposed is the one that maximizes the total value for the individuals involved. The total value of the allocation is 120, which is the sum of the values that each person gets from the goods that they are allocated. This is the highest possible total value that can be achieved, given the values that each person has for the goods.",2,1,3,1
+52,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 2""
+}
+Justification: The allocation proposed maximizes the total value of the goods allocated. The total value of the allocation is 5 + 47 + 32 + 2 = 86.",1,2,3,None
+53,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+```
+
+Person 1 values Good B the most (47). Person 2 values Good A the most (45). Person 3 values Good C the most (32). Person 1 also values Good D the most (3). So, it seems fair to allocate Good B to Person 1, Good A to Person 2, and Good C to Person 3. This leaves Good D to be allocated to the only person who values it, Person 1.",2,1,3,None
+54,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+This allocation is fair because it maximizes the total value of the goods allocated to the individuals. The total value of the goods allocated to Person 1 is 52 (Good B: 47 + Good C: 5). The total value of the goods allocated to Person 2 is 98 (Good A: 45 + Good C: 48 + Good D: 5). The total value of the goods allocated to Person 3 is 43 (Good D: 20 + Good C: 23). By allocating the goods in this way, we ensure that each individual receives a fair share of the total value of the goods.",1,2,3,1
+55,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+**Justification**:
+
+The allocation is fair to all the three individuals:
+- Person 1 gets Good B that has the highest value (47) for him. Also, he gets Good A, which has value 5 for him. So, his overall utility is 52.
+- Person 2 gets Good A that has the highest value (45) for him. Also, he gets Good C, which has value 48 for him. So, his overall utility is 93.
+- Person 3 gets Good D that has the highest value (20) for him. Also, he gets Good C, which has value 32 for him. So, his overall utility is 52.",1,2,3,None
+56,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+To justify this allocation, let's compute the total value for each person according to this proposed allocation:
+Person 1: 5 + 47 + 0 + 0 = 52
+Person 2: 45 + 0 + 48 + 2 = 95
+Person 3: 0 + 0 + 0 + 20 = 20
+As you can see, Person 2 receives the highest total value (95), even though they only received two out of the four goods. This is because they have the highest individual value for Good A and Good C. Person 1 receives the second highest total value (52), even though they received three out of the four goods. This is because they have the highest individual value for Good B. Person 3 receives the lowest total value (20), but they still receive the good that they value the most (Good D). Overall, this allocation ensures that each person receives a fair share of the goods, based on their individual preferences and values.",1,3,2,3
+57,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification: The total value of the goods allocated to each person is as follows: Person 1: 52, Person 2: 98, Person 3: 45. This allocation is fair because it results in the smallest difference in the total value of goods allocated to each person.",1,2,3,1
+58,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+This allocation is the fairest because it gives each person their most preferred good and one of their second or third most preferred goods. Person 1 gets Good B, which is their highest-valued good, and Good A which is their second-highest-valued good. Person 2 gets Good A,  which is their highest-valued good, and Good C, which is their second-highest-valued good. Person 3 gets Good D, which is their highest-valued good, and Good C, which is their third-highest-valued good.",1,2,3,None
+59,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation is the fairest because it maximizes the total value of the goods to the individuals and it ensures that each person receives at least one good. The total value of the goods to the individuals is 5 + 47 + 48 + 20 = 120. Person 1 gets Good B, which has a value of 47 to them, Person 2 gets Good A and Good C, which have a total value of 45 + 48 = 93 to them, and Person 3 gets Good D, which has a value of 20 to them.",1,2,3,1
+60,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+This allocation maximizes the total value of the goods to the three individuals. Person 2 has the highest value for both Good A and Good C, so they receive those goods. Person 1 has the highest value for Good B, so they receive that good. Person 3 has the highest value for Good D, so they receive that good.
+
+The total value of this allocation is 120, which is the highest possible total value. Person 1 receives 47 value, Person 2 receives 49 value, and Person 3 receives 24 value.",1,3,2,Discard
+61,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+My reasoning is that this allocation maximizes the total value of the goods for the three individuals. Person 1 values Good B the most, so they get Good B. Person 2 values Goods A and C the most, so they get Goods A and C. Person 3 values Good D the most, so they get Good D. This allocation results in a total value of 122 for the three individuals, which is the highest possible total value.",1,3,2,3
+62,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+In this allocation, Person 1 receives Good B, which is the good they value the most, while Person 2 receives Goods A and C, which are the goods they value the most and second-most, respectively. Person 3 receives Good D, as it is the good that they value the most among the remaining goods. Considering these values and how important each good is for each person, this alocation considers all the individual preferences and provides a fair distribution.",2,1,2,3
+63,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+This allocation is considered fair because it maximizes the total value of the goods allocated to the individuals. The total value of the goods allocated to Person 1 is 52 (47 for Good B and 5 for Good A), the total value of the goods allocated to Person 2 is 98 (48 for Good C, 45 for Good A, and 5 for Good B), and the total value of the goods allocated to Person 3 is 45 (25 for Good B, 20 for Good D, and None for Good A and Good C).",2,1,2,3
+64,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+In this allocation, Person 1 receives Good B, which they value the most. Person 2 receives Good A and Good C, which they value the second and third most, respectively. Person 3 receives Good D, which they value the most. This allocation is fair because it gives each person at least one good that they value highly, while also ensuring that no one person receives all of the most valuable goods.",1,2,3,None
+65,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+The proposed allocation maximizes the sum of the values that the three people attach to the goods they receive. This can be interpreted as maximizing the total 'happiness' or 'well-being' derived from the allocation.
+
+* Person 1 receives Good B, which they value at 47.
+* Person 2 receives Good A, which they value at 45, and Good C, which they value at 48, for a total of 93.
+* Person 3 receives Good D, which they value at 20, which is the highest value they place on any of the goods.
+
+The total value of the allocation is 47 + 93 + 20 = 160.
+
+This allocation is fair because it gives each person a good that they value highly, and it results in the highest possible total value of the allocation.",1,2,2,3
+66,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation is fair because it maximizes the total value of the goods for the three people. Person 2 gets the two goods that they value the most, Person 1 gets the good that they value the most, and Person 3 gets the good that they value the most out of the remaining goods.",1,2,3,None
+67,"{
+ ""Good A"": ""Person 2"",
+ ""Good B"": ""Person 1"",
+ ""Good C"": ""Person 2"",
+ ""Good D"": ""Person 3""
+}
+
+The allocation specified above is the fairest because it maximizes the total value of the allocation for the three people involved. The total value of the allocation is 122, which is the sum of the values that each person gets from the goods they are allocated. This allocation is also fair because it gives each person at least one good that they value relatively highly. Person 1 gets Good B, which they value at 47, Person 2 gets Good A, which they value at 45, and Person 3 gets Good D, which they value at 20.",1,2,3,None
+68,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+This allocation is fair because it results in the highest total value being allocated to these 3 individuals. Each good is allocated to the person who values it the most. Person 1 does not get Good A because Person 2 values Good A 40 more than Person 1. Person 2 does not get Good B because Person 1 values Good B 42 more than Person 2. Similarly, Person 1 does not get Good C and Person 3 does not get Good D because other individuals value these goods more than them.",1,3,2,None
+69,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+The allocation was determined based on the following reasoning:
+
+1. Person 1 values Good B more than anyone else, and Person 2 values Good C more than anyone else. Hence, it is fair to allocate Good B to Person 1, and Good C to Person 2.
+
+2. Person 2 values Good A more than Person 3, and Person 3 values Good D more than Person 2. Therefore, it is fair to allocate Good A to Person 2, and Good D to Person 3.",1,3,2,Discard
+70,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+Using the utilitarian approach, I aim to maximize the total value assigned to the goods by the individuals. Under this allocation:
+
+Person 1: 47 (Good B)
+Person 2: 45 (Good A) + 48 (Good C) = 93
+Person 3: 20 (Good D)
+
+Total value: 47 + 93 + 20 = 160
+
+This allocation results in the highest total value among all possible allocations.",1,2,3,1
+71,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+**Justification:**
+This is a difficult problem with no perfect solution. There are several different approaches to the problem and the outcome may depend on the weight that is attached to different factors.
+One approach is to maximize the sum of utilities or total value for all of the goods. This allocation follows this approach. The total value of the goods is 152. The allocation I have chosen results in a total value of 115.
+Another approach is to find an allocation that is fair to each individual. This could mean giving each person an allocation that is equal to their average value for the four goods. However, this is not possible without dividing the goods into fractional amounts.
+A third approach is to minimize the maximum regret, or, the amount that an individual values the good that they did not receive the most. The allocation I have chosen results in a maximum regret of 22 which is less than the maximum regret for all other allocations. 
+Finally, it is also possible to consider the envy of each individual, or the amount that an individual values the allocation that another individual received. The allocation I have chosen results in an envy of 24 for Person 1, an envy of 10 for Person 2, and an envy of 15 for Person 3. This is the lowest envy of all of the possible allocations.
+Overall, I believe that the allocation I have chosen is the fairest because it achieves several objectives, including maximizing the total value of the goods, minimizing the maximum regret, and minimizing the envy for each individual.",1,2,3,1
+72,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+The allocation above results in the highest total value for all three individuals combined:
+- Person 1 receives Good B, which they value at 47.
+- Person 2 receives Good A, which they value at 45, and Good C, which they value at 48. Their total value is 93.
+- Person 3 receives Good D, which they value at 20.
+
+This allocation is fair because it gives each person goods that they value relatively highly, while also maximizing the overall value for the group as a whole.",1,2,3,None
+73,"{
+  ""Good A"": ""Person 2"",
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""Person 2"",
+  ""Good D"": ""Person 3""
+}
+
+This allocation is fair because it gives each person the good that they value the most. Person 1 values Good B the most, so they get Good B. Person 2 values Good A and Good C the most, so they get Good A and Good C. Person 3 values Good D the most, so they get Good D.",1,2,3,None
+74,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+Justification:
+
+This allocation gives Person 1 their most valued good, Good B. It also gives Person 2 their most valued good, Good C. Person 3 receives Good D, which is their most valued good of the remaining goods. Good A is allocated to Person 1 because it is their most valued good of the remaining goods. This allocation ensures that each person receives at least one of their most valued goods, while also ensuring that the total value of the goods allocated to each person is as close as possible.",1,2,3,None
+75,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+The total value of the allocation is 122.
+This allocation is fair because it gives each person at least one good that they value highly. 
+Person 1 gets Good B, which they value the most. 
+Person 2 gets Good A and Good C, which they value the most and second most, respectively. 
+Person 3 gets Good D, which they value the most. 
+No other allocation can give each person a good that they value more highly.",1,2,3,None
+76,"```JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+This allocation achieves the highest total value (120) among all possible allocations.
+
+In particular, Person 1 gets Good B, which has the highest value to Person 1 (47) among the goods which are not discarded.
+
+Person 2 gets Good A and Good C, which are the two goods with the highest value to Person 2 (45 and 48) among the goods that remain after Person 1 has been allocated a good.
+
+Person 3 gets Good D, which has the highest value to Person 3 (20) among the remaining goods.",2,1,3,2
+77,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+Justification:
+My goal is to distribute the goods in a way that maximises the total value for all three people. In total, the value for Good A is 73. Giving it to Person 1, who values it the most (5), yields the highest benefit. Similarly, the total value for Good B is 77 and giving it to Person 2, who values it the most (47), provides the highest benefit. The same logic can be applied to Good C, which has the highest total value of 125 and Person 2 values it the most (48). Lastly, Good D has a total value of 45 and Person 3 values it the most (20). Allocating it to Person 3 maximises its value.",1,2,2,1
+78,"```
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+I have allocated the goods in a way that maximizes the total value for the individuals. Person 1 gets Good B, which is their highest-valued good. Person 2 gets Goods A and C, which are their two highest-valued goods. Person 3 gets Good D, which is their highest-valued good. This allocation results in a total value of 122 for the three individuals, which is the highest possible total value.",1,3,2,None
+79,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+**Justification:** The allocation proposed maximizes the sum of the values that the individuals assign to the goods they receive. With this allocation, the total value of the allocation is 120, which is higher than any other possible allocation. Person 1 values Good B the most, Person 2 values Good A and Good C the most, and Person 3 values Good D the most, so this allocation gives the goods to the people who value them the most.",2,1,2,3
+80,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 2""
+}
+In this allocation, Person 1 receives their highest-valued item (Good B), and their second highest-valued item (Good A). Person 2 receives their highest-valued item (Good C), and their second highest-valued item (Good D). Person 3 receives their highest-valued item (Good C), and their second highest-valued item (Good D). This outcome is fair because it gives each person their most preferred or second most preferred goods.",1,2,3,None
+81,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+Justification: This allocation has the highest utilitarian value, calculated by summing the values each person places on the goods they receive. Person 1 gets their highest-valued good, Good B, and two other goods with relatively high value. Person 2 gets their highest-valued good, Good C, and another good with the highest value to them, Good A. Person 3 gets their highest-valued good, Good D, while no other good has a particularly high value to them.",1,2,3,None
+82,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+<b>Justification:</b>
+The allocation I have chosen is the one that maximizes the sum of the values that the individuals place on the goods. This is a common measure of fairness in allocation problems.
+
+Here is the value of the allocation to each person:
+
+Person 1: 47 (Good B)
+Person 2: 93 (Good A + Good C)
+Person 3: 20 (Good D)
+
+As you can see, this allocation gives Person 2 the highest value, but it also gives Person 1 and Person 3 positive values. This is the allocation that I consider to be the fairest.",2,1,2,3
+83,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+I allocated Good A to Person 2 because they value it the most (45). I allocated Good B to Person 1 because they value it the most (47). I allocated Good C to Person 2 because they value it the most (48). Finally, I allocated Good D to Person 3 because they value it the most (20) among the remaining individuals.",2,1,2,3
+84,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+I have chosen this allocation because it maximizes the total value of the goods for all three individuals. Person 1 values Good B the most, and Good A the second most, so they receive those goods. Person 2 values Good C the most, and Good A the second most, so they receive those goods. Person 3 values Good D the most, and Good C the second most, so they receive those goods. This allocation results in a total value of 120 for the three individuals, which is the highest possible total value.",1,2,3,None
+85,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation is fair because it gives each person the good that they value the most, while also ensuring that each person receives at least one good. Person 1 gets Good B, which they value the most. Person 2 gets Goods A and C, which they value the most and second most, respectively. Person 3 gets Good D, which they value the most. No goods are discarded in this allocation.",1,2,3,None
+86,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+One possible allocation is to give Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3. This allocation has a total value of 122, which is the highest possible total value. It is also fair because each person receives at least one good that they value highly.",1,2,3,None
+87,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+I have decided to allocate the goods as follows:
+- Good A to Person 2 because it gives him the highest satisfaction (45) and also leaves sufficient value for the others. 
+- Good B to Person 1 because it gives him the highest satisfaction (47) and it is also the good that gives him the highest satisfaction among the three people.
+- Good C to Person 2 because it gives him the highest satisfaction (48) among the three people.
+- Good D to Person 3 because it gives him the highest satisfaction (20) among the three people. 
+
+This allocation results in the following total satisfaction:
+- Person 1: 52
+- Person 2: 93
+- Person 3: 43
+
+This allocation is fair because it gives each person a good that they value highly, while also ensuring that the overall satisfaction is maximized.",1,2,3,None
+88,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+
+The proposed allocation is based on the **Nash social welfare** criterion, that aims at maximizing the product of the agents' utilities.
+The Nash social welfare for a given allocation is given by:
+$$W(x_1, x_2, ..., x_n) = \prod_{i=1}^n u_i(x_i)$$
+where \(x_i\) is the allocation for agent \(i\).
+By computing the Nash social welfare for all possible allocations, the proposed allocation is the one which maximizes the product of the agents' utilities.
+In this case, the Nash social welfare is 13500, which is the highest possible value.",2,1,3,1
+89,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 1""
+}
+This allocation maximises the total value that the goods can bring to individuals and, in case of a tie, breaks the tie by giving priority to Person 1. Indeed, the total value of the allocation is 5+47+32+3=87 which is more than what any other allocation can provide. Note that it is possible to discard some goods and still achieve the same total value (for instance, if we discard Good A and give Good B, Good C, and Good D to Person 2, Person 3, and Person 1, respectively, the total value is still 47+32+3=82), however it is not possible to increase it.",1,2,3,1
+90,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+This allocation maximizes the total value of the goods for the three individuals:
+
+* Person 1 receives Good B, which they value at 47.
+* Person 2 receives Goods A and C, which they value at 45 and 48 respectively, for a total of 93.
+* Person 3 receives Good D, which they value at 20.
+
+The total value of this allocation is 47 + 93 + 20 = 160.
+
+Furthermore, this allocation is fair because it gives each person at least one good that they value highly. Person 1 gets Good B, which they value more than any other good. Person 2 gets Goods A and C, which they value more than any other goods except Good B. Person 3 gets Good D, which they value more than any other good except Goods A and C.",1,3,2,None
+91,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+This allocation is fair because it gives each person the good that they value the most, and it also gives each person an equal number of goods. Person 1 gets Good A, which they value at 5. Person 1 also gets Good B, which they value at 47. This gives Person 1 a total value of 52. Person 2 gets Good A, which they value at 45. Person 2 also gets Good C, which they value at 48. This gives Person 1 a total value of 93. Person 3 gets Good D, which they value at 20. Person 3 also gets Good C, which they value at 32. This gives Person 3 a total value of 52.",1,2,3,1
+92,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+Justification: This allocation results in the highest possible total value for the goods, which is 120. This is because Person 2 values Goods A and C the most, Person 1 values Good B the most, and Person 3 values Good D the most. By allocating the goods in this way, we ensure that each person receives the good that they value the most.",1,2,3,None
+93,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+**Justification:**
+
+This allocation gives Person 1 a total value of 52, Person 2 a total value of 98, and Person 3 a total value of 75. This allocation maximizes the total value of the goods for the three individuals.
+
+Person 2 gets Good A because they value it the most (45) and they also get Good C because they value it the most (48). Person 1 gets Good B because they value it the most (47) and Person 3 gets Good D because they value it the most (20).",1,2,3,None
+94,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation is fair because it maximizes the total value of the goods to the individuals. Person 1 receives Good B, which they value the most (47), and Person 2 receives Good A and Good C, which they value the most (45 and 48). Person 3 receives Good D, which they value the most (20). Discarding any of the goods would result in a lower total value for the individuals.",1,2,3,None
+95,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation aims to maximize the total value derived from the goods by the individuals. By allocating Good A to Person 2, Good B to Person 1, Good C to Person 2, and Good D to Person 3, the total value derived from the goods becomes 45+47+48+20 = 160. This allocation also takes into account the differing preferences of the individuals for each good, ensuring that each person receives a good that they value highly.",1,2,3,1
+96,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 3"",
+""Good D"": ""Person 2""
+}
+Based on the information given, this allocation is fair because it gives each person the good that they value the most. Person 1 values Good B the most, so they get Good B. Person 2 values Good A the most, so they get Good A. Person 3 values Good C the most, so they get Good C. Good D is left, and Person 2 values Good D the most out of the remaining goods, so they get Good D.",1,2,3,None
+97,"``` JSON
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+```
+
+Justification: This allocation has the highest total value among all possible allocations, which is 120. This means that the total value of the goods is maximized, and all individuals are getting a fair share of the goods. Person 1 gets Good B, which they value the most, and Person 2 gets Good A and Good C, which they value the most. Person 3 gets Good D, which they value the most.",1,2,3,None
+98,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Person 2"",
+""Good D"": ""Person 3""
+}
+
+This allocation would maximize the total value of the goods received by the three people.
+
+Person 1 values Good A at 5, Good B at 47, Good C at 45, and Good D at 3.  Thus, their total value is 5+47+45+3 = 100.  With this allocation, they would receive Good B, with a value of 47.
+
+Person 2 values Good A at 45, Good B at 5, Good C at 48, and Good D at 2. Thus, their total value is 45+5+48+2 = 100. With this allocation, they would receive Good A and Good C, with a total value of 45+48 = 93.
+
+Person 3 values Good A at 23, Good B at 25, Good C at 32, and Good D at 20. Thus, their total value is 23+25+32+20 = 100. With this allocation, they would receive Good D, with a value of 20.
+
+Therefore, this allocation would maximize the total value of the goods received by the three people (47+93+20 = 160).",2,1,3,None
+99,"```json
+{
+  ""Good A"": ""Person 2"",
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""Person 2"",
+  ""Good D"": ""Person 3""
+}
+```
+
+The allocation above is fair because it maximizes the total value of the goods for the three persons. The total value of the goods for this allocation is 5 + 47 + 48 + 20 = 120.
+
+Here is the calculation of the total value of the goods for each person under this allocation:
+
+* Person 1: 47
+* Person 2: 45 + 48 = 93
+* Person 3: 20
+
+As you can see, Person 2 gets the highest total value of the goods, but this is because they have the highest value for two of the goods (Good A and Good C). Person 1 gets the second highest total value of the goods, and Person 3 gets the lowest total value of the goods. However, this allocation is still fair because it gives each person the goods that they value the most.
+
+It is also worth noting that this allocation is Pareto efficient, which means that there is no other allocation that would make one person better off without making another person worse off.",1,2,3,None

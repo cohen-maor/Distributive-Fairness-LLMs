@@ -1,0 +1,5105 @@
+,Text,Tokens,Good A,Good B,Good C,Person 1 money,Person 2 money,Person 3 money
+0,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if Good i is allocated to Person j, 0 otherwise
+x = [[pulp.LpVariable(f""x_{i}_{j}"", cat=""Binary"") for j in range(1, 4)] for i in range(1, 4)]
+
+# y[j] represents the amount of money allocated to Person j
+y = [pulp.LpVariable(f""y_{j}"", lowBound=0, upBound=5) for j in range(1, 4)]
+
+# Define the objective function: Maximize total welfare
+problem += (
+    45 * x[0][0] + 30 * x[1][0] + 25 * x[2][0] + y[0]  # Person 1
+    + 35 * x[0][1] + 40 * x[1][1] + 25 * x[2][1] + y[1]  # Person 2
+    + 50 * x[0][2] + 5 * x[1][2] + 45 * x[2][2] + y[2]  # Person 3
+)
+
+# Constraints:
+# Each good can be allocated to at most one person
+for i in range(3):
+    problem += pulp.lpSum(x[i][j] for j in range(3)) <= 1
+
+# Total money allocated cannot exceed 5 units
+problem += pulp.lpSum(y[j] for j in range(3)) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i, good in enumerate([""Good A"", ""Good B"", ""Good C""]):
+    for j, person in enumerate([""Person 1"", ""Person 2"", ""Person 3""]):
+        if x[i][j].varValue == 1:
+            print(f""{good} allocated to {person}"")
+
+for j, person in enumerate([""Person 1"", ""Person 2"", ""Person 3""]):
+    if y[j].varValue > 0:
+        print(f""{y[j].varValue} units of money allocated to {person}"")
+```
+",0,3,2,1,0,0,0
+1,"```python
+import pulp
+
+# Define the goods and individuals
+goods = ['A', 'B', 'C']
+individuals = ['Person 1', 'Person 2', 'Person 3']
+
+# Define the values each individual has for each good
+values = {
+    'Person 1': {'A': 45, 'B': 30, 'C': 25},
+    'Person 2': {'A': 35, 'B': 40, 'C': 25},
+    'Person 3': {'A': 50, 'B': 5,  'C': 45}
+}
+
+# Create the linear programming problem
+problem = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = pulp.LpVariables.dicts(""Allocation"", (goods, individuals), cat='Binary')
+money_allocations = pulp.LpVariables.dicts(""Money Allocation"", individuals, lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += pulp.lpSum(values[i][g] * allocations[g][i] for g in goods for i in individuals) + pulp.lpSum(money_allocations[i] for i in individuals)
+
+# Constraints
+# Each good can only be allocated to one person or no one
+for g in goods:
+    problem += pulp.lpSum(allocations[g][i] for i in individuals) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money_allocations[i] for i in individuals) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation results
+print(""Fair Allocation:"")
+for g in goods:
+    for i in individuals:
+        if allocations[g][i].varValue == 1:
+            print(f""{i} gets {g}"")
+for i in individuals:
+    if money_allocations[i].varValue > 0:
+        print(f""{i} gets {money_allocations[i].varValue} units of money"")
+```
+",0,3,2,1,5.0,0.0,0.0
+2,"```python
+import pulp
+
+# Define the goods and individuals
+goods = ['A', 'B', 'C']
+individuals = ['Person 1', 'Person 2', 'Person 3']
+
+# Define the values each individual has for each good
+values = {
+    ('Person 1', 'A'): 45,
+    ('Person 1', 'B'): 30,
+    ('Person 1', 'C'): 25,
+    ('Person 2', 'A'): 35,
+    ('Person 2', 'B'): 40,
+    ('Person 2', 'C'): 25,
+    ('Person 3', 'A'): 50,
+    ('Person 3', 'B'): 5,
+    ('Person 3', 'C'): 45,
+}
+
+# Create the optimization problem
+problem = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Define the decision variables: whether to allocate each good to each person
+allocations = pulp.LpVariable.dicts(""Allocation"", (individuals, goods), 0, 1, pulp.LpInteger)
+
+# Define the decision variables: how much money to give to each person
+money = pulp.LpVariable.dicts(""Money"", individuals, 0, 5)
+
+# Objective function: maximize the total value of the allocation
+problem += pulp.lpSum([allocations[i][g] * values[i, g] for i in individuals for g in goods]) + pulp.lpSum([money[i] for i in individuals])
+
+# Constraints:
+# - Each good can be allocated to at most one person
+for g in goods:
+    problem += pulp.lpSum([allocations[i][g] for i in individuals]) <= 1
+
+# - The total amount of money allocated cannot exceed 5
+problem += pulp.lpSum([money[i] for i in individuals]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for i in individuals:
+    for g in goods:
+        if allocations[i][g].varValue == 1:
+            print(f""{i} gets {g}"")
+    print(f""{i} gets {money[i].varValue} units of money"")
+```
+",0,3,2,1,2.5,0,2.5
+3,"```python
+import itertools
+
+# Define the individuals and their valuations
+persons = {
+    ""Person 1"": {""Good A"": 45, ""Good B"": 30, ""Good C"": 25},
+    ""Person 2"": {""Good A"": 35, ""Good B"": 40, ""Good C"": 25},
+    ""Person 3"": {""Good A"": 50, ""Good B"": 5, ""Good C"": 45},
+}
+
+goods = [""Good A"", ""Good B"", ""Good C""]
+
+# Generate all possible allocations
+allocations = list(itertools.product(persons.keys(), repeat=len(goods)))
+
+# Calculate the total value for each allocation
+values = {}
+for allocation in allocations:
+    total_value = 0
+    for i, good in enumerate(goods):
+        person = allocation[i]
+        if person:  # Check if the good is allocated
+            total_value += persons[person][good]
+    values[allocation] = total_value
+
+# Find the allocation with the maximum total value
+best_allocation = max(values, key=values.get)
+
+# Allocate the money proportionally to the valuations of the remaining goods
+money_allocation = {}
+remaining_value = 5  # Total money available
+for person in persons:
+    total_valuation = sum(persons[person].values())
+    money_allocation[person] = 0
+    for i, good in enumerate(goods):
+        if best_allocation[i] != person:
+            money_allocation[person] += persons[person][good] / total_valuation * remaining_value
+
+# Print the allocation
+print(""Allocation of Goods:"")
+for i, good in enumerate(goods):
+    print(f""{good}: {best_allocation[i]}"")
+
+print(""\nAllocation of Money:"")
+for person, amount in money_allocation.items():
+    print(f""{person}: {amount:.2f}"")
+```
+",0,3,2,1,1.67,0.83,2.50
+4,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+money = 5
+
+# Create the model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocation = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money_allocation = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=money)
+
+# Objective function: Maximize total value
+model += pulp.lpSum(values[p, g] * allocation[p][g] for p in persons for g in goods) + pulp.lpSum(money_allocation[p] for p in persons)
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum(allocation[p][g] for p in persons) <= 1
+
+for p in persons:
+    model += pulp.lpSum(values[p, g] * allocation[p][g] for g in goods) + money_allocation[p] <= max(values[p, g] for g in goods) + money
+
+model += pulp.lpSum(money_allocation[p] for p in persons) <= money
+
+# Solve the problem
+model.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocation[p].varValue} units of money"")
+```
+",0,3,2,1,5.0,0.0,0.0
+5,"```python
+values = {
+    ""Person 1"": {""Good A"": 45, ""Good B"": 30, ""Good C"": 25},
+    ""Person 2"": {""Good A"": 35, ""Good B"": 40, ""Good C"": 25},
+    ""Person 3"": {""Good A"": 50, ""Good B"": 5, ""Good C"": 45},
+}
+
+budget = 5
+
+allocation = {
+    ""Person 1"": {""Good A"": False, ""Good B"": True, ""Good C"": False, ""Money"": 1.25},
+    ""Person 2"": {""Good A"": False, ""Good B"": False, ""Good C"": True, ""Money"": 1.25},
+    ""Person 3"": {""Good A"": True, ""Good B"": False, ""Good C"": False, ""Money"": 2.5},
+}
+```
+",0,3,1,2,1.25,1.25,2.5
+6,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the individuals
+individuals = [""Person 1"", ""Person 2"", ""Person 3""]
+
+# Define the goods
+goods = [""Good A"", ""Good B"", ""Good C""]
+
+# Define the values
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45
+}
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(""Allocation"", (individuals, goods), cat='Binary')
+money_allocations = pulp.LpVariable.dicts(""Money_Allocation"", individuals, lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += pulp.lpSum(values[i, g] * allocations[i][g] for i in individuals for g in goods) + pulp.lpSum(money_allocations[i] for i in individuals)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for g in goods:
+    problem += pulp.lpSum(allocations[i][g] for i in individuals) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money_allocations[i] for i in individuals) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in individuals:
+    for g in goods:
+        if allocations[i][g].varValue == 1:
+            print(f""{i} gets {g}"")
+    print(f""{i} gets {money_allocations[i].varValue} units of money"")
+```
+",0,3,2,1,0,0,5
+7,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total social welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {x_11.varValue}, Good B: {x_21.varValue}, Good C: {x_31.varValue}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {x_12.varValue}, Good B: {x_22.varValue}, Good C: {x_32.varValue}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {x_13.varValue}, Good B: {x_23.varValue}, Good C: {x_33.varValue}, Money: {m3.varValue}"")
+``` 
+",0,3,2,1,2.0,0.0,3.0
+8,"```python
+import gurobipy as gp
+from gurobipy import GRB
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+
+# Create a model
+model = gp.Model(""Fair Allocation"")
+
+# Variables
+allocation = model.addVars(persons, goods, vtype=GRB.BINARY, name=""allocation"")
+money = model.addVars(persons, vtype=GRB.CONTINUOUS, name=""money"")
+
+# Constraints
+model.addConstrs((allocation.sum('*', g) <= 1 for g in goods), ""One_allocation_per_good"")
+model.addConstr(money.sum() <= 5, ""Total_money"")
+
+# Objective function: Maximize total welfare
+objective = gp.quicksum(values[p, g] * allocation[p, g] for p in persons for g in goods) + gp.quicksum(money)
+model.setObjective(objective, GRB.MAXIMIZE)
+
+# Solve the model
+model.optimize()
+
+# Print the solution
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p, g].X > 0.5:
+            print(f""{p} gets {g}"")
+print(""Money:"")
+for p in persons:
+    if money[p].X > 0:
+        print(f""{p} gets {money[p].X:.2f} units of money"")
+```
+",0,3,2,1,2.00,0,3.00
+9,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the goods
+goods = ['A', 'B', 'C']
+
+# Define the people
+people = ['Person 1', 'Person 2', 'Person 3']
+
+# Values for goods
+values = {
+    ('Person 1', 'A'): 45,
+    ('Person 1', 'B'): 30,
+    ('Person 1', 'C'): 25,
+    ('Person 2', 'A'): 35,
+    ('Person 2', 'B'): 40,
+    ('Person 2', 'C'): 25,
+    ('Person 3', 'A'): 50,
+    ('Person 3', 'B'): 5,
+    ('Person 3', 'C'): 45
+}
+
+# Decision variables: whether to allocate good i to person j
+allocation = pulp.LpVariable.dicts(""allocation"", ((i, j) for i in goods for j in people), cat='Binary')
+
+# Money allocation
+money = pulp.LpVariable.dicts(""money"", people, lowBound=0, upBound=5)
+
+# Objective function: maximize total value
+problem += pulp.lpSum(values[(j, i)] * allocation[(i, j)] for i in goods for j in people) + pulp.lpSum(money[j] for j in people)
+
+# Constraints:
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum(allocation[(i, j)] for j in people) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money[j] for j in people) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in goods:
+    for j in people:
+        if allocation[(i, j)].varValue == 1:
+            print(f""{j} gets {i}"")
+
+print(""Money Allocation:"")
+for j in people:
+    print(f""{j} gets {money[j].varValue} units of money"")
+```
+",0,3,2,1,0,0,0
+10,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3 
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(f""Person 1 receives: {'Good A' if x_11.value() == 1 else ('Good B' if x_21.value() == 1 else ('Good C' if x_31.value() == 1 else 'Nothing'))}, Money: {m1.value()}"")
+print(f""Person 2 receives: {'Good A' if x_12.value() == 1 else ('Good B' if x_22.value() == 1 else ('Good C' if x_32.value() == 1 else 'Nothing'))}, Money: {m2.value()}"")
+print(f""Person 3 receives: {'Good A' if x_13.value() == 1 else ('Good B' if x_23.value() == 1 else ('Good C' if x_33.value() == 1 else 'Nothing'))}, Money: {m3.value()}"")
+```
+",0,3,2,1,2.0,0.0,3.0
+11,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good i is allocated to person j, 0 otherwise
+x = {}
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        x[i, j] = pulp.LpVariable(f""x_{i}_{j}"", 0, 1, pulp.LpInteger)
+
+# Define the money allocation variables
+# y[j] = amount of money allocated to person j
+y = {}
+for j in [1, 2, 3]:
+    y[j] = pulp.LpVariable(f""y_{j}"", 0, 5)
+
+# Define the valuations
+valuations = {
+    (1, ""A""): 45,
+    (1, ""B""): 30,
+    (1, ""C""): 25,
+    (2, ""A""): 35,
+    (2, ""B""): 40,
+    (2, ""C""): 25,
+    (3, ""A""): 50,
+    (3, ""B""): 5,
+    (3, ""C""): 45,
+}
+
+# Objective function: Maximize the total valuation
+problem += pulp.lpSum(valuations[j, i] * x[i, j] + y[j] for i in [""A"", ""B"", ""C""] for j in [1, 2, 3])
+
+# Constraints
+# Each good can be allocated to at most one person
+for i in [""A"", ""B"", ""C""]:
+    problem += pulp.lpSum([x[i, j] for j in [1, 2, 3]]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in [1, 2, 3]]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        if pulp.value(x[i, j]) == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in [1, 2, 3]:
+    if pulp.value(y[j]) > 0:
+        print(f""Person {j} receives {pulp.value(y[j])} units of money"")
+```
+",0,3,2,1,0,0,0
+12,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = {}
+for person in range(1, 4):
+    for good in ['A', 'B', 'C']:
+        allocations[(person, good)] = pulp.LpVariable(f""Person_{person}_{good}"", 0, 1, pulp.LpInteger)
+
+money_allocations = {}
+for person in range(1, 4):
+    money_allocations[person] = pulp.LpVariable(f""Money_Person_{person}"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += (
+    allocations[(1, 'A')] * 45 + allocations[(1, 'B')] * 30 + allocations[(1, 'C')] * 25 +
+    allocations[(2, 'A')] * 35 + allocations[(2, 'B')] * 40 + allocations[(2, 'C')] * 25 +
+    allocations[(3, 'A')] * 50 + allocations[(3, 'B')] * 5 +  allocations[(3, 'C')] * 45 +
+    money_allocations[1] + money_allocations[2] + money_allocations[3]
+)
+
+# Define the constraints
+# Each good can only be allocated to one person or no one
+problem += allocations[(1, 'A')] + allocations[(2, 'A')] + allocations[(3, 'A')] <= 1
+problem += allocations[(1, 'B')] + allocations[(2, 'B')] + allocations[(3, 'B')] <= 1
+problem += allocations[(1, 'C')] + allocations[(2, 'C')] + allocations[(3, 'C')] <= 1
+
+# Total money allocated cannot exceed 5
+problem += money_allocations[1] + money_allocations[2] + money_allocations[3] <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+for person in range(1, 4):
+    for good in ['A', 'B', 'C']:
+        if pulp.value(allocations[(person, good)]) == 1:
+            print(f""Person {person} gets Good {good}"")
+    print(f""Person {person} gets {pulp.value(money_allocations[person]):.2f} units of money"")
+```
+",0,3,2,1,1.67,1.67,1.67
+13,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+
+# Model
+model = pulp.LpProblem(""Allocation_Problem"", pulp.LpMaximize)
+
+# Variables
+allocations = pulp.LpVariable.dicts(""allocation"", (persons, goods), cat='Binary')
+money = pulp.LpVariable.dicts(""money"", persons, lowBound=0, upBound=5)
+
+# Objective function
+model += pulp.lpSum([allocations[p][g] * values[p, g] for p in persons for g in goods]) + pulp.lpSum([money[p] for p in persons])
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum([allocations[p][g] for p in persons]) <= 1
+
+for p in persons:
+    model += pulp.lpSum([allocations[p][g] * values[p, g] for g in goods]) + money[p] <= 50  
+
+# Solve
+model.solve()
+
+# Output
+allocation_result = {g: None for g in goods}
+for p in persons:
+    for g in goods:
+        if allocations[p][g].varValue == 1:
+            allocation_result[g] = p
+    print(f""{p} gets {money[p].varValue} units of money."")
+
+print(f""Allocation of goods: {allocation_result}"")
+```
+",0,3,2,1,5.0,0.0,0.0
+14,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = {
+    (person, good): pulp.LpVariable(f""{person}_{good}"", 0, 1, pulp.LpInteger)
+    for person in [""Person 1"", ""Person 2"", ""Person 3""]
+    for good in [""Good A"", ""Good B"", ""Good C""]
+}
+money_allocations = {
+    person: pulp.LpVariable(f""Money_{person}"", 0, 5)
+    for person in [""Person 1"", ""Person 2"", ""Person 3""]
+}
+
+# Set the objective function
+problem += (
+    pulp.lpSum(
+        allocations[person, ""Good A""] * 45
+        + allocations[person, ""Good B""] * 30
+        + allocations[person, ""Good C""] * 25
+        + money_allocations[person] * 25
+        for person in [""Person 1"", ""Person 2"", ""Person 3""]
+    ),
+    ""Total Value"",
+)
+
+# Add constraints
+for good in [""Good A"", ""Good B"", ""Good C""]:
+    problem += (
+        pulp.lpSum(allocations[person, good] for person in [""Person 1"", ""Person 2"", ""Person 3""])
+        <= 1,
+        f""One_{good}"",
+    )
+
+problem += (
+    pulp.lpSum(
+        money_allocations[person] for person in [""Person 1"", ""Person 2"", ""Person 3""]
+    )
+    <= 5,
+    ""Total_Money"",
+)
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for person in [""Person 1"", ""Person 2"", ""Person 3""]:
+    for good in [""Good A"", ""Good B"", ""Good C""]:
+        if pulp.value(allocations[person, good]) == 1:
+            print(f""{person} gets {good}"")
+    print(f""{person} gets {pulp.value(money_allocations[person])} units of money"")
+```
+```",0,3,2,1,2.0,0.0,3.0
+15,"```python
+from cvxpy import *
+
+# Values for each person and good
+values = {
+    ""Person 1"": {""Good A"": 45, ""Good B"": 30, ""Good C"": 25},
+    ""Person 2"": {""Good A"": 35, ""Good B"": 40, ""Good C"": 25},
+    ""Person 3"": {""Good A"": 50, ""Good B"": 5,  ""Good C"": 45}
+}
+
+# Decision variables
+allocate = Variable((3, 3), binary=True)  # allocation of goods (person x good)
+money = Variable(3) # money allocation for each person
+
+# Constraints
+constraints = [
+    sum(allocate, axis=0) <= 1,  # Each good allocated at most once
+    sum(money) <= 5, # Total money constraint
+    money >= 0 # Non-negativity of money
+]
+
+# Objective: Maximize total value
+objective = Maximize(sum([
+    allocate[i, j] * values[""Person {}"".format(i + 1)][""Good {}"".format(chr(ord('A') + j))] 
+    for i in range(3) for j in range(3)
+]) + sum(money))
+
+# Solve the problem
+problem = Problem(objective, constraints)
+problem.solve()
+
+# Print allocation
+print(""Allocation of goods (Person x Good):"")
+print(allocate.value.astype(int))
+
+print(""\nMoney allocation:"")
+print(money.value)
+```
+",0,3,2,1,0,0,5
+16,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+# y_j = amount of money allocated to person j
+goods = ['A', 'B', 'C']
+persons = ['1', '2', '3']
+x = pulp.LpVariable.dicts(""Good_Allocation"", ((i, j) for i in goods for j in persons), cat='Binary')
+y = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += sum(
+    [
+        (45 * x[('A', '1')] + 30 * x[('B', '1')] + 25 * x[('C', '1')] + y['1']) +
+        (35 * x[('A', '2')] + 40 * x[('B', '2')] + 25 * x[('C', '2')] + y['2']) +
+        (50 * x[('A', '3')] + 5 * x[('B', '3')] + 45 * x[('C', '3')] + y['3'])
+    ]
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum([x[(i, j)] for j in persons]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in persons]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[(i, j)].value() == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in persons:
+    if y[j].value() > 0:
+        print(f""{y[j].value()} units of money allocated to Person {j}"")
+```
+",0,3,2,1,0,0,0
+17,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1A = pulp.LpVariable(""x1A"", cat='Binary')
+x1B = pulp.LpVariable(""x1B"", cat='Binary')
+x1C = pulp.LpVariable(""x1C"", cat='Binary')
+x2A = pulp.LpVariable(""x2A"", cat='Binary')
+x2B = pulp.LpVariable(""x2B"", cat='Binary')
+x2C = pulp.LpVariable(""x2C"", cat='Binary')
+x3A = pulp.LpVariable(""x3A"", cat='Binary')
+x3B = pulp.LpVariable(""x3B"", cat='Binary')
+x3C = pulp.LpVariable(""x3C"", cat='Binary')
+
+# Money allocation
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += (45*x1A + 30*x1B + 25*x1C + m1) + (35*x2A + 40*x2B + 25*x2C + m2) + (50*x3A + 5*x3B + 45*x3C + m3)
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1A + x2A + x3A <= 1
+problem += x1B + x2B + x3B <= 1
+problem += x1C + x2C + x3C <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: A:"", pulp.value(x1A), ""B:"", pulp.value(x1B), ""C:"", pulp.value(x1C), ""Money:"", pulp.value(m1))
+print(""Person 2: A:"", pulp.value(x2A), ""B:"", pulp.value(x2B), ""C:"", pulp.value(x2C), ""Money:"", pulp.value(m2))
+print(""Person 3: A:"", pulp.value(x3A), ""B:"", pulp.value(x3B), ""C:"", pulp.value(x3C), ""Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+18,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1:
+  print(""Good A"")
+if x_21.varValue == 1:
+  print(""Good B"")
+if x_31.varValue == 1:
+  print(""Good C"")
+print(""Money:"", m1.varValue)
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1:
+  print(""Good A"")
+if x_22.varValue == 1:
+  print(""Good B"")
+if x_32.varValue == 1:
+  print(""Good C"")
+print(""Money:"", m2.varValue)
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1:
+  print(""Good A"")
+if x_23.varValue == 1:
+  print(""Good B"")
+if x_33.varValue == 1:
+  print(""Good C"")
+print(""Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+19,"```python
+import gurobipy as gp
+from gurobipy import GRB
+
+# Create a model
+model = gp.Model(""Fair Allocation"")
+
+# Define sets
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+
+# Values of goods for each person
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+
+# Decision variables: Binary variables indicating if a good is assigned to a person
+x = model.addVars(persons, goods, vtype=GRB.BINARY, name=""x"")
+
+# Decision variable: Amount of money allocated to each person
+m = model.addVars(persons, vtype=GRB.CONTINUOUS, name=""m"", lb=0, ub=5)
+
+# Constraints: Each good can be assigned to at most one person
+model.addConstrs((x.sum('*', good) <= 1 for good in goods), ""Good_once"")
+
+# Constraint: Total allocated money cannot exceed 5
+model.addConstr(m.sum('*') <= 5, ""Money_limit"")
+
+# Objective function: Maximize total value across all persons
+obj_func = gp.quicksum(values[p, g] * x[p, g] for p in persons for g in goods) + gp.quicksum(m[p] for p in persons)
+model.setObjective(obj_func, GRB.MAXIMIZE)
+
+# Optimize model
+model.optimize()
+
+# Print results
+print(""Optimal Allocation:"")
+for p in persons:
+    for g in goods:
+        if x[p, g].X > 0.5:
+            print(f""{p} receives {g}"")
+    print(f""{p} receives {m[p].X} units of money"")
+```
+",0,3,2,1,0.0,0.0,5.0
+20,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variable
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total social welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total_Welfare""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Good A to Person 1:"", pulp.value(x_11))
+print(""Good A to Person 2:"", pulp.value(x_12))
+print(""Good A to Person 3:"", pulp.value(x_13))
+print(""Good B to Person 1:"", pulp.value(x_21))
+print(""Good B to Person 2:"", pulp.value(x_22))
+print(""Good B to Person 3:"", pulp.value(x_23))
+print(""Good C to Person 1:"", pulp.value(x_31))
+print(""Good C to Person 2:"", pulp.value(x_32))
+print(""Good C to Person 3:"", pulp.value(x_33))
+print(""Money to Person 1:"", pulp.value(m1))
+print(""Money to Person 2:"", pulp.value(m2))
+print(""Money to Person 3:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,5
+21,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1a = pulp.LpVariable(""x1a"", cat='Binary') # Person 1, Good A
+x1b = pulp.LpVariable(""x1b"", cat='Binary') # Person 1, Good B
+x1c = pulp.LpVariable(""x1c"", cat='Binary') # Person 1, Good C
+x2a = pulp.LpVariable(""x2a"", cat='Binary') # Person 2, Good A
+x2b = pulp.LpVariable(""x2b"", cat='Binary') # Person 2, Good B
+x2c = pulp.LpVariable(""x2c"", cat='Binary') # Person 2, Good C
+x3a = pulp.LpVariable(""x3a"", cat='Binary') # Person 3, Good A
+x3b = pulp.LpVariable(""x3b"", cat='Binary') # Person 3, Good B
+x3c = pulp.LpVariable(""x3c"", cat='Binary') # Person 3, Good C
+
+# Money allocation
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5) # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5) # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5) # Money to Person 3
+
+# Objective function: Maximize total perceived value
+problem += 45*x1a + 30*x1b + 25*x1c + m1 + 35*x2a + 40*x2b + 25*x2c + m2 + 50*x3a + 5*x3b + 45*x3c + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1a + x2a + x3a <= 1
+problem += x1b + x2b + x3b <= 1
+problem += x1c + x2c + x3c <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x1a), ""Good B:"", pulp.value(x1b), ""Good C:"", pulp.value(x1c), ""Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x2a), ""Good B:"", pulp.value(x2b), ""Good C:"", pulp.value(x2c), ""Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x3a), ""Good B:"", pulp.value(x3b), ""Good C:"", pulp.value(x3c), ""Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+22,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize the total value of allocated goods and money
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1:
+  print(""- Good A"")
+if x_21.varValue == 1:
+  print(""- Good B"")
+if x_31.varValue == 1:
+  print(""- Good C"")
+print(f""- {m1.varValue} units of money"")
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1:
+  print(""- Good A"")
+if x_22.varValue == 1:
+  print(""- Good B"")
+if x_32.varValue == 1:
+  print(""- Good C"")
+print(f""- {m2.varValue} units of money"")
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1:
+  print(""- Good A"")
+if x_23.varValue == 1:
+  print(""- Good B"")
+if x_33.varValue == 1:
+  print(""- Good C"")
+print(f""- {m3.varValue} units of money"")
+```
+",0,3,2,1,0,0,5
+23,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1A = pulp.LpVariable(""x1A"", cat='Binary')  # Person 1 gets Good A
+x1B = pulp.LpVariable(""x1B"", cat='Binary')  # Person 1 gets Good B
+x1C = pulp.LpVariable(""x1C"", cat='Binary')  # Person 1 gets Good C
+x2A = pulp.LpVariable(""x2A"", cat='Binary')  # Person 2 gets Good A
+x2B = pulp.LpVariable(""x2B"", cat='Binary')  # Person 2 gets Good B
+x2C = pulp.LpVariable(""x2C"", cat='Binary')  # Person 2 gets Good C
+x3A = pulp.LpVariable(""x3A"", cat='Binary')  # Person 3 gets Good A
+x3B = pulp.LpVariable(""x3B"", cat='Binary')  # Person 3 gets Good B
+x3C = pulp.LpVariable(""x3C"", cat='Binary')  # Person 3 gets Good C
+
+# Money allocation
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5) # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5) # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5) # Money to Person 3
+
+# Objective function: Maximize total perceived value
+problem += 45*x1A + 30*x1B + 25*x1C + m1 + \
+           35*x2A + 40*x2B + 25*x2C + m2 + \
+           50*x3A + 5*x3B  + 45*x3C + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1A + x2A + x3A <= 1
+problem += x1B + x2B + x3B <= 1
+problem += x1C + x2C + x3C <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x1A), "" Good B:"", pulp.value(x1B), "" Good C:"", pulp.value(x1C), "" Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x2A), "" Good B:"", pulp.value(x2B), "" Good C:"", pulp.value(x2C), "" Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x3A), "" Good B:"", pulp.value(x3B), "" Good C:"", pulp.value(x3C), "" Money:"", pulp.value(m3))
+```
+",0,3,2,1,5.0,0.0,0.0
+24,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define decision variables
+allocate_good_a = {
+    1: pulp.LpVariable(""Person1_GoodA"", cat=""Binary""),
+    2: pulp.LpVariable(""Person2_GoodA"", cat=""Binary""),
+    3: pulp.LpVariable(""Person3_GoodA"", cat=""Binary""),
+}
+allocate_good_b = {
+    1: pulp.LpVariable(""Person1_GoodB"", cat=""Binary""),
+    2: pulp.LpVariable(""Person2_GoodB"", cat=""Binary""),
+    3: pulp.LpVariable(""Person3_GoodB"", cat=""Binary""),
+}
+allocate_good_c = {
+    1: pulp.LpVariable(""Person1_GoodC"", cat=""Binary""),
+    2: pulp.LpVariable(""Person2_GoodC"", cat=""Binary""),
+    3: pulp.LpVariable(""Person3_GoodC"", cat=""Binary""),
+}
+allocate_money = {
+    1: pulp.LpVariable(""Money_Person1"", lowBound=0, upBound=5),
+    2: pulp.LpVariable(""Money_Person2"", lowBound=0, upBound=5),
+    3: pulp.LpVariable(""Money_Person3"", lowBound=0, upBound=5),
+}
+
+# Define the objective function: Maximize total value
+problem.setObjective(
+    pulp.lpSum(
+        [
+            allocate_good_a[1] * 45
+            + allocate_good_b[1] * 30
+            + allocate_good_c[1] * 25
+            + allocate_money[1],
+            allocate_good_a[2] * 35
+            + allocate_good_b[2] * 40
+            + allocate_good_c[2] * 25
+            + allocate_money[2],
+            allocate_good_a[3] * 50
+            + allocate_good_b[3] * 5
+            + allocate_good_c[3] * 45
+            + allocate_money[3],
+        ]
+    )
+)
+
+# Define constraints
+# Each good can only be allocated to one person or none
+problem += allocate_good_a[1] + allocate_good_a[2] + allocate_good_a[3] <= 1
+problem += allocate_good_b[1] + allocate_good_b[2] + allocate_good_b[3] <= 1
+problem += allocate_good_c[1] + allocate_good_c[2] + allocate_good_c[3] <= 1
+
+# Total money allocated cannot exceed 5
+problem += (
+    allocate_money[1] + allocate_money[2] + allocate_money[3] <= 5
+)
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+for i in range(1, 4):
+    print(f""Person {i}:"")
+    print(f""  Good A: {int(allocate_good_a[i].varValue)}"")
+    print(f""  Good B: {int(allocate_good_b[i].varValue)}"")
+    print(f""  Good C: {int(allocate_good_c[i].varValue)}"")
+    print(f""  Money: {allocate_money[i].varValue:.2f}"")
+```
+",0,3,2,1,0.00,0.00,5.00
+25,"```python
+import gurobipy as gp
+from gurobipy import GRB
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+money = 5
+
+# Create a model
+model = gp.Model(""Fair Allocation"")
+
+# Variables
+allocation = {}
+for p in persons:
+    for g in goods:
+        allocation[p, g] = model.addVar(vtype=GRB.BINARY, name=f""{p}_{g}"")
+money_allocation = {}
+for p in persons:
+    money_allocation[p] = model.addVar(ub=money, name=f""{p}_money"")
+
+# Constraints
+for g in goods:
+    model.addConstr(gp.quicksum(allocation[p, g] for p in persons) <= 1)
+
+model.addConstr(gp.quicksum(money_allocation[p] for p in persons) <= money)
+
+# Objective function
+objective = gp.quicksum(
+    values[p, g] * allocation[p, g] + money_allocation[p]
+    for p in persons
+    for g in goods
+)
+model.setObjective(objective, GRB.MAXIMIZE)
+
+# Solve
+model.optimize()
+
+# Print results
+print(""Optimal allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p, g].X > 0.5:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocation[p].X:.2f} units of money"")
+```
+```",0,3,2,1,2.50,0.00,2.50
+26,"```python
+from cvxpy import *
+
+# Define the individuals and goods
+individuals = [1, 2, 3]
+goods = ['A', 'B', 'C']
+
+# Values for each good for each individual
+values = {
+    (1, 'A'): 45, (1, 'B'): 30, (1, 'C'): 25,
+    (2, 'A'): 35, (2, 'B'): 40, (2, 'C'): 25,
+    (3, 'A'): 50, (3, 'B'): 5,  (3, 'C'): 45,
+}
+
+# Decision variables
+allocation = {(i, g): Variable(boolean=True) for i in individuals for g in goods}
+money_allocation = {i: Variable(nonneg=True) for i in individuals}
+
+# Constraints
+constraints = [
+    # Each good can be allocated to at most one individual
+    sum(allocation[i, g] for i in individuals) <= 1 for g in goods,
+    # Money allocation cannot exceed 5
+    sum(money_allocation[i] for i in individuals) <= 5,
+]
+
+# Objective function: Maximize total value
+objective = Maximize(
+    sum(values[i, g] * allocation[i, g] for i in individuals for g in goods) + 
+    sum(money_allocation[i] for i in individuals)
+)
+
+# Solve the problem
+problem = Problem(objective, constraints)
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for g in goods:
+    for i in individuals:
+        if allocation[i, g].value > 0.5:
+            print(f""Individual {i} gets Good {g}"")
+for i in individuals:
+    if money_allocation[i].value > 0:
+        print(f""Individual {i} gets {money_allocation[i].value:.2f} units of money"")
+```
+",0,3,2,1,2.50,0.00,2.50
+27,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total Value""
+
+# Constraints:
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+28,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+# y_j = amount of money allocated to Person j
+goods = [""A"", ""B"", ""C""]
+persons = [""1"", ""2"", ""3""]
+x = pulp.LpVariable.dicts(""Good_Allocation"", ((i, j) for i in goods for j in persons), cat='Binary')
+y = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total social welfare
+problem += pulp.lpSum([
+    45 * x[(""A"", ""1"")] + 30 * x[(""B"", ""1"")] + 25 * x[(""C"", ""1"")] + y[""1""],  # Person 1's utility
+    35 * x[(""A"", ""2"")] + 40 * x[(""B"", ""2"")] + 25 * x[(""C"", ""2"")] + y[""2""],  # Person 2's utility
+    50 * x[(""A"", ""3"")] + 5 * x[(""B"", ""3"")] + 45 * x[(""C"", ""3"")] + y[""3""]   # Person 3's utility
+])
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum([x[(i, j)] for j in persons]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in persons]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Optimal Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[(i, j)].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+
+for j in persons:
+    if y[j].varValue > 0:
+        print(f""{y[j].varValue} units of money allocated to Person {j}"")
+```
+",0,3,2,1,0,0,0
+29,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good i is allocated to person j, 0 otherwise
+x = {}
+for i in [""A"", ""B"", ""C""]:
+    x[i] = {}
+    for j in [1, 2, 3]:
+        x[i][j] = pulp.LpVariable(f""x_{i}_{j}"", 0, 1, pulp.LpInteger)
+
+# Define the money allocation variables
+# m[j] = amount of money allocated to person j
+m = {}
+for j in [1, 2, 3]:
+    m[j] = pulp.LpVariable(f""m_{j}"", 0, 5)
+
+# Define the valuations
+valuations = {
+    1: {""A"": 45, ""B"": 30, ""C"": 25},
+    2: {""A"": 35, ""B"": 40, ""C"": 25},
+    3: {""A"": 50, ""B"": 5, ""C"": 45},
+}
+
+# Objective function: Maximize the total social welfare
+problem += pulp.lpSum(
+    valuations[j][i] * x[i][j] + m[j] for i in [""A"", ""B"", ""C""] for j in [1, 2, 3]
+)
+
+# Constraints
+# Each good can be allocated to at most one person
+for i in [""A"", ""B"", ""C""]:
+    problem += pulp.lpSum([x[i][j] for j in [1, 2, 3]]) <= 1
+
+# Total money allocated cannot exceed 5 units
+problem += pulp.lpSum([m[j] for j in [1, 2, 3]]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        if x[i][j].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in [1, 2, 3]:
+    if m[j].varValue > 0:
+        print(f""{m[j].varValue} units of money allocated to Person {j}"")
+```
+```
+Allocation:
+Good A allocated to Person 3
+Good B allocated to Person 2
+Good C allocated to Person 1
+```
+",0,3,2,1,0,0,0
+30,"```python
+from ortools.linear_solver import pywraplp
+
+# Data
+persons = range(3)
+goods = range(3)
+values = [[45, 30, 25], [35, 40, 25], [50, 5, 45]]
+money = 5
+
+# Solver
+solver = pywraplp.Solver.CreateSolver('SCIP')
+
+# Variables
+allocations = [[solver.IntVar(0, 1, f'x_{i}_{j}') for j in goods] for i in persons]
+money_allocations = [solver.NumVar(0, money, f'm_{i}') for i in persons]
+
+# Constraints
+for j in goods:
+    solver.Add(sum(allocations[i][j] for i in persons) <= 1)
+
+for i in persons:
+    solver.Add(sum(allocations[i][j] for j in goods) <= 1)
+
+solver.Add(sum(money_allocations[i] for i in persons) <= money)
+
+# Objective
+objective = solver.Objective()
+for i in persons:
+    objective.Add(
+        sum(allocations[i][j] * values[i][j] for j in goods) + money_allocations[i])
+objective.Maximize()
+
+# Solve
+status = solver.Solve()
+
+# Solution
+if status == pywraplp.Solver.OPTIMAL:
+    for i in persons:
+        for j in goods:
+            if allocations[i][j].solution_value() == 1:
+                print(f'Person {i+1} gets Good {""ABC""[j]}')
+    for i in persons:
+        if money_allocations[i].solution_value() > 0:
+            print(
+                f'Person {i+1} gets {money_allocations[i].solution_value()} units of money')
+else:
+    print('No optimal solution found.')
+```
+",0,3,2,1,0,0,5
+31,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+32,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the goods
+goods = [""A"", ""B"", ""C""]
+
+# Define the individuals
+individuals = [""Person 1"", ""Person 2"", ""Person 3""]
+
+# Define the values each individual has for each good
+values = {
+    (""Person 1"", ""A""): 45,
+    (""Person 1"", ""B""): 30,
+    (""Person 1"", ""C""): 25,
+    (""Person 2"", ""A""): 35,
+    (""Person 2"", ""B""): 40,
+    (""Person 2"", ""C""): 25,
+    (""Person 3"", ""A""): 50,
+    (""Person 3"", ""B""): 5,
+    (""Person 3"", ""C""): 45,
+}
+
+# Define binary variables for good allocation (1 if allocated, 0 otherwise)
+allocation = pulp.LpVariable.dicts(
+    ""Allocation"", [(i, g) for i in individuals for g in goods], cat=""Binary""
+)
+
+# Define variables for money allocation
+money_allocation = pulp.LpVariable.dicts(
+    ""Money"", [i for i in individuals], lowBound=0, upBound=5
+)
+
+# Objective: Maximize total value
+problem += pulp.lpSum(
+    values[(i, g)] * allocation[(i, g)] for i in individuals for g in goods
+) + pulp.lpSum(money_allocation[i] for i in individuals)
+
+# Constraints:
+# Each good can be allocated to at most one person
+for g in goods:
+    problem += pulp.lpSum(allocation[(i, g)] for i in individuals) <= 1
+
+# Total money allocated cannot exceed 5 units
+problem += pulp.lpSum(money_allocation[i] for i in individuals) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in individuals:
+    for g in goods:
+        if allocation[(i, g)].varValue == 1:
+            print(f""{i} gets Good {g}"")
+for i in individuals:
+    if money_allocation[i].varValue > 0:
+        print(f""{i} gets {money_allocation[i].varValue} units of money"")
+```
+",0,3,2,1,0,0,0
+33,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total_Value""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x_11), "", Good B:"", pulp.value(x_21), "", Good C:"", pulp.value(x_31), "", Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x_12), "", Good B:"", pulp.value(x_22), "", Good C:"", pulp.value(x_32), "", Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x_13), "", Good B:"", pulp.value(x_23), "", Good C:"", pulp.value(x_33), "", Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,5
+34,"```python
+import pulp
+
+# Create a linear programming problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define decision variables
+allocate_A1 = pulp.LpVariable(""Allocate_A_to_1"", 0, 1, pulp.LpInteger)
+allocate_A2 = pulp.LpVariable(""Allocate_A_to_2"", 0, 1, pulp.LpInteger)
+allocate_A3 = pulp.LpVariable(""Allocate_A_to_3"", 0, 1, pulp.LpInteger)
+
+allocate_B1 = pulp.LpVariable(""Allocate_B_to_1"", 0, 1, pulp.LpInteger)
+allocate_B2 = pulp.LpVariable(""Allocate_B_to_2"", 0, 1, pulp.LpInteger)
+allocate_B3 = pulp.LpVariable(""Allocate_B_to_3"", 0, 1, pulp.LpInteger)
+
+allocate_C1 = pulp.LpVariable(""Allocate_C_to_1"", 0, 1, pulp.LpInteger)
+allocate_C2 = pulp.LpVariable(""Allocate_C_to_2"", 0, 1, pulp.LpInteger)
+allocate_C3 = pulp.LpVariable(""Allocate_C_to_3"", 0, 1, pulp.LpInteger)
+
+money_1 = pulp.LpVariable(""Money_to_1"", 0, 5)
+money_2 = pulp.LpVariable(""Money_to_2"", 0, 5)
+money_3 = pulp.LpVariable(""Money_to_3"", 0, 5)
+
+# Set objective: Maximize total value
+problem += 45*allocate_A1 + 30*allocate_B1 + 25*allocate_C1 + money_1 + \
+           35*allocate_A2 + 40*allocate_B2 + 25*allocate_C2 + money_2 + \
+           50*allocate_A3 + 5*allocate_B3 + 45*allocate_C3 + money_3
+
+# Constraints: Each good allocated to at most one person
+problem += allocate_A1 + allocate_A2 + allocate_A3 <= 1
+problem += allocate_B1 + allocate_B2 + allocate_B3 <= 1
+problem += allocate_C1 + allocate_C2 + allocate_C3 <= 1
+
+# Constraint: Total money allocated cannot exceed 5
+problem += money_1 + money_2 + money_3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Person 1 receives:"")
+if allocate_A1.varValue == 1:
+    print(""- Good A"")
+if allocate_B1.varValue == 1:
+    print(""- Good B"")
+if allocate_C1.varValue == 1:
+    print(""- Good C"")
+print(f""- {money_1.varValue} units of money"")
+
+print(""\nPerson 2 receives:"")
+if allocate_A2.varValue == 1:
+    print(""- Good A"")
+if allocate_B2.varValue == 1:
+    print(""- Good B"")
+if allocate_C2.varValue == 1:
+    print(""- Good C"")
+print(f""- {money_2.varValue} units of money"")
+
+print(""\nPerson 3 receives:"")
+if allocate_A3.varValue == 1:
+    print(""- Good A"")
+if allocate_B3.varValue == 1:
+    print(""- Good B"")
+if allocate_C3.varValue == 1:
+    print(""- Good C"")
+print(f""- {money_3.varValue} units of money"")
+```
+",0,3,2,1,2.0,0.0,3.0
+35,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (binary: 1 if allocated, 0 otherwise)
+x1a = pulp.LpVariable(""x1a"", cat='Binary')  # Person 1 gets Good A
+x1b = pulp.LpVariable(""x1b"", cat='Binary')  # Person 1 gets Good B
+x1c = pulp.LpVariable(""x1c"", cat='Binary')  # Person 1 gets Good C
+x2a = pulp.LpVariable(""x2a"", cat='Binary')  # Person 2 gets Good A
+x2b = pulp.LpVariable(""x2b"", cat='Binary')  # Person 2 gets Good B
+x2c = pulp.LpVariable(""x2c"", cat='Binary')  # Person 2 gets Good C
+x3a = pulp.LpVariable(""x3a"", cat='Binary')  # Person 3 gets Good A
+x3b = pulp.LpVariable(""x3b"", cat='Binary')  # Person 3 gets Good B
+x3c = pulp.LpVariable(""x3c"", cat='Binary')  # Person 3 gets Good C
+
+# Money allocation (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)  # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)  # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)  # Money to Person 3
+
+# Objective function: Maximize total perceived value
+problem += (45*x1a + 30*x1b + 25*x1c + m1) + (35*x2a + 40*x2b + 25*x2c + m2) + (50*x3a + 5*x3b + 45*x3c + m3), ""Total_Value""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1a + x2a + x3a <= 1, ""Good_A_Allocation""
+problem += x1b + x2b + x3b <= 1, ""Good_B_Allocation""
+problem += x1c + x2c + x3c <= 1, ""Good_C_Allocation""
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5, ""Total_Money""
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x1a.varValue == 1 else 'No'}, Good B: {'Yes' if x1b.varValue == 1 else 'No'}, Good C: {'Yes' if x1c.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x2a.varValue == 1 else 'No'}, Good B: {'Yes' if x2b.varValue == 1 else 'No'}, Good C: {'Yes' if x2c.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x3a.varValue == 1 else 'No'}, Good B: {'Yes' if x3b.varValue == 1 else 'No'}, Good C: {'Yes' if x3c.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0.0,0.0,5.0
+36,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+37,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total social welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,5
+38,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+39,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+money = 5
+
+# Model
+model = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Variables
+allocations = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money_allocations = pulp.LpVariable.dicts(""Money Allocation"", persons, lowBound=0, upBound=money)
+
+# Objective function: Maximize total value
+model += pulp.lpSum(values[p, g] * allocations[p][g] for p in persons for g in goods) + pulp.lpSum(money_allocations[p] for p in persons) 
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum(allocations[p][g] for p in persons) <= 1  # Each good to at most one person
+
+model += pulp.lpSum(money_allocations[p] for p in persons) <= money  # Total money limit
+
+# Solve
+model.solve()
+
+# Output
+allocation = {g: [p for p in persons if allocations[p][g].varValue == 1] for g in goods}
+money_allocation = {p: money_allocations[p].varValue for p in persons}
+
+print(""Allocation:"")
+print(allocation)
+print(""Money Allocation:"")
+print(money_allocation)
+```
+",0,3,2,1,0,0,5
+40,"```python
+import pulp
+
+# Define the goods and agents
+goods = [""Good A"", ""Good B"", ""Good C""]
+agents = [""Person 1"", ""Person 2"", ""Person 3""]
+
+# Define the values for each agent and good
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Create a linear programming problem
+problem = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(
+    ""Allocation"", (goods, agents), 0, 1, pulp.LpInteger
+)
+money_allocations = pulp.LpVariable.dicts(""Money"", agents, 0, 5)
+
+# Objective function: Maximize the total value
+problem += pulp.lpSum(
+    values[agent, good] * allocations[good][agent]
+    for good in goods
+    for agent in agents
+) + pulp.lpSum(money_allocations[agent] for agent in agents)
+
+# Constraints:
+# Each good can be allocated to at most one agent
+for good in goods:
+    problem += pulp.lpSum(allocations[good][agent] for agent in agents) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money_allocations[agent] for agent in agents) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for good in goods:
+    for agent in agents:
+        if allocations[good][agent].varValue == 1:
+            print(f""{agent} gets {good}"")
+for agent in agents:
+    if money_allocations[agent].varValue > 0:
+        print(f""{agent} gets {money_allocations[agent].varValue} units of money"")
+```
+",0,3,2,None,5.0,0.0,0.0
+41,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1: print(""Good A"")
+if x_21.varValue == 1: print(""Good B"")
+if x_31.varValue == 1: print(""Good C"")
+print(f""Money: {m1.varValue}"") 
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1: print(""Good A"")
+if x_22.varValue == 1: print(""Good B"")
+if x_32.varValue == 1: print(""Good C"")
+print(f""Money: {m2.varValue}"") 
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1: print(""Good A"")
+if x_23.varValue == 1: print(""Good B"")
+if x_33.varValue == 1: print(""Good C"")
+print(f""Money: {m3.varValue}"") 
+```
+",0,3,2,1,5.0,0.0,0.0
+42,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the individuals
+individuals = [""Person 1"", ""Person 2"", ""Person 3""]
+
+# Define the goods
+goods = [""Good A"", ""Good B"", ""Good C""]
+
+# Define the values
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(
+    ""Allocation"", (individuals, goods), cat=""Binary""
+)
+money_allocations = pulp.LpVariable.dicts(
+    ""Money Allocation"", individuals, lowBound=0, upBound=5
+)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum(
+    values[(i, g)] * allocations[i][g]
+    for i in individuals
+    for g in goods
+) + pulp.lpSum(money_allocations[i] for i in individuals)
+
+# Constraints:
+# Each good can be allocated to at most one individual
+for g in goods:
+    problem += pulp.lpSum(allocations[i][g] for i in individuals) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money_allocations[i] for i in individuals) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+for i in individuals:
+    for g in goods:
+        if allocations[i][g].varValue == 1:
+            print(f""{i} gets {g}"")
+    print(f""{i} gets {money_allocations[i].varValue} units of money"")
+```
+",0,3,2,1,5.0,0.0,0.0
+43,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total social welfare
+problem += (
+    45 * x_11
+    + 30 * x_21
+    + 25 * x_31
+    + 35 * x_12
+    + 40 * x_22
+    + 25 * x_32
+    + 50 * x_13
+    + 5 * x_23
+    + 45 * x_33
+    + m1
+    + m2
+    + m3
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1:
+    print(""Good A"")
+if x_21.varValue == 1:
+    print(""Good B"")
+if x_31.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m1.varValue)
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1:
+    print(""Good A"")
+if x_22.varValue == 1:
+    print(""Good B"")
+if x_32.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m2.varValue)
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1:
+    print(""Good A"")
+if x_23.varValue == 1:
+    print(""Good B"")
+if x_33.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+44,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good i is allocated to person j, 0 otherwise
+x = pulp.LpVariable.dicts(""x"", ((i, j) for i in range(3) for j in range(3)), cat='Binary')
+
+# y[j] = amount of money allocated to person j
+y = pulp.LpVariable.dicts(""y"", range(3), lowBound=0, upBound=5)
+
+# Define the objective function: maximize the total value
+problem += pulp.lpSum([
+    45*x[(0,0)] + 30*x[(1,0)] + 25*x[(2,0)] + y[0],  # Person 1
+    35*x[(0,1)] + 40*x[(1,1)] + 25*x[(2,1)] + y[1],  # Person 2
+    50*x[(0,2)] + 5*x[(1,2)] + 45*x[(2,2)] + y[2]   # Person 3
+])
+
+# Constraints
+# Each good can be allocated to at most one person
+for i in range(3):
+    problem += pulp.lpSum([x[(i, j)] for j in range(3)]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in range(3)]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in range(3):
+    for j in range(3):
+        if pulp.value(x[(i, j)]) == 1:
+            print(f""Good {chr(ord('A') + i)} allocated to Person {j+1}"")
+for j in range(3):
+    if pulp.value(y[j]) > 0:
+        print(f""Person {j+1} receives {pulp.value(y[j])} units of money."")
+```
+",0,3,2,1,2.5,0,2.5
+45,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: maximize total welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total_Welfare""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {x_11.varValue}, Good B: {x_21.varValue}, Good C: {x_31.varValue}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {x_12.varValue}, Good B: {x_22.varValue}, Good C: {x_32.varValue}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {x_13.varValue}, Good B: {x_23.varValue}, Good C: {x_33.varValue}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+46,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can only be allocated to one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x_11), ""Good B:"", pulp.value(x_21), ""Good C:"", pulp.value(x_31), ""Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x_12), ""Good B:"", pulp.value(x_22), ""Good C:"", pulp.value(x_32), ""Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x_13), ""Good B:"", pulp.value(x_23), ""Good C:"", pulp.value(x_33), ""Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+47,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (binary: 1 if allocated, 0 otherwise)
+x1A = pulp.LpVariable(""x1A"", cat='Binary')  # Person 1 gets Good A
+x1B = pulp.LpVariable(""x1B"", cat='Binary')  # Person 1 gets Good B
+x1C = pulp.LpVariable(""x1C"", cat='Binary')  # Person 1 gets Good C
+x2A = pulp.LpVariable(""x2A"", cat='Binary')  # Person 2 gets Good A
+x2B = pulp.LpVariable(""x2B"", cat='Binary')  # Person 2 gets Good B
+x2C = pulp.LpVariable(""x2C"", cat='Binary')  # Person 2 gets Good C
+x3A = pulp.LpVariable(""x3A"", cat='Binary')  # Person 3 gets Good A
+x3B = pulp.LpVariable(""x3B"", cat='Binary')  # Person 3 gets Good B
+x3C = pulp.LpVariable(""x3C"", cat='Binary')  # Person 3 gets Good C
+
+# Money allocation (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)  # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)  # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)  # Money to Person 3
+
+# Objective function: Maximize total perceived value
+problem += 45*x1A + 30*x1B + 25*x1C + m1 + \
+           35*x2A + 40*x2B + 25*x2C + m2 + \
+           50*x3A +  5*x3B + 45*x3C + m3, ""Total_Value""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1A + x2A + x3A <= 1, ""Good_A_Allocation""
+problem += x1B + x2B + x3B <= 1, ""Good_B_Allocation""
+problem += x1C + x2C + x3C <= 1, ""Good_C_Allocation""
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5, ""Total_Money""
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(""Person 1: "")
+print(""  Good A:"", pulp.value(x1A))
+print(""  Good B:"", pulp.value(x1B))
+print(""  Good C:"", pulp.value(x1C))
+print(""  Money:"", pulp.value(m1))
+print(""Person 2: "")
+print(""  Good A:"", pulp.value(x2A))
+print(""  Good B:"", pulp.value(x2B))
+print(""  Good C:"", pulp.value(x2C))
+print(""  Money:"", pulp.value(m2))
+print(""Person 3: "")
+print(""  Good A:"", pulp.value(x3A))
+print(""  Good B:"", pulp.value(x3B))
+print(""  Good C:"", pulp.value(x3C))
+print(""  Money:"", pulp.value(m3))
+```
+",0,3,2,1,2.0,0.0,3.0
+48,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i, j] = 1 if good j is allocated to person i, 0 otherwise
+x = pulp.LpVariable.dicts(""x"", [(i, j) for i in range(1, 4) for j in [""A"", ""B"", ""C""]], cat='Binary')
+# y[i] = amount of money allocated to person i
+y = pulp.LpVariable.dicts(""y"", [i for i in range(1, 4)], lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum([
+    45 * x[(1, ""A"")] + 30 * x[(1, ""B"")] + 25 * x[(1, ""C"")] + y[1],
+    35 * x[(2, ""A"")] + 40 * x[(2, ""B"")] + 25 * x[(2, ""C"")] + y[2],
+    50 * x[(3, ""A"")] + 5 * x[(3, ""B"")] + 45 * x[(3, ""C"")] + y[3]
+])
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x[(1, ""A"")] + x[(2, ""A"")] + x[(3, ""A"")] <= 1
+problem += x[(1, ""B"")] + x[(2, ""B"")] + x[(3, ""B"")] <= 1
+problem += x[(1, ""C"")] + x[(2, ""C"")] + x[(3, ""C"")] <= 1
+
+# Total money allocated cannot exceed 5
+problem += y[1] + y[2] + y[3] <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in range(1, 4):
+    print(f""Person {i}:"")
+    for j in [""A"", ""B"", ""C""]:
+        if x[(i, j)].varValue == 1:
+            print(f""  Good {j}"")
+    if y[i].varValue > 0:
+        print(f""  Money: {y[i].varValue:.2f}"")
+```
+",0,3,2,1,2.50,0.00,2.50
+49,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1a = pulp.LpVariable(""x1a"", cat='Binary') # Person 1 gets Good A
+x1b = pulp.LpVariable(""x1b"", cat='Binary') # Person 1 gets Good B
+x1c = pulp.LpVariable(""x1c"", cat='Binary') # Person 1 gets Good C
+x2a = pulp.LpVariable(""x2a"", cat='Binary') # Person 2 gets Good A
+x2b = pulp.LpVariable(""x2b"", cat='Binary') # Person 2 gets Good B
+x2c = pulp.LpVariable(""x2c"", cat='Binary') # Person 2 gets Good C
+x3a = pulp.LpVariable(""x3a"", cat='Binary') # Person 3 gets Good A
+x3b = pulp.LpVariable(""x3b"", cat='Binary') # Person 3 gets Good B
+x3c = pulp.LpVariable(""x3c"", cat='Binary') # Person 3 gets Good C
+
+# Money allocation (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5) # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5) # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5) # Money to Person 3
+
+# Objective function: maximize total value
+problem += 45*x1a + 30*x1b + 25*x1c + m1 + \
+           35*x2a + 40*x2b + 25*x2c + m2 + \
+           50*x3a + 5*x3b + 45*x3c + m3, ""Total Value""
+
+# Constraints
+problem += x1a + x2a + x3a <= 1, ""Good A allocation""
+problem += x1b + x2b + x3b <= 1, ""Good B allocation""
+problem += x1c + x2c + x3c <= 1, ""Good C allocation""
+problem += m1 + m2 + m3 <= 5, ""Total money allocation""
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", int(x1a.varValue), ""Good B:"", int(x1b.varValue), ""Good C:"", int(x1c.varValue), ""Money:"", m1.varValue)
+print(""Person 2: Good A:"", int(x2a.varValue), ""Good B:"", int(x2b.varValue), ""Good C:"", int(x2c.varValue), ""Money:"", m2.varValue)
+print(""Person 3: Good A:"", int(x3a.varValue), ""Good B:"", int(x3b.varValue), ""Good C:"", int(x3c.varValue), ""Money:"", m3.varValue)
+```
+",0,3,2,1,0.0,0.0,0.0
+50,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good i is allocated to person j, 0 otherwise
+x = {}
+for i in [""A"", ""B"", ""C""]:
+    x[i] = {}
+    for j in [1, 2, 3]:
+        x[i][j] = pulp.LpVariable(f""x_{i}_{j}"", 0, 1, pulp.LpInteger)
+
+# Define the money allocation variables
+# y[j] = amount of money allocated to person j
+y = {}
+for j in [1, 2, 3]:
+    y[j] = pulp.LpVariable(f""y_{j}"", 0, 5)
+
+# Define the valuations
+valuations = {
+    1: {""A"": 45, ""B"": 30, ""C"": 25},
+    2: {""A"": 35, ""B"": 40, ""C"": 25},
+    3: {""A"": 50, ""B"": 5, ""C"": 45},
+}
+
+# Objective function: Maximize the total valuation
+problem += pulp.lpSum(
+    valuations[j][i] * x[i][j] + y[j] for i in [""A"", ""B"", ""C""] for j in [1, 2, 3]
+)
+
+# Constraints:
+# Each good can be allocated to at most one person
+for i in [""A"", ""B"", ""C""]:
+    problem += pulp.lpSum([x[i][j] for j in [1, 2, 3]]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in [1, 2, 3]]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        if x[i][j].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+
+for j in [1, 2, 3]:
+    if y[j].varValue > 0:
+        print(f""{y[j].varValue} units of money allocated to Person {j}"")
+```
+",0,3,2,1,0,0,0
+51,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (binary: 1 if allocated, 0 otherwise)
+x1A = pulp.LpVariable(""x1A"", cat='Binary')
+x1B = pulp.LpVariable(""x1B"", cat='Binary')
+x1C = pulp.LpVariable(""x1C"", cat='Binary')
+x2A = pulp.LpVariable(""x2A"", cat='Binary')
+x2B = pulp.LpVariable(""x2B"", cat='Binary')
+x2C = pulp.LpVariable(""x2C"", cat='Binary')
+x3A = pulp.LpVariable(""x3A"", cat='Binary')
+x3B = pulp.LpVariable(""x3B"", cat='Binary')
+x3C = pulp.LpVariable(""x3C"", cat='Binary')
+
+# Money allocation (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total social welfare (sum of individual values)
+problem += 45*x1A + 30*x1B + 25*x1C + m1 + \
+           35*x2A + 40*x2B + 25*x2C + m2 + \
+           50*x3A + 5*x3B + 45*x3C + m3, ""Total_Social_Welfare""
+
+# Constraints
+# Each good can only be allocated to one person or none
+problem += x1A + x2A + x3A <= 1
+problem += x1B + x2B + x3B <= 1
+problem += x1C + x2C + x3C <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x1A), "" Good B:"", pulp.value(x1B), "" Good C:"", pulp.value(x1C), "" Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x2A), "" Good B:"", pulp.value(x2B), "" Good C:"", pulp.value(x2C), "" Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x3A), "" Good B:"", pulp.value(x3B), "" Good C:"", pulp.value(x3C), "" Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+52,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1A = pulp.LpVariable(""x1A"", cat='Binary')
+x1B = pulp.LpVariable(""x1B"", cat='Binary')
+x1C = pulp.LpVariable(""x1C"", cat='Binary')
+x2A = pulp.LpVariable(""x2A"", cat='Binary')
+x2B = pulp.LpVariable(""x2B"", cat='Binary')
+x2C = pulp.LpVariable(""x2C"", cat='Binary')
+x3A = pulp.LpVariable(""x3A"", cat='Binary')
+x3B = pulp.LpVariable(""x3B"", cat='Binary')
+x3C = pulp.LpVariable(""x3C"", cat='Binary')
+
+# Money allocation
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total welfare
+problem += 45*x1A + 30*x1B + 25*x1C + m1 + 35*x2A + 40*x2B + 25*x2C + m2 + 50*x3A + 5*x3B + 45*x3C + m3
+
+# Define the constraints
+# Each good can be allocated to at most one person
+problem += x1A + x2A + x3A <= 1
+problem += x1B + x2B + x3B <= 1
+problem += x1C + x2C + x3C <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Good A:"")
+print(""Person 1:"", pulp.value(x1A))
+print(""Person 2:"", pulp.value(x2A))
+print(""Person 3:"", pulp.value(x3A))
+print(""\nGood B:"")
+print(""Person 1:"", pulp.value(x1B))
+print(""Person 2:"", pulp.value(x2B))
+print(""Person 3:"", pulp.value(x3B))
+print(""\nGood C:"")
+print(""Person 1:"", pulp.value(x1C))
+print(""Person 2:"", pulp.value(x2C))
+print(""Person 3:"", pulp.value(x3C))
+print(""\nMoney:"")
+print(""Person 1:"", pulp.value(m1))
+print(""Person 2:"", pulp.value(m2))
+print(""Person 3:"", pulp.value(m3))
+```
+",0,3,2,1,5.0,0.0,0.0
+53,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variable
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can only be allocated to one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {int(x_11.varValue)}, Good B: {int(x_21.varValue)}, Good C: {int(x_31.varValue)}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {int(x_12.varValue)}, Good B: {int(x_22.varValue)}, Good C: {int(x_32.varValue)}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {int(x_13.varValue)}, Good B: {int(x_23.varValue)}, Good C: {int(x_33.varValue)}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0.0,0.0,5.0
+54,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,2.0,0.0,3.0
+55,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define decision variables (binary for good allocation, continuous for money)
+good_a = {
+    ""Person1"": pulp.LpVariable(""Good_A_Person1"", cat=""Binary""),
+    ""Person2"": pulp.LpVariable(""Good_A_Person2"", cat=""Binary""),
+    ""Person3"": pulp.LpVariable(""Good_A_Person3"", cat=""Binary""),
+}
+good_b = {
+    ""Person1"": pulp.LpVariable(""Good_B_Person1"", cat=""Binary""),
+    ""Person2"": pulp.LpVariable(""Good_B_Person2"", cat=""Binary""),
+    ""Person3"": pulp.LpVariable(""Good_B_Person3"", cat=""Binary""),
+}
+good_c = {
+    ""Person1"": pulp.LpVariable(""Good_C_Person1"", cat=""Binary""),
+    ""Person2"": pulp.LpVariable(""Good_C_Person2"", cat=""Binary""),
+    ""Person3"": pulp.LpVariable(""Good_C_Person3"", cat=""Binary""),
+}
+money = {
+    ""Person1"": pulp.LpVariable(""Money_Person1"", lowerbound=0, upperbound=5),
+    ""Person2"": pulp.LpVariable(""Money_Person2"", lowerbound=0, upperbound=5),
+    ""Person3"": pulp.LpVariable(""Money_Person3"", lowerbound=0, upperbound=5),
+}
+
+# Define the objective function: Maximize total value
+problem += (
+    45 * good_a[""Person1""]
+    + 30 * good_b[""Person1""]
+    + 25 * good_c[""Person1""]
+    + money[""Person1""]
+    + 35 * good_a[""Person2""]
+    + 40 * good_b[""Person2""]
+    + 25 * good_c[""Person2""]
+    + money[""Person2""]
+    + 50 * good_a[""Person3""]
+    + 5 * good_b[""Person3""]
+    + 45 * good_c[""Person3""]
+    + money[""Person3""]
+)
+
+# Define constraints
+# Each good can be allocated to at most one person
+problem += good_a[""Person1""] + good_a[""Person2""] + good_a[""Person3""] <= 1
+problem += good_b[""Person1""] + good_b[""Person2""] + good_b[""Person3""] <= 1
+problem += good_c[""Person1""] + good_c[""Person2""] + good_c[""Person3""] <= 1
+
+# Total money allocated cannot exceed 5
+problem += money[""Person1""] + money[""Person2""] + money[""Person3""] <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1:"")
+print(f""- Good A: {int(good_a['Person1'].varValue)}"")
+print(f""- Good B: {int(good_b['Person1'].varValue)}"")
+print(f""- Good C: {int(good_c['Person1'].varValue)}"")
+print(f""- Money: {money['Person1'].varValue:.2f}"")
+print(""Person 2:"")
+print(f""- Good A: {int(good_a['Person2'].varValue)}"")
+print(f""- Good B: {int(good_b['Person2'].varValue)}"")
+print(f""- Good C: {int(good_c['Person2'].varValue)}"")
+print(f""- Money: {money['Person2'].varValue:.2f}"")
+print(""Person 3:"")
+print(f""- Good A: {int(good_a['Person3'].varValue)}"")
+print(f""- Good B: {int(good_b['Person3'].varValue)}"")
+print(f""- Good C: {int(good_c['Person3'].varValue)}"")
+print(f""- Money: {money['Person3'].varValue:.2f}"")
+```
+",0,3,2,1,2.50,0.00,2.50
+56,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the goods
+goods = ['A', 'B', 'C']
+
+# Define the individuals
+individuals = ['Person 1', 'Person 2', 'Person 3']
+
+# Define the values each individual has for each good
+values = {
+    ('Person 1', 'A'): 45,
+    ('Person 1', 'B'): 30,
+    ('Person 1', 'C'): 25,
+    ('Person 2', 'A'): 35,
+    ('Person 2', 'B'): 40,
+    ('Person 2', 'C'): 25,
+    ('Person 3', 'A'): 50,
+    ('Person 3', 'B'): 5,
+    ('Person 3', 'C'): 45
+}
+
+# Define the decision variables: whether to allocate a good to an individual
+allocation = pulp.LpVariable.dicts(""Allocation"", (individuals, goods), cat='Binary')
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum(values[(i, g)] * allocation[i][g] for i in individuals for g in goods)
+
+# Define the constraints: each good can be allocated to at most one individual
+for g in goods:
+    problem += pulp.lpSum(allocation[i][g] for i in individuals) <= 1
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal allocation:"")
+for i in individuals:
+    for g in goods:
+        if pulp.value(allocation[i][g]) == 1:
+            print(f""{i} receives Good {g}"")
+
+# Calculate and print the total value generated
+total_value = pulp.value(problem.objective)
+print(f""\nTotal value generated: {total_value}"")
+
+# Since no individual values money more than any good, 
+# and the total value of money is less than the potential 
+# value generated by allocating all goods, no money is allocated.
+```
+",0,3,2,1,0,0,0
+57,"```python
+import mip
+
+# Create a MIP model
+model = mip.Model()
+
+# Decision variables:
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+# y_j = amount of money allocated to Person j
+goods = ['A', 'B', 'C']
+persons = [1, 2, 3]
+x = {}
+for i in goods:
+    for j in persons:
+        x[i, j] = model.add_var(var_type=mip.BINARY, name=f""x_{i}{j}"")
+y = {}
+for j in persons:
+    y[j] = model.add_var(var_type='C', name=f""y_{j}"")
+
+# Values of goods for each person
+values = {
+    (1, 'A'): 45, (1, 'B'): 30, (1, 'C'): 25,
+    (2, 'A'): 35, (2, 'B'): 40, (2, 'C'): 25,
+    (3, 'A'): 50, (3, 'B'): 5,  (3, 'C'): 45,
+}
+
+# Constraints:
+# Each good is allocated to at most one person
+for i in goods:
+    model += mip.xsum(x[i, j] for j in persons) <= 1
+
+# Total money allocated cannot exceed 5
+model += mip.xsum(y[j] for j in persons) <= 5
+
+# Objective function: Maximize total value
+model.objective = mip.maximize(
+    mip.xsum(values[j, i] * x[i, j] for i in goods for j in persons) +
+    mip.xsum(y[j] for j in persons)
+)
+
+# Solve the model
+model.optimize()
+
+# Print the allocation
+print(""Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[i, j].x > 0.5:
+            print(f""Good {i} allocated to Person {j}"")
+for j in persons:
+    if y[j].x > 0.5:
+        print(f""Person {j} receives {y[j].x:.2f} units of money"")
+```
+",0,3,2,1,0,0,0
+58,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total social welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total_Welfare""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1, ""Good_A_Allocation""
+problem += x_21 + x_22 + x_23 <= 1, ""Good_B_Allocation""
+problem += x_31 + x_32 + x_33 <= 1, ""Good_C_Allocation""
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5, ""Total_Money""
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+59,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (1 if allocated, 0 otherwise)
+x1a = pulp.LpVariable(""x1a"", cat='Binary') # Person 1 gets Good A
+x1b = pulp.LpVariable(""x1b"", cat='Binary') # Person 1 gets Good B
+x1c = pulp.LpVariable(""x1c"", cat='Binary') # Person 1 gets Good C
+x2a = pulp.LpVariable(""x2a"", cat='Binary') # Person 2 gets Good A
+x2b = pulp.LpVariable(""x2b"", cat='Binary') # Person 2 gets Good B
+x2c = pulp.LpVariable(""x2c"", cat='Binary') # Person 2 gets Good C
+x3a = pulp.LpVariable(""x3a"", cat='Binary') # Person 3 gets Good A
+x3b = pulp.LpVariable(""x3b"", cat='Binary') # Person 3 gets Good B
+x3c = pulp.LpVariable(""x3c"", cat='Binary') # Person 3 gets Good C
+
+# Money allocation
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5) # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5) # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5) # Money to Person 3
+
+# Objective function: Maximize total social welfare
+problem += 45*x1a + 30*x1b + 25*x1c + m1 + 35*x2a + 40*x2b + 25*x2c + m2 + 50*x3a + 5*x3b + 45*x3c + m3
+
+# Constraints
+# Each good can be allocated to only one person or not allocated at all
+problem += x1a + x2a + x3a <= 1 
+problem += x1b + x2b + x3b <= 1
+problem += x1c + x2c + x3c <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x1a.varValue == 1 else 'No'}, Good B: {'Yes' if x1b.varValue == 1 else 'No'}, Good C: {'Yes' if x1c.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x2a.varValue == 1 else 'No'}, Good B: {'Yes' if x2b.varValue == 1 else 'No'}, Good C: {'Yes' if x2c.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x3a.varValue == 1 else 'No'}, Good B: {'Yes' if x3b.varValue == 1 else 'No'}, Good C: {'Yes' if x3c.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,2.0,0.0,3.0
+60,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# Goods allocation (binary): 1 if allocated, 0 otherwise
+x1a = pulp.LpVariable(""x1a"", cat='Binary')  # Person 1 gets Good A
+x1b = pulp.LpVariable(""x1b"", cat='Binary')  # Person 1 gets Good B
+x1c = pulp.LpVariable(""x1c"", cat='Binary')  # Person 1 gets Good C
+x2a = pulp.LpVariable(""x2a"", cat='Binary')  # Person 2 gets Good A
+x2b = pulp.LpVariable(""x2b"", cat='Binary')  # Person 2 gets Good B
+x2c = pulp.LpVariable(""x2c"", cat='Binary')  # Person 2 gets Good C
+x3a = pulp.LpVariable(""x3a"", cat='Binary')  # Person 3 gets Good A
+x3b = pulp.LpVariable(""x3b"", cat='Binary')  # Person 3 gets Good B
+x3c = pulp.LpVariable(""x3c"", cat='Binary')  # Person 3 gets Good C
+
+# Money allocation (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowbound=0, upbound=5)  # Money to Person 1
+m2 = pulp.LpVariable(""m2"", lowbound=0, upbound=5)  # Money to Person 2
+m3 = pulp.LpVariable(""m3"", lowbound=0, upbound=5)  # Money to Person 3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x1a + x2a + x3a <= 1
+problem += x1b + x2b + x3b <= 1
+problem += x1c + x2c + x3c <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Objective function: Maximize total perceived value
+problem += 45*x1a + 30*x1b + 25*x1c + m1  + \
+           35*x2a + 40*x2b + 25*x2c + m2  + \
+           50*x3a + 5*x3b  + 45*x3c + m3
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+print(""  Good A:"", int(x1a.varValue))
+print(""  Good B:"", int(x1b.varValue))
+print(""  Good C:"", int(x1c.varValue))
+print(""  Money:"", m1.varValue)
+print(""Person 2: "")
+print(""  Good A:"", int(x2a.varValue))
+print(""  Good B:"", int(x2b.varValue))
+print(""  Good C:"", int(x2c.varValue))
+print(""  Money:"", m2.varValue)
+print(""Person 3: "")
+print(""  Good A:"", int(x3a.varValue))
+print(""  Good B:"", int(x3b.varValue))
+print(""  Good C:"", int(x3c.varValue))
+print(""  Money:"", m3.varValue)
+```
+",0,3,2,1,2.0,0.0,3.0
+61,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m_1 = pulp.LpVariable(""m_1"", 0, 5)
+m_2 = pulp.LpVariable(""m_2"", 0, 5)
+m_3 = pulp.LpVariable(""m_3"", 0, 5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m_1 + m_2 + m_3
+
+# Constraints:
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m_1 + m_2 + m_3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1:
+  print(""- Good A"")
+if x_21.varValue == 1:
+  print(""- Good B"")
+if x_31.varValue == 1:
+  print(""- Good C"")
+print(f""- {m_1.varValue} units of money"")
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1:
+  print(""- Good A"")
+if x_22.varValue == 1:
+  print(""- Good B"")
+if x_32.varValue == 1:
+  print(""- Good C"")
+print(f""- {m_2.varValue} units of money"")
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1:
+  print(""- Good A"")
+if x_23.varValue == 1:
+  print(""- Good B"")
+if x_33.varValue == 1:
+  print(""- Good C"")
+print(f""- {m_3.varValue} units of money"")
+```
+",0,3,2,1,2.0,0.0,3.0
+62,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good i is allocated to person j, 0 otherwise
+x = {}
+for i in range(1, 4):
+    x[i] = {}
+    for j in range(1, 4):
+        x[i][j] = pulp.LpVariable(f""x_{i}_{j}"", 0, 1, pulp.LpInteger)
+
+# Define the money allocation variables
+# m[j] = amount of money allocated to person j
+m = {}
+for j in range(1, 4):
+    m[j] = pulp.LpVariable(f""m_{j}"", 0, 5)
+
+# Define the valuations
+valuations = {
+    1: {1: 45, 2: 30, 3: 25},
+    2: {1: 35, 2: 40, 3: 25},
+    3: {1: 50, 2: 5, 3: 45},
+}
+
+# Objective function: maximize the total valuation
+problem += pulp.lpSum(
+    valuations[i][j] * x[i][j] + m[j]
+    for i in range(1, 4)
+    for j in range(1, 4)
+)
+
+# Constraints
+# Each good can be allocated to at most one person
+for i in range(1, 4):
+    problem += pulp.lpSum(x[i][j] for j in range(1, 4)) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(m[j] for j in range(1, 4)) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in range(1, 4):
+    for j in range(1, 4):
+        if x[i][j].value() == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in range(1, 4):
+    if m[j].value() > 0:
+        print(f""{m[j].value()} units of money allocated to Person {j}"")
+
+```
+",0,3,2,1,0,0,0
+63,"```python
+import pulp
+
+# Define the problem data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45,
+}
+money = 5
+
+# Create the optimization model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money_allocations = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=money)
+
+# Set the objective function: maximize total value
+model += pulp.lpSum(values[p, g] * allocations[p][g] for p in persons for g in goods) + pulp.lpSum(money_allocations[p] for p in persons)
+
+# Add constraints to ensure each good is allocated to at most one person
+for g in goods:
+    model += pulp.lpSum(allocations[p][g] for p in persons) <= 1
+
+# Add constraint to ensure total money allocated does not exceed available money
+model += pulp.lpSum(money_allocations[p] for p in persons) <= money
+
+# Solve the optimization problem
+model.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocations[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocations[p].varValue} units of money"")
+```
+",0,3,2,1,0,0,5
+64,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+# y_j = amount of money allocated to person j
+goods = [""A"", ""B"", ""C""]
+persons = [""1"", ""2"", ""3""]
+x = pulp.LpVariable.dicts(""x"", [(i, j) for i in goods for j in persons], cat=""Binary"")
+y = pulp.LpVariable.dicts(""y"", persons, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += (
+    pulp.lpSum(
+        [
+            45 * x[(""A"", ""1"")]
+            + 30 * x[(""B"", ""1"")]
+            + 25 * x[(""C"", ""1"")]
+            + y[""1""]
+            + 35 * x[(""A"", ""2"")]
+            + 40 * x[(""B"", ""2"")]
+            + 25 * x[(""C"", ""2"")]
+            + y[""2""]
+            + 50 * x[(""A"", ""3"")]
+            + 5 * x[(""B"", ""3"")]
+            + 45 * x[(""C"", ""3"")]
+            + y[""3""]
+        ]
+    ),
+    ""Total Value"",
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum([x[(i, j)] for j in persons]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in persons]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[(i, j)].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in persons:
+    if y[j].varValue > 0:
+        print(f""Person {j} receives {y[j].varValue} units of money"")
+
+```
+",0,3,2,1,0,0,0
+65,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1: print(""Good A"") 
+if x_21.varValue == 1: print(""Good B"")
+if x_31.varValue == 1: print(""Good C"")
+print(f""Money: {m1.varValue}"")
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1: print(""Good A"") 
+if x_22.varValue == 1: print(""Good B"")
+if x_32.varValue == 1: print(""Good C"")
+print(f""Money: {m2.varValue}"")
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1: print(""Good A"") 
+if x_23.varValue == 1: print(""Good B"")
+if x_33.varValue == 1: print(""Good C"")
+print(f""Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+66,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total Value""
+
+# Constraints: each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1, ""Good A Allocation""
+problem += x_21 + x_22 + x_23 <= 1, ""Good B Allocation""
+problem += x_31 + x_32 + x_33 <= 1, ""Good C Allocation""
+
+# Money allocation constraint
+problem += m1 + m2 + m3 <= 5, ""Total Money Allocation""
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+print(f""Total Value: {pulp.value(problem.objective)}"")
+```
+",0,3,2,1,0,0,5
+67,"```python
+import numpy as np
+
+# Define the values each person has for each good
+values = np.array([
+    [45, 30, 25],  # Person 1
+    [35, 40, 25],  # Person 2
+    [50, 5, 45]   # Person 3
+])
+
+# Define the available money
+money = 5
+
+# Create a matrix to store the allocation
+allocation = np.zeros((3, 4), dtype=int)
+
+# Allocate goods to maximize total value
+for good in range(3):
+    person = np.argmax(values[:, good])
+    allocation[person, good] = 1
+
+# Allocate remaining money based on highest remaining value
+remaining_values = values * (1 - allocation[:, :3])
+for _ in range(money):
+    person, good = np.unravel_index(np.argmax(remaining_values), remaining_values.shape)
+    allocation[person, 3] += 1
+    remaining_values[person, good] = 0
+
+# Print the allocation matrix
+print(allocation)
+```
+
+```
+[[0 1 0 2]
+ [0 0 1 3]
+ [1 0 0 0]]
+```
+",0,3,1,2,2,3,0
+68,"```python
+import pulp
+
+# Data
+persons = [""Person 1"", ""Person 2"", ""Person 3""]
+goods = [""Good A"", ""Good B"", ""Good C""]
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocations = pulp.LpVariable.dicts(
+    ""Allocation"", (persons, goods), cat=""Binary""
+)
+money_allocations = pulp.LpVariable.dicts(
+    ""Money"", persons, lowBound=0, upBound=5
+)
+
+# Objective: maximize total value
+model += pulp.lpSum(
+    values[p, g] * allocations[p][g] for p in persons for g in goods
+) + pulp.lpSum(money_allocations)
+
+# Constraints
+# Each good can be allocated to at most one person
+for g in goods:
+    model += pulp.lpSum(allocations[p][g] for p in persons) <= 1
+
+# Total money allocated cannot exceed 5
+model += pulp.lpSum(money_allocations) <= 5
+
+# Solve
+model.solve()
+
+# Print allocation
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocations[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocations[p].varValue} units of money"")
+```
+",0,3,2,1,0.0,0.0,0.0
+69,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Good A allocation:"", pulp.value(x_11), pulp.value(x_12), pulp.value(x_13))
+print(""Good B allocation:"", pulp.value(x_21), pulp.value(x_22), pulp.value(x_23))
+print(""Good C allocation:"", pulp.value(x_31), pulp.value(x_32), pulp.value(x_33))
+print(""Money allocation:"", pulp.value(m1), pulp.value(m2), pulp.value(m3))
+```
+",0,3,2,1,0,0,5
+70,"```python
+import pulp
+
+# Define the problem data
+persons = [""Person 1"", ""Person 2"", ""Person 3""]
+goods = [""Good A"", ""Good B"", ""Good C""]
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Create the optimization model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocation = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money_allocation = pulp.LpVariable.dicts(""Money Allocation"", persons, lowBound=0, upBound=5)
+
+# Define the objective function
+model += pulp.lpSum(
+    [values[p, g] * allocation[p][g] for p in persons for g in goods] + 
+    [money_allocation[p] for p in persons]
+)
+
+# Define the constraints
+for g in goods:
+    model += pulp.lpSum([allocation[p][g] for p in persons]) <= 1
+
+model += pulp.lpSum([money_allocation[p] for p in persons]) <= 5
+
+# Solve the optimization problem
+model.solve()
+
+# Print the results
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+
+print(""\nMoney Allocation:"")
+for p in persons:
+    print(f""{p} gets {money_allocation[p].varValue:.2f} units of money"")
+```
+",0,3,2,1,2.50,0.00,2.50
+71,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Good A allocation:"", pulp.value(x_11), pulp.value(x_12), pulp.value(x_13))
+print(""Good B allocation:"", pulp.value(x_21), pulp.value(x_22), pulp.value(x_23))
+print(""Good C allocation:"", pulp.value(x_31), pulp.value(x_32), pulp.value(x_33))
+print(""Money allocation:"", pulp.value(m1), pulp.value(m2), pulp.value(m3))
+```
+",0,3,2,1,0,0,5
+72,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total social welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,5
+73,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total value
+problem += (
+    45 * x_11
+    + 30 * x_21
+    + 25 * x_31
+    + 35 * x_12
+    + 40 * x_22
+    + 25 * x_32
+    + 50 * x_13
+    + 5 * x_23
+    + 45 * x_33
+    + m1
+    + m2
+    + m3
+)
+
+# Constraints:
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1:
+    print(""Good A"")
+if x_21.varValue == 1:
+    print(""Good B"")
+if x_31.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m1.varValue)
+
+print(""Person 2: "")
+if x_12.varValue == 1:
+    print(""Good A"")
+if x_22.varValue == 1:
+    print(""Good B"")
+if x_32.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m2.varValue)
+
+print(""Person 3: "")
+if x_13.varValue == 1:
+    print(""Good A"")
+if x_23.varValue == 1:
+    print(""Good B"")
+if x_33.varValue == 1:
+    print(""Good C"")
+print(""Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+74,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += (
+    45 * x_11 + 30 * x_21 + 25 * x_31 +
+    35 * x_12 + 40 * x_22 + 25 * x_32 +
+    50 * x_13 + 5 * x_23 + 45 * x_33 +
+    m1 + m2 + m3
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+75,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1: print(""Good A"")
+if x_21.varValue == 1: print(""Good B"")
+if x_31.varValue == 1: print(""Good C"")
+print(""Money:"", m1.varValue)
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1: print(""Good A"")
+if x_22.varValue == 1: print(""Good B"")
+if x_32.varValue == 1: print(""Good C"")
+print(""Money:"", m2.varValue)
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1: print(""Good A"")
+if x_23.varValue == 1: print(""Good B"")
+if x_33.varValue == 1: print(""Good C"")
+print(""Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+76,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variable
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total welfare
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can only be allocated to one person or no one:
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5:
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+77,"```python
+import pulp
+
+# Define the problem data
+values = {
+    (1, 'A'): 45,
+    (1, 'B'): 30,
+    (1, 'C'): 25,
+    (2, 'A'): 35,
+    (2, 'B'): 40,
+    (2, 'C'): 25,
+    (3, 'A'): 50,
+    (3, 'B'): 5,
+    (3, 'C'): 45,
+}
+money = 5
+
+# Create the optimization problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = {}
+for person in range(1, 4):
+    for good in ['A', 'B', 'C']:
+        allocations[(person, good)] = pulp.LpVariable(f""x_{person}_{good}"", 0, 1, pulp.LpInteger)
+
+money_allocation = {}
+for person in range(1, 4):
+    money_allocation[person] = pulp.LpVariable(f""m_{person}"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum(values[(person, good)] * allocations[(person, good)] for person in range(1, 4) for good in ['A', 'B', 'C']) + pulp.lpSum(money_allocation[person] for person in range(1, 4))
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for good in ['A', 'B', 'C']:
+    problem += pulp.lpSum(allocations[(person, good)] for person in range(1, 4)) <= 1
+
+# Total money allocated cannot exceed the available amount
+problem += pulp.lpSum(money_allocation[person] for person in range(1, 4)) <= money
+
+# Solve the optimization problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for person in range(1, 4):
+    for good in ['A', 'B', 'C']:
+        if allocations[(person, good)].varValue == 1:
+            print(f""Person {person} gets Good {good}"")
+    print(f""Person {person} gets {money_allocation[person].varValue} units of money"")
+```
+",0,3,2,1,0,0,5
+78,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+money = 5
+
+# Create the model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocations = pulp.LpVariable.dicts(""allocation"", (persons, goods), 0, 1, pulp.LpInteger)
+money_allocations = pulp.LpVariable.dicts(""money_allocation"", persons, 0, 5)
+
+# Objective function
+model += pulp.lpSum([values[p, g] * allocations[p][g] for p in persons for g in goods]) + pulp.lpSum([money_allocations[p] for p in persons])
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum([allocations[p][g] for p in persons]) <= 1
+
+for p in persons:
+    model += pulp.lpSum([allocations[p][g] for g in goods]) <= 1
+
+model += pulp.lpSum([money_allocations[p] for p in persons]) <= money
+
+# Solve the model
+model.solve()
+
+# Print the results
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocations[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocations[p].varValue} units of money"")
+```
+",0,3,2,1,0.0,0.0,5.0
+79,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables (continuous from 0 to 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x_11), "", Good B:"", pulp.value(x_21), "", Good C:"", pulp.value(x_31), "", Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x_12), "", Good B:"", pulp.value(x_22), "", Good C:"", pulp.value(x_32), "", Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x_13), "", Good B:"", pulp.value(x_23), "", Good C:"", pulp.value(x_33), "", Money:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+80,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if Good i is allocated to Person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints:
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the solution
+print(""Allocation:"")
+print(""Good A to Person 1:"", pulp.value(x_11))
+print(""Good A to Person 2:"", pulp.value(x_12))
+print(""Good A to Person 3:"", pulp.value(x_13))
+print(""Good B to Person 1:"", pulp.value(x_21))
+print(""Good B to Person 2:"", pulp.value(x_22))
+print(""Good B to Person 3:"", pulp.value(x_23))
+print(""Good C to Person 1:"", pulp.value(x_31))
+print(""Good C to Person 2:"", pulp.value(x_32))
+print(""Good C to Person 3:"", pulp.value(x_33))
+print(""Money to Person 1:"", pulp.value(m1))
+print(""Money to Person 2:"", pulp.value(m2))
+print(""Money to Person 3:"", pulp.value(m3))
+```
+",0,3,2,1,0,0,0
+81,"```python
+import pulp
+
+# Data
+persons = [""Person 1"", ""Person 2"", ""Person 3""]
+goods = [""Good A"", ""Good B"", ""Good C""]
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Create the model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocation = pulp.LpVariable.dicts(
+    ""Allocation"", (persons, goods), cat=""Binary""
+)
+money_allocation = pulp.LpVariable.dicts(""Money"", persons, lowBound=0, upBound=5)
+
+# Objective function
+model += pulp.lpSum(
+    values[p, g] * allocation[p][g] for p in persons for g in goods
+) + pulp.lpSum(money_allocation[p] for p in persons)
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum(allocation[p][g] for p in persons) <= 1
+
+for p in persons:
+    model += pulp.lpSum(allocation[p][g] for g in goods) <= 1
+
+model += pulp.lpSum(money_allocation.values()) <= 5
+
+# Solve the problem
+model.solve()
+
+# Print the results
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocation[p].varValue} units of money"")
+```
+",0,3,2,1,2.5,0,2.5
+82,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+
+# Model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocation = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money = pulp.LpVariable.dicts(""Money"", persons, lowBound=0, upBound=5)
+
+# Objective: Maximize total value
+model += pulp.lpSum(values[p, g] * allocation[p][g] for p in persons for g in goods) + pulp.lpSum(money)
+
+# Constraints
+# Each good can only be allocated to one person
+for g in goods:
+    model += pulp.lpSum(allocation[p][g] for p in persons) <= 1
+
+# Total money allocated cannot exceed 5
+model += pulp.lpSum(money[p] for p in persons) <= 5
+
+# Solve
+model.solve()
+
+# Print results
+print(""Allocation:"")
+for p in persons:
+    for g in goods:
+        if allocation[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+print(""Money:"")
+for p in persons:
+    if money[p].varValue > 0:
+        print(f""{p} gets {money[p].varValue:.2f} units of money"")
+```
+",0,3,2,1,5.00,0.00,0.00
+83,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat=""Binary"")
+x_12 = pulp.LpVariable(""x_12"", cat=""Binary"")
+x_13 = pulp.LpVariable(""x_13"", cat=""Binary"")
+x_21 = pulp.LpVariable(""x_21"", cat=""Binary"")
+x_22 = pulp.LpVariable(""x_22"", cat=""Binary"")
+x_23 = pulp.LpVariable(""x_23"", cat=""Binary"")
+x_31 = pulp.LpVariable(""x_31"", cat=""Binary"")
+x_32 = pulp.LpVariable(""x_32"", cat=""Binary"")
+x_33 = pulp.LpVariable(""x_33"", cat=""Binary"")
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints:
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(""Person 1: "")
+if x_11.varValue == 1: print(""Good A"") 
+if x_21.varValue == 1: print(""Good B"")
+if x_31.varValue == 1: print(""Good C"")
+print(f""Money: {m1.varValue}"")
+
+print(""\nPerson 2: "")
+if x_12.varValue == 1: print(""Good A"") 
+if x_22.varValue == 1: print(""Good B"")
+if x_32.varValue == 1: print(""Good C"")
+print(f""Money: {m2.varValue}"")
+
+print(""\nPerson 3: "")
+if x_13.varValue == 1: print(""Good A"") 
+if x_23.varValue == 1: print(""Good B"")
+if x_33.varValue == 1: print(""Good C"")
+print(f""Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,0
+84,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if good j is allocated to person i, 0 otherwise
+x = {}
+for i in range(1, 4):
+    x[i] = {}
+    for j in [""A"", ""B"", ""C""]:
+        x[i][j] = pulp.LpVariable(f""x_{i}{j}"", cat=""Binary"")
+
+# Define the money allocation variables
+m = {}
+for i in range(1, 4):
+    m[i] = pulp.LpVariable(f""m_{i}"", lowBound=0, upBound=5)
+
+# Define the valuations
+valuations = {
+    1: {""A"": 45, ""B"": 30, ""C"": 25},
+    2: {""A"": 35, ""B"": 40, ""C"": 25},
+    3: {""A"": 50, ""B"": 5, ""C"": 45},
+}
+
+# Objective function: Maximize the total valuation
+problem += pulp.lpSum(valuations[i][j] * x[i][j] + m[i] for i in range(1, 4) for j in [""A"", ""B"", ""C""])
+
+# Constraints
+# Each good can be allocated to at most one person
+for j in [""A"", ""B"", ""C""]:
+    problem += pulp.lpSum(x[i][j] for i in range(1, 4)) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(m[i] for i in range(1, 4)) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in range(1, 4):
+    print(f""Person {i}:"")
+    for j in [""A"", ""B"", ""C""]:
+        if x[i][j].value() == 1:
+            print(f""  Good {j}"")
+    print(f""  Money: {m[i].value()}"")
+```
+",0,3,2,1,0,0,0
+85,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+# y_j = amount of money allocated to person j
+goods = ['A', 'B', 'C']
+persons = ['1', '2', '3']
+x = pulp.LpVariable.dicts(""x"", ((i, j) for i in goods for j in persons), cat='Binary')
+y = pulp.LpVariable.dicts(""y"", persons, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum([
+    45 * x[('A', '1')] + 30 * x[('B', '1')] + 25 * x[('C', '1')] + y['1'],
+    35 * x[('A', '2')] + 40 * x[('B', '2')] + 25 * x[('C', '2')] + y['2'],
+    50 * x[('A', '3')] + 5 * x[('B', '3')] + 45 * x[('C', '3')] + y['3']
+])
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum([x[(i, j)] for j in persons]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in persons]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[(i, j)].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in persons:
+    if y[j].varValue > 0:
+        print(f""Person {j} receives {y[j].varValue} units of money"")
+```
+",0,3,2,1,0,0,0
+86,"```python
+import pulp
+
+# Define the problem data
+goods = ['A', 'B', 'C']
+people = ['Person 1', 'Person 2', 'Person 3']
+values = {
+    ('Person 1', 'A'): 45,
+    ('Person 1', 'B'): 30,
+    ('Person 1', 'C'): 25,
+    ('Person 2', 'A'): 35,
+    ('Person 2', 'B'): 40,
+    ('Person 2', 'C'): 25,
+    ('Person 3', 'A'): 50,
+    ('Person 3', 'B'): 5,
+    ('Person 3', 'C'): 45
+}
+
+# Create the optimization problem
+problem = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(""Allocation"", (people, goods), cat='Binary')
+money_allocations = pulp.LpVariable.dicts(""Money Allocation"", people, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum(values[p, g] * allocations[p][g] for p in people for g in goods) + pulp.lpSum(money_allocations[p] for p in people)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for g in goods:
+    problem += pulp.lpSum(allocations[p][g] for p in people) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum(money_allocations[p] for p in people) <= 5
+
+# Solve the optimization problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for p in people:
+    for g in goods:
+        if allocations[p][g].varValue == 1:
+            print(f""{p} gets {g}"")
+    print(f""{p} gets {money_allocations[p].varValue} units of money"")
+```
+",0,3,2,1,0,0,5
+87,"```python
+import mip
+
+# Define the problem data
+values = {
+    (1, 'A'): 45,
+    (1, 'B'): 30,
+    (1, 'C'): 25,
+    (2, 'A'): 35,
+    (2, 'B'): 40,
+    (2, 'C'): 25,
+    (3, 'A'): 50,
+    (3, 'B'): 5,
+    (3, 'C'): 45,
+}
+goods = ['A', 'B', 'C']
+persons = [1, 2, 3]
+money = 5
+
+# Create the MIP model
+model = mip.Model(sense=mip.MAXIMIZE)
+
+# Define the decision variables
+allocations = {}
+for p in persons:
+    for g in goods:
+        allocations[p, g] = model.add_var(
+            name=f""allocation_{p}_{g}"", var_type=mip.BINARY
+        )
+money_allocation = {}
+for p in persons:
+    money_allocation[p] = model.add_var(
+        name=f""money_allocation_{p}"", var_type=mip.CONTINUOUS, lb=0, ub=money
+    )
+
+# Define the objective function
+objective = sum(
+    values[p, g] * allocations[p, g] for p in persons for g in goods
+) + sum(money_allocation[p] for p in persons)
+model.objective = objective
+
+# Define the constraints
+for g in goods:
+    model += mip.xsum(allocations[p, g] for p in persons) <= 1
+for p in persons:
+    model += mip.xsum(money_allocation.values()) <= money
+
+# Solve the model
+model.optimize()
+
+# Print the optimal allocation
+print(""Optimal allocation:"")
+for p in persons:
+    for g in goods:
+        if allocations[p, g].x > 0.5:
+            print(f""Person {p} gets Good {g}"")
+    print(f""Person {p} gets {money_allocation[p].x:.2f} units of money"")
+```
+",0,3,2,1,2.50,0.00,2.50
+88,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+# y_j = amount of money allocated to person j
+goods = ['A', 'B', 'C']
+persons = ['1', '2', '3']
+x = pulp.LpVariable.dicts(""Good_Allocation"", ((i, j) for i in goods for j in persons), cat='Binary')
+y = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum(
+    [45 * x[('A', '1')] + 30 * x[('B', '1')] + 25 * x[('C', '1')] + y['1'],  # Person 1's value
+     35 * x[('A', '2')] + 40 * x[('B', '2')] + 25 * x[('C', '2')] + y['2'],  # Person 2's value
+     50 * x[('A', '3')] + 5 * x[('B', '3')] + 45 * x[('C', '3')] + y['3']]  # Person 3's value
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+for i in goods:
+    problem += pulp.lpSum([x[(i, j)] for j in persons]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[j] for j in persons]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+for i in goods:
+    for j in persons:
+        if x[(i, j)].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+for j in persons:
+    if y[j].varValue > 0:
+        print(f""Person {j} receives {y[j].varValue} units of money"")
+```
+",0,3,2,1,0,0,0
+89,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocated to each person
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize the total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Person 1: Good A:"", x_11.varValue, "", Good B:"", x_21.varValue, "", Good C:"", x_31.varValue, "", Money:"", m1.varValue)
+print(""Person 2: Good A:"", x_12.varValue, "", Good B:"", x_22.varValue, "", Good C:"", x_32.varValue, "", Money:"", m2.varValue)
+print(""Person 3: Good A:"", x_13.varValue, "", Good B:"", x_23.varValue, "", Good C:"", x_33.varValue, "", Money:"", m3.varValue)
+```
+",0,3,2,1,0,0,0
+90,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables (continuous between 0 and 5)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize the total perceived value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the optimal allocation
+print(""Optimal Allocation:"")
+print(""Person 1: Good A:"", pulp.value(x_11), ""Good B:"", pulp.value(x_21), ""Good C:"", pulp.value(x_31), ""Money:"", pulp.value(m1))
+print(""Person 2: Good A:"", pulp.value(x_12), ""Good B:"", pulp.value(x_22), ""Good C:"", pulp.value(x_32), ""Money:"", pulp.value(m2))
+print(""Person 3: Good A:"", pulp.value(x_13), ""Good B:"", pulp.value(x_23), ""Good C:"", pulp.value(x_33), ""Money:"", pulp.value(m3))
+```
+",0,3,2,1,0.0,0.0,5.0
+91,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+print(f""Person 1: Good A: {'Yes' if x_11.varValue == 1 else 'No'}, Good B: {'Yes' if x_21.varValue == 1 else 'No'}, Good C: {'Yes' if x_31.varValue == 1 else 'No'}, Money: {m1.varValue}"")
+print(f""Person 2: Good A: {'Yes' if x_12.varValue == 1 else 'No'}, Good B: {'Yes' if x_22.varValue == 1 else 'No'}, Good C: {'Yes' if x_32.varValue == 1 else 'No'}, Money: {m2.varValue}"")
+print(f""Person 3: Good A: {'Yes' if x_13.varValue == 1 else 'No'}, Good B: {'Yes' if x_23.varValue == 1 else 'No'}, Good C: {'Yes' if x_33.varValue == 1 else 'No'}, Money: {m3.varValue}"")
+```
+",0,3,2,1,0,0,5
+92,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", cat='Binary')
+x_12 = pulp.LpVariable(""x_12"", cat='Binary')
+x_13 = pulp.LpVariable(""x_13"", cat='Binary')
+x_21 = pulp.LpVariable(""x_21"", cat='Binary')
+x_22 = pulp.LpVariable(""x_22"", cat='Binary')
+x_23 = pulp.LpVariable(""x_23"", cat='Binary')
+x_31 = pulp.LpVariable(""x_31"", cat='Binary')
+x_32 = pulp.LpVariable(""x_32"", cat='Binary')
+x_33 = pulp.LpVariable(""x_33"", cat='Binary')
+
+# Money allocation variables (0 to 5, continuous)
+m1 = pulp.LpVariable(""m1"", lowBound=0, upBound=5)
+m2 = pulp.LpVariable(""m2"", lowBound=0, upBound=5)
+m3 = pulp.LpVariable(""m3"", lowBound=0, upBound=5)
+
+# Objective function: Maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total Value""
+
+# Constraints
+# Each good can be allocated to at most one person
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+print(""Good A to Person 1:"", x_11.varValue)
+print(""Good A to Person 2:"", x_12.varValue)
+print(""Good A to Person 3:"", x_13.varValue)
+print(""Good B to Person 1:"", x_21.varValue)
+print(""Good B to Person 2:"", x_22.varValue)
+print(""Good B to Person 3:"", x_23.varValue)
+print(""Good C to Person 1:"", x_31.varValue)
+print(""Good C to Person 2:"", x_32.varValue)
+print(""Good C to Person 3:"", x_33.varValue)
+print(""Money to Person 1:"", m1.varValue)
+print(""Money to Person 2:"", m2.varValue)
+print(""Money to Person 3:"", m3.varValue)
+```
+",0,3,2,1,5.0,0.0,0.0
+93,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i, j] = 1 if Good j is allocated to Person i, 0 otherwise
+x = pulp.LpVariable.dicts(""x"", ((i, j) for i in range(1, 4) for j in ['A', 'B', 'C']), cat='Binary')
+
+# y[i] = amount of money allocated to Person i
+y = pulp.LpVariable.dicts(""y"", range(1, 4), lowBound=0, upBound=5)
+
+# Define the objective function: maximize total value
+problem += pulp.lpSum([
+    45 * x[1, 'A'] + 30 * x[1, 'B'] + 25 * x[1, 'C'] + y[1],
+    35 * x[2, 'A'] + 40 * x[2, 'B'] + 25 * x[2, 'C'] + y[2],
+    50 * x[3, 'A'] + 5 * x[3, 'B'] + 45 * x[3, 'C'] + y[3]
+])
+
+# Constraints
+# Each good can be allocated to at most one person
+for j in ['A', 'B', 'C']:
+    problem += pulp.lpSum([x[i, j] for i in range(1, 4)]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([y[i] for i in range(1, 4)]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in range(1, 4):
+    print(f""Person {i}:"")
+    for j in ['A', 'B', 'C']:
+        if x[i, j].varValue == 1:
+            print(f""  Good {j}"")
+    print(f""  Money: {y[i].varValue}"")
+```
+",0,3,2,1,2.5,0,2.5
+94,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = {}
+for person in range(1, 4):
+    for good in [""A"", ""B"", ""C""]:
+        allocations[(person, good)] = pulp.LpVariable(f""p{person}_{good}"", 0, 1, pulp.LpInteger)
+
+money_allocations = {}
+for person in range(1, 4):
+    money_allocations[person] = pulp.LpVariable(f""money_p{person}"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += (
+    allocations[(1, ""A"")] * 45 + allocations[(1, ""B"")] * 30 + allocations[(1, ""C"")] * 25 +
+    allocations[(2, ""A"")] * 35 + allocations[(2, ""B"")] * 40 + allocations[(2, ""C"")] * 25 +
+    allocations[(3, ""A"")] * 50 + allocations[(3, ""B"")] * 5 + allocations[(3, ""C"")] * 45 +
+    money_allocations[1] + money_allocations[2] + money_allocations[3]
+)
+
+# Define the constraints
+# Each good can be allocated to at most one person
+problem += allocations[(1, ""A"")] + allocations[(2, ""A"")] + allocations[(3, ""A"")] <= 1
+problem += allocations[(1, ""B"")] + allocations[(2, ""B"")] + allocations[(3, ""B"")] <= 1
+problem += allocations[(1, ""C"")] + allocations[(2, ""C"")] + allocations[(3, ""C"")] <= 1
+
+# Total money allocated cannot exceed 5
+problem += money_allocations[1] + money_allocations[2] + money_allocations[3] <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Allocation:"")
+for person in range(1, 4):
+    for good in [""A"", ""B"", ""C""]:
+        if allocations[(person, good)].varValue == 1:
+            print(f""Person {person} gets Good {good}"")
+    print(f""Person {person} gets {money_allocations[person].varValue} units of money"")
+```
+```
+Allocation:
+Person 1 gets Good B
+Person 1 gets 0.0 units of money
+Person 2 gets Good C
+Person 2 gets 0.0 units of money
+Person 3 gets Good A
+Person 3 gets 5.0 units of money
+```",0,3,1,2,0,0,5
+95,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x[i][j] = 1 if Good i is allocated to Person j, 0 otherwise
+x = {}
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        x[i, j] = pulp.LpVariable(f""x_{i}_{j}"", 0, 1, pulp.LpInteger)
+
+# Define the money allocation variables
+# m[j] = amount of money allocated to Person j
+m = {}
+for j in [1, 2, 3]:
+    m[j] = pulp.LpVariable(f""m_{j}"", 0, 5)
+
+# Define the valuations
+valuations = {
+    (1, ""A""): 45, (1, ""B""): 30, (1, ""C""): 25,
+    (2, ""A""): 35, (2, ""B""): 40, (2, ""C""): 25,
+    (3, ""A""): 50, (3, ""B""): 5,  (3, ""C""): 45,
+}
+
+# Objective function: maximize total social welfare
+problem += pulp.lpSum([valuations[j, i] * x[i, j] for i in [""A"", ""B"", ""C""] for j in [1, 2, 3]]) + pulp.lpSum([m[j] for j in [1, 2, 3]])
+
+# Constraints
+# Each good can be allocated to at most one person
+for i in [""A"", ""B"", ""C""]:
+    problem += pulp.lpSum([x[i, j] for j in [1, 2, 3]]) <= 1
+
+# Total money allocated cannot exceed 5
+problem += pulp.lpSum([m[j] for j in [1, 2, 3]]) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for i in [""A"", ""B"", ""C""]:
+    for j in [1, 2, 3]:
+        if x[i, j].varValue == 1:
+            print(f""Good {i} allocated to Person {j}"")
+
+print(""Money Allocation:"")
+for j in [1, 2, 3]:
+    print(f""Person {j}: {m[j].varValue}"")
+```
+",0,3,2,1,0,0,0
+96,"```python
+import pulp
+
+# Data
+persons = [""Person 1"", ""Person 2"", ""Person 3""]
+goods = [""Good A"", ""Good B"", ""Good C""]
+values = {
+    (""Person 1"", ""Good A""): 45,
+    (""Person 1"", ""Good B""): 30,
+    (""Person 1"", ""Good C""): 25,
+    (""Person 2"", ""Good A""): 35,
+    (""Person 2"", ""Good B""): 40,
+    (""Person 2"", ""Good C""): 25,
+    (""Person 3"", ""Good A""): 50,
+    (""Person 3"", ""Good B""): 5,
+    (""Person 3"", ""Good C""): 45,
+}
+
+# Create a LP maximization problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define variables
+allocation = pulp.LpVariable.dicts(
+    ""Allocation"", (persons, goods), lowBound=0, upBound=1, cat=""Integer""
+)
+money = pulp.LpVariable.dicts(""Money"", persons, lowBound=0, upBound=5)
+
+# Objective function: maximize total value
+problem += pulp.lpSum(
+    values[(person, good)] * allocation[person][good]
+    for person in persons
+    for good in goods
+) + pulp.lpSum(money[person] for person in persons)
+
+# Constraints
+for good in goods:
+    # Each good can only be allocated to one person
+    problem += pulp.lpSum(allocation[person][good] for person in persons) <= 1
+
+# Total money allocated cannot exceed 5 units
+problem += pulp.lpSum(money[person] for person in persons) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for person in persons:
+    for good in goods:
+        if allocation[person][good].varValue == 1:
+            print(f""{person} gets {good}"")
+for person in persons:
+    if money[person].varValue > 0:
+        print(f""{person} gets {money[person].varValue} units of money"")
+```
+",0,3,2,1,0,0,0
+97,"```python
+import pulp
+
+# Data
+persons = ['Person 1', 'Person 2', 'Person 3']
+goods = ['Good A', 'Good B', 'Good C']
+values = {
+    ('Person 1', 'Good A'): 45,
+    ('Person 1', 'Good B'): 30,
+    ('Person 1', 'Good C'): 25,
+    ('Person 2', 'Good A'): 35,
+    ('Person 2', 'Good B'): 40,
+    ('Person 2', 'Good C'): 25,
+    ('Person 3', 'Good A'): 50,
+    ('Person 3', 'Good B'): 5,
+    ('Person 3', 'Good C'): 45
+}
+money = 5
+
+# Model
+model = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Variables
+allocation = pulp.LpVariable.dicts(""Allocation"", (persons, goods), cat='Binary')
+money_allocation = pulp.LpVariable.dicts(""Money_Allocation"", persons, lowBound=0, upBound=money)
+
+# Objective function
+model += pulp.lpSum([values[p, g] * allocation[p][g] for p in persons for g in goods] + [money_allocation[p] for p in persons])
+
+# Constraints
+for g in goods:
+    model += pulp.lpSum([allocation[p][g] for p in persons]) <= 1
+for p in persons:
+    model += pulp.lpSum([allocation[p][g] * values[p, g] for g in goods]) + money_allocation[p] <= max([values[p, g] for g in goods] + [money])
+
+# Solve
+model.solve()
+
+# Print results
+print(""Allocation:"")
+for g in goods:
+    for p in persons:
+        if pulp.value(allocation[p][g]) == 1:
+            print(f""{g} allocated to {p}"")
+
+print(""\nMoney Allocation:"")
+for p in persons:
+    print(f""{p}: {pulp.value(money_allocation[p])}"")
+```
+",0,3,2,1,2.0,0,3.0
+98,"```python
+import pulp
+
+# Define the problem
+problem = pulp.LpProblem(""Fair_Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+# x_ij = 1 if good i is allocated to person j, 0 otherwise
+x_11 = pulp.LpVariable(""x_11"", 0, 1, pulp.LpInteger)
+x_12 = pulp.LpVariable(""x_12"", 0, 1, pulp.LpInteger)
+x_13 = pulp.LpVariable(""x_13"", 0, 1, pulp.LpInteger)
+x_21 = pulp.LpVariable(""x_21"", 0, 1, pulp.LpInteger)
+x_22 = pulp.LpVariable(""x_22"", 0, 1, pulp.LpInteger)
+x_23 = pulp.LpVariable(""x_23"", 0, 1, pulp.LpInteger)
+x_31 = pulp.LpVariable(""x_31"", 0, 1, pulp.LpInteger)
+x_32 = pulp.LpVariable(""x_32"", 0, 1, pulp.LpInteger)
+x_33 = pulp.LpVariable(""x_33"", 0, 1, pulp.LpInteger)
+
+# Money allocation variables
+m1 = pulp.LpVariable(""m1"", 0, 5)
+m2 = pulp.LpVariable(""m2"", 0, 5)
+m3 = pulp.LpVariable(""m3"", 0, 5)
+
+# Define the objective function: maximize total value
+problem += 45*x_11 + 30*x_21 + 25*x_31 + 35*x_12 + 40*x_22 + 25*x_32 + 50*x_13 + 5*x_23 + 45*x_33 + m1 + m2 + m3, ""Total Value""
+
+# Constraints
+# Each good can only be allocated to one person or none
+problem += x_11 + x_12 + x_13 <= 1
+problem += x_21 + x_22 + x_23 <= 1
+problem += x_31 + x_32 + x_33 <= 1
+
+# Total money allocated cannot exceed 5
+problem += m1 + m2 + m3 <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the results
+print(""Status:"", pulp.LpStatus[problem.status])
+
+print(""Good A allocation:"", x_11.varValue, x_12.varValue, x_13.varValue)
+print(""Good B allocation:"", x_21.varValue, x_22.varValue, x_23.varValue)
+print(""Good C allocation:"", x_31.varValue, x_32.varValue, x_33.varValue)
+print(""Money allocation:"", m1.varValue, m2.varValue, m3.varValue)
+```
+",0,3,2,1,0,0,0
+99,"```python
+import pulp
+
+# Define the goods and individuals
+goods = ['Good A', 'Good B', 'Good C']
+individuals = ['Person 1', 'Person 2', 'Person 3']
+
+# Define the values each individual has for each good
+values = {
+    'Person 1': {'Good A': 45, 'Good B': 30, 'Good C': 25},
+    'Person 2': {'Good A': 35, 'Good B': 40, 'Good C': 25},
+    'Person 3': {'Good A': 50, 'Good B': 5, 'Good C': 45}
+}
+
+# Create a linear programming problem
+problem = pulp.LpProblem(""Fair Allocation"", pulp.LpMaximize)
+
+# Define the decision variables
+allocations = pulp.LpVariable.dicts(""Allocation"", (goods, individuals), cat=pulp.LpBinary)
+money_allocations = pulp.LpVariable.dicts(""Money Allocation"", individuals, lowBound=0, upBound=5)
+
+# Set the objective function: Maximize total value
+problem += pulp.lpSum(values[i][g] * allocations[g][i] for g in goods for i in individuals) + pulp.lpSum(money_allocations[i] for i in individuals)
+
+# Constraints
+# Each good can be allocated to at most one person
+for g in goods:
+    problem += pulp.lpSum(allocations[g][i] for i in individuals) <= 1
+
+# Total money allocated cannot exceed 5 units
+problem += pulp.lpSum(money_allocations[i] for i in individuals) <= 5
+
+# Solve the problem
+problem.solve()
+
+# Print the allocation
+print(""Allocation:"")
+for g in goods:
+    for i in individuals:
+        if allocations[g][i].value() == 1:
+            print(f""{i} gets {g}"")
+for i in individuals:
+    if money_allocations[i].value() > 0:
+        print(f""{i} gets {money_allocations[i].value()} units of money"")
+```
+",0,3,2,1,2.5,0,2.5

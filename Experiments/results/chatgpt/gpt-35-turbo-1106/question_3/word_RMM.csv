@@ -1,0 +1,4531 @@
+,Text,Tokens,Good A,Good B,Good C,Good D,Good E
+0,"To find the allocation that maximizes the minimum value across all individuals, we can use the following approach:
+
+1. Calculate the total value each individual assigns to all goods.
+2. For each possible allocation of the goods, calculate the minimum value received by any individual.
+3. Choose the allocation that maximizes this minimum value.
+
+Let's analyze the possible allocations:
+
+Allocation 1: 
+- Person 1 receives Good A (value = 40)
+- Person 2 receives Good B (value = 26)
+- Person 3 receives Good C, Good D, and Good E (total value = 64)
+
+Minimum value = 26
+
+Allocation 2: 
+- Person 1 receives Good A (value = 40)
+- Person 2 receives Good B, Good D (total value = 52)
+- Person 3 receives Good C and Good E (total value = 56)
+
+Minimum value = 52
+
+Allocation 3: 
+- Person 1 receives Good A, Good D (total value = 65)
+- Person 2 receives Good B, Good C (total value = 20)
+- Person 3 receives Good E (value = 26)
+
+Minimum value = 20
+
+Allocation 4: 
+- Person 1 receives Good A, Good E (total value = 56)
+- Person 2 receives Good B, Good D (total value = 52)
+- Person 3 receives Good C (value = 26)
+
+Minimum value = 26
+
+Allocation 5: 
+- Person 1 receives Good A, Good D (total value = 65)
+- Person 2 receives Good B, Good C (total value = 34)
+- Person 3 receives Good E (value = 26)
+
+Minimum value = 26
+
+Allocation 6: 
+- Person 1 receives Good A, Good E (total value = 56)
+- Person 2 receives Good B, Good D (total value = 52)
+- Person 3 receives Good C (value = 26)
+
+Minimum value = 26
+
+Based on these calculations, Allocation 3 has the highest minimum value of 20. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is as follows:
+- Person 1 receives Good A, Good D (total value = 65)
+- Person 2 receives Good B, Good C (total value = 20)
+- Person 3 receives Good E (value = 26)",1759,1,2,2,1,3
+1,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value each person receives for each possible allocation of goods. We then need to find the allocation where the minimum value across all individuals is maximized.
+
+There are 3! (or 6) possible allocations of the 5 goods. We will calculate the minimum value for each person for each allocation and then find the maximum of these minimum values.
+
+1. Allocation 1: 
+   Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good D, Good E
+   Minimum values: 
+   Person 1: 40
+   Person 2: 26
+   Person 3: 10
+   Maximum of minimum values: 40
+
+2. Allocation 2:
+   Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good E
+   Minimum values:
+   Person 1: 40
+   Person 2: 26
+   Person 3: 10
+   Maximum of minimum values: 40
+
+3. Allocation 3:
+   Person 1: Good A
+   Person 2: Good B
+   Person 3: Good D, Good E
+   Minimum values:
+   Person 1: 40
+   Person 2: 26
+   Person 3: 12
+   Maximum of minimum values: 40
+
+4. Allocation 4:
+   Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good D
+   Minimum values:
+   Person 1: 40
+   Person 2: 26
+   Person 3: 10
+   Maximum of minimum values: 40
+
+5. Allocation 5:
+   Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C
+   Minimum values:
+   Person 1: 40
+   Person 2: 26
+   Person 3: 10
+   Maximum of minimum values: 40
+
+6. Allocation 6:
+   No allocation (throwing all goods away)
+   Minimum values:
+   Person 1: 0
+   Person 2: 0
+   Person 3: 0
+   Maximum of minimum values: 0
+
+In all 6 possible allocations, the maximum of the minimum values is 40. Therefore, all allocations result in the same maximum of minimum values, and the ""Max-Min"" criterion is satisfied for any allocation that gives Good A and Good B to Person 1, as long as they receive at least these two goods.",1869,1,2,None,None,None
+2,"To solve this problem, we can use a method called the ""priority-based allocation"" to maximize the minimum value derived by the worst-off individual.
+
+First, we need to calculate the total value each person derives from each possible allocation. Then, we can find the allocation that maximizes the minimum value.
+
+Here's a step-by-step approach:
+1. Create a table to calculate the total value each person derives from each allocation.
+2. Calculate the total value each person derives from each possible allocation by adding up their values for the goods they receive in each allocation.
+3. Find the maximum value derived by the worst-off individual in each allocation.
+4. Choose the allocation where the maximum value derived by the worst-off individual is the highest.
+
+Here's an organized table to calculate the total value each person derives from each allocation:
+
+| Allocation | Person 1  | Person 2 | Person 3 | Minimum Value |
+|------------|-----------|----------|----------|---------------|
+| A          | 40        | 14       | 10       | 10            |
+| B          | 2         | 26       | 26       | 2             |
+| C          | 3         | 8        | 26       | 3             |
+| D          | 25        | 26       | 12       | 12            |
+| E          | 30        | 26       | 26       | 26            |
+
+From the table, we can see that the allocation to Person 3 for Good C yields the highest minimum value of 26, making it the most favorable allocation according to the ""Max-Min"" criterion.
+
+Therefore, the fair allocation of the 5 goods, in order to maximize the minimum value derived by the worst-off individual, would be:
+- Good A: Person 1
+- Good B: Person 2
+- Good C: Person 3
+- Good D: Person 3
+- Good E: Person 2",1562,1,2,3,3,2
+3,"To find the allocation that maximizes the minimum value derived by the worst-off individual, we need to consider all possible allocations and determine the allocation that results in the highest minimum value across all individuals.
+
+Let's consider all possible allocations:
+1. Allocate Good A to Person 1: 
+   - Person 1: 40
+   - Person 2: 14
+   - Person 3: 10
+   - Minimum value: 10
+
+2. Allocate Good A to Person 2: 
+   - Person 1: 14
+   - Person 2: 14
+   - Person 3: 10
+   - Minimum value: 10
+
+3. Allocate Good A to Person 3: 
+   - Person 1: 10
+   - Person 2: 14
+   - Person 3: 10
+   - Minimum value: 10
+
+Based on these allocations, it is clear that the minimum value derived by the worst-off individual is 10, regardless of the allocation of Good A. Therefore, the allocation that satisfies the Max-Min criterion is any allocation where Good A is allocated.
+
+Since the allocation of Good A does not affect the minimum value derived by the worst-off individual, we can proceed to allocate the remaining goods in a way that maximizes the total value derived by all individuals.
+
+For example, we can allocate Good B, Good C, Good D, and Good E to the individuals in a way that maximizes the total value:
+
+- Allocate Good B, Good C, Good D, and Good E to Person 1: 
+   - Person 1: 40 (Good A) + 2 (Good B) + 3 (Good C) + 25 (Good D) + 30 (Good E) = 100
+   - Person 2: 0
+   - Person 3: 0
+
+This allocation results in the highest total value of 100, maximizing the total value derived by all individuals.
+
+In conclusion, the allocation that satisfies the Max-Min criterion is to allocate Good A to any individual and allocate the remaining goods to maximize the total value derived by all individuals.",1648,1,1,1,1,1
+4,"To solve this problem, we can use a method called the ""divide and choose"" method. Here's how it works:
+
+1. We first calculate the total value that each individual assigns to all the goods.
+
+Person 1: 40 + 2 + 3 + 25 + 30 = 100
+Person 2: 14 + 26 + 8 + 26 + 26 = 100
+Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+2. Now, we find the goods that have the highest total value assigned to them by all individuals. In this case, it is Good A with a total value of 64.
+
+3. We allocate Good A to the individual who values it the most. In this case, Person 1 values Good A the most, so we allocate it to them.
+
+4. Now, we remove Good A from the allocation problem and repeat the process for the remaining goods (Goods B, C, D, and E).
+
+5. We find the goods with the highest total value assigned to them by all individuals in the remaining goods. In this case, Goods B and E each have a total value of 54.
+
+6. We allocate Goods B and E to the individuals who value them the most. Person 2 values Good B and Good E the most, so we allocate them to Person 2.
+
+7. Now, we are left with Goods C and D. Since we have already allocated the remaining goods to the individuals who value them the most, we do not allocate Goods C and D. This means that they remain unallocated.
+
+This allocation satisfies the ""Max-Min"" criterion as the value derived by the worst-off individual, Person 3, is 0. This is the best possible allocation to ensure that the value derived by the worst-off individual is the most across all possible allocations.",1527,1,2,None,None,2
+5,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is the highest across all possible allocations.
+
+We can approach this problem using a method called ""the divide and choose method."" In this method, the individuals take turns to divide the goods into shares they find to be of equal value, and the other individuals choose which share they want.
+
+In this case, let's say Person 1 starts by dividing the goods into 3 shares. Person 1 could divide the goods as follows:
+Share 1: Good A, Good B
+Share 2: Good C, Good D
+Share 3: Good E
+
+Person 2 and Person 3 then choose one share each. Let's say Person 2 chooses Share 1 and Person 3 chooses Share 2. This leaves Share 3 for Person 1.
+
+Under this allocation, the value derived by the worst-off individual (Person 3) is 26 (from Good C and Good D).
+
+Now let's consider another allocation. This time, Person 2 starts by dividing the goods into 3 shares:
+Share 1: Good A, Good E
+Share 2: Good B, Good C
+Share 3: Good D
+
+Person 1 and Person 3 then choose one share each. Let's say Person 1 chooses Share 1 and Person 3 chooses Share 2. This leaves Share 3 for Person 2.
+
+Under this allocation, the value derived by the worst-off individual (Person 2) is 26 (from Good B and Good C).
+
+By considering all possible allocations, we can find the one that maximizes the value for the worst-off individual. In this specific case, the allocation determined by Person 1 in the first round of the divide and choose method is the one that satisfies the ""Max-Min"" criterion, with the value derived by the worst-off individual being 26.",1557,1,None,2,1,3
+6,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by each individual. 
+
+One way to approach this problem is to consider all possible allocations and calculate the minimum value obtained by each individual for each allocation. Then, we can compare these minimum values and find the allocation that maximizes the minimum value.
+
+First, let's list all the possible allocations:
+1. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D, Good E
+2. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D
+3. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good E
+4. Person 1: Good A, Person 2: Good B, Person 3: Good D, Good E
+5. Person 1: Good A, Person 2: Good B, Person 3: Good D
+6. Person 1: Good A, Person 2: Good B, Person 3: Good E
+7. Person 1: Good A, Person 2: Good C, Person 3: Good D, Good E
+8. Person 1: Good A, Person 2: Good C, Person 3: Good D
+9. Person 1: Good A, Person 2: Good C, Person 3: Good E
+10. Person 1: Good A, Person 2: Good D, Person 3: Good E
+11. Person 1: Good A, Person 2: Good D
+12. Person 1: Good A, Person 2: Good E
+13. Person 1: Good B, Person 2: Good C, Person 3: Good D, Good E
+14. Person 1: Good B, Person 2: Good C, Person 3: Good D
+15. Person 1: Good B, Person 2: Good C, Person 3: Good E
+16. Person 1: Good B, Person 2: Good D, Person 3: Good E
+17. Person 1: Good B, Person 2: Good D
+18. Person 1: Good B, Person 2: Good E
+19. Person 1: Good C, Person 2: Good D, Person 3: Good E
+20. Person 1: Good C, Person 2: Good D
+21. Person 1: Good C, Person 2: Good E
+22. Person 1: Good D, Person 2: Good E
+23. Person 1: Good D
+24. Person 1: Good E
+25. No allocation
+
+Now we need to calculate the minimum value obtained by each individual for each of these 25 allocations. This can be done by adding up the values corresponding to the goods allocated to each person.
+
+After calculating the minimum value obtained by each individual for each allocation, we can compare these minimum values and find the allocation that maximizes the minimum value. This allocation would satisfy the ""Max-Min"" criterion.",2087,1,2,None,2,3
+7,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual. 
+
+To do so, we can calculate all possible allocations and compare the minimum value received by each individual for each allocation. The allocation that yields the highest minimum value among all individuals will be the one that satisfies the ""Max-Min"" criterion.
+
+Let's consider all possible allocations:
+
+1. Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good D, Good E
+
+   Minimum value: 2 (Person 1)
+
+2. Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good D
+
+   Minimum value: 3 (Person 1)
+
+3. Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good E
+
+   Minimum value: 3 (Person 1)
+
+4. Person 1: Good A
+   Person 2: Good B
+   Person 3: Good D, Good E
+
+   Minimum value: 2 (Person 3)
+
+5. Person 1: Good A
+   Person 2: Good C
+   Person 3: Good B, Good D, Good E
+
+   Minimum value: 8 (Person 2)
+
+6. Person 1: Good A
+   Person 2: Good C
+   Person 3: Good B, Good D
+
+   Minimum value: 8 (Person 2)
+
+7. Person 1: Good A
+   Person 2: Good C
+   Person 3: Good B, Good E
+
+   Minimum value: 8 (Person 2)
+
+8. Person 1: Good A
+   Person 2: Good D
+   Person 3: Good B, Good C, Good E
+
+   Minimum value: 10 (Person 3)
+
+9. Person 1: Good A
+   Person 2: Good D
+   Person 3: Good B, Good C
+
+   Minimum value: 10 (Person 3)
+
+10. Person 1: Good A
+    Person 2: Good D
+    Person 3: Good B, Good E
+
+    Minimum value: 10 (Person 3)
+
+11. Person 1: Good A
+    Person 2: Good E
+    Person 3: Good B, Good C, Good D
+
+    Minimum value: 12 (Person 3)
+
+12. Person 1: Good B
+    Person 2: Good A
+    Person 3: Good C, Good D, Good E
+
+    Minimum value: 2 (Person 1)
+
+13. Person 1: Good B
+    Person 2: Good A
+    Person 3: Good C, Good D
+
+    Minimum value: 2 (Person 1)
+
+14. Person 1: Good B
+    Person 2: Good A
+    Person 3: Good C, Good E
+
+    Minimum value: 3 (Person 1)
+
+15. Person 1: Good B
+    Person 2: Good A
+    Person 3: Good D, Good E
+
+    Minimum value: 3 (Person 1)
+
+16. Person 1: Good B
+    Person 2: Good C
+    Person 3: Good A, Good D, Good E
+
+    Minimum value: 8 (Person 2)
+
+17. Person 1: Good B
+    Person 2: Good C
+    Person 3: Good A, Good D
+
+    Minimum value: 8 (Person 2)
+
+18. Person 1: Good B
+    Person 2: Good C
+    Person 3: Good A, Good E
+
+    Minimum value: 8 (Person 2)
+
+19. Person 1: Good B
+    Person 2: Good D
+    Person 3: Good A, Good C, Good E
+
+    Minimum value: 10 (Person 3)
+
+20. Person 1: Good B
+    Person 2: Good D
+    Person 3: Good A, Good C
+
+    Minimum value: 10 (Person 3)
+
+21. Person 1: Good B
+    Person 2: Good D
+    Person 3: Good A, Good E
+
+    Minimum value: 10 (Person 3)
+
+22. Person 1: Good B
+    Person 2: Good E
+    Person 3: Good A, Good C, Good D
+
+    Minimum value: 12 (Person 3)
+
+23. Person 1: Good C
+    Person 2: Good A
+    Person 3: Good B, Good D, Good E
+
+    Minimum value: 2 (Person 1)
+
+24. Person 1: Good C
+    Person 2: Good A
+    Person 3: Good B, Good D
+
+    Minimum value: 2 (Person 1)
+
+25. Person 1: Good C
+    Person 2: Good A
+    Person 3: Good B, Good E
+
+    Minimum value: 3 (Person 1)
+
+26. Person 1: Good C
+    Person 2: Good A
+    Person 3: Good D, Good E
+
+    Minimum value: 3 (Person 1)
+
+27. Person 1: Good C
+    Person 2: Good B
+    Person 3: Good A, Good D, Good E
+
+    Minimum value: 2 (Person 1)
+
+28. Person 1: Good C
+    Person 2: Good B
+    Person 3: Good A, Good D
+
+    Minimum value: 2 (Person 1)
+
+29. Person 1: Good C
+    Person 2: Good B
+    Person 3: Good A, Good E
+
+    Minimum value: 8 (Person 2)
+
+30. Person 1: Good C
+    Person 2: Good D
+    Person 3: Good A, Good B, Good E
+
+    Minimum value: 8 (Person 2)
+
+31. Person 1: Good C
+    Person 2: Good D
+    Person 3: Good A, Good B
+
+    Minimum value: 8 (Person 2)
+
+32. Person 1: Good C
+    Person 2: Good D
+    Person 3: Good A, Good E
+
+    Minimum value: 10 (Person 3)
+
+33. Person 1: Good C
+    Person 2: Good E
+    Person 3: Good A, Good B, Good D
+
+    Minimum value: 8 (Person 2)
+
+34. Person 1: Good D
+    Person 2: Good A
+    Person 3: Good B, Good C, Good E
+
+    Minimum value: 2 (Person 1)
+
+35. Person 1: Good D
+    Person 2: Good A
+    Person 3: Good B, Good C
+
+    Minimum value: 3 (Person 1)
+
+36. Person 1: Good D
+    Person 2: Good A
+    Person 3: Good B, Good E
+
+    Minimum value: 26 (Person 2)
+
+37. Person 1: Good D
+    Person 2: Good B
+    Person 3: Good A, Good C, Good E
+
+    Minimum value: 14 (Person 1)
+
+38. Person 1: Good D
+    Person 2: Good B
+    Person 3: Good A, Good C
+
+    Minimum value: 14 (Person 1)
+
+39. Person 1: Good D
+    Person 2: Good B
+    Person 3: Good A, Good E
+
+    Minimum value: 26 (Person 2)
+
+40. Person 1: Good D
+    Person 2: Good C
+    Person 3: Good A, Good B, Good E
+
+    Minimum value: 25 (Person 1)
+
+41. Person 1: Good D
+    Person 2: Good C
+    Person 3: Good A, Good B
+
+    Minimum value: 25 (Person 1)
+
+42. Person 1: Good D
+    Person 2: Good C
+    Person 3: Good A, Good E
+
+    Minimum value: 26 (Person 2)
+
+43. Person 1: Good D
+    Person 2: Good E
+    Person 3: Good A, Good B, Good C
+
+    Minimum value: 25 (Person 1)
+
+44. Person 1: Good E
+    Person 2: Good A
+    Person 3: Good B, Good C, Good D
+
+    Minimum value: 14 (Person 1)
+
+45. Person 1: Good E
+    Person 2: Good A
+    Person 3: Good B, Good C
+
+    Minimum value: 26 (Person 2)
+
+46. Person 1: Good E
+    Person 2: Good A
+    Person 3: Good B, Good D
+
+    Minimum value: 26 (Person 2)
+
+47. Person 1: Good E
+    Person 2: Good B
+    Person 3: Good A, Good C, Good D
+
+    Minimum value: 14 (Person 1)
+
+48. Person 1: Good E
+    Person 2: Good B
+    Person 3: Good A, Good C
+
+    Minimum value: 26 (Person 2)
+
+49. Person 1: Good E
+    Person 2: Good C
+    Person 3: Good A, Good B, Good D
+
+    Minimum value: 26 (Person 2)
+
+50. Person 1: Good E
+    Person 2: Good D
+    Person 3: Good A, Good B, Good C
+
+    Minimum value: 25 (Person 1)
+
+After considering all possible allocations, we observe that the highest minimum value obtained is 14 (Person 1) in the following allocations:
+
+a) Person 1: Good A
+   Person 2: Good E
+   Person 3: Good B, Good C, Good D
+
+b) Person 1: Good E
+   Person 2: Good A
+   Person 3: Good B, Good C, Good D
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is as follows:
+
+- Person 1: Good A
+- Person 2: Good E
+- Person 3: Good B, Good C, Good D
+
+In this allocation, the lowest value received by any individual (Person 1) is 14, which is the maximum among all possible allocations.",5277,1,None,3,3,2
+8,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and choose the one where the value derived by the worst-off individual is the highest.
+
+Here's how we can approach this problem:
+
+Step 1: Create a matrix of values for each person and each good:
+
+```
+  A   B   C   D   E
+1 40   2   3  25  30
+2 14  26   8  26  26
+3 10  26  26  12  26
+```
+
+Step 2: Find the maximum value for each column:
+
+```
+Max: 40  26  26  26  30
+```
+
+Step 3: Compare the maximum values and select the highest value:
+
+```
+Max-Min value: 26
+```
+
+Step 4: Allocate the goods based on the maximum value for each good. In this case, the maximum values are:
+Good A: Person 1 (40)
+Good B: Person 2 (26)
+Good C: Person 1 and Person 2 (26)
+Good D: Person 1 (26)
+Good E: Person 1 (30)
+
+So, the allocation that satisfies the ""Max-Min"" criterion is:
+Good A: Person 1
+Good B: Person 2
+Good C: Person 1
+Good D: Person 1
+Good E: Person 1
+
+This allocation ensures that the worst-off individual (Person 3) gets a value of 26, which is the highest value possible in any allocation.",1433,1,2,1,1,1
+9,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and determine which one maximizes the minimum value received by any individual.
+
+One way to approach this problem is to calculate the total value received by each individual for each possible allocation. Then, we can find the allocation that maximizes the minimum total value received.
+
+Here are the possible allocations:
+
+1. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D, Good E
+   Total value received: Person 1 = 40, Person 2 = 26, Person 3 = 40
+
+2. Person 1: Good A, Person 2: Good B, Good C, Person 3: Good D, Good E
+   Total value received: Person 1 = 40, Person 2 = 36, Person 3 = 38
+
+3. Person 1: Good A, Good B, Person 2: Good C, Good D, Person 3: Good E
+   Total value received: Person 1 = 42, Person 2 = 34, Person 3 = 36
+
+4. Person 1: Good A, Good B, Person 2: Good C, Person 3: Good D, Good E
+   Total value received: Person 1 = 40, Person 2 = 34, Person 3 = 38
+
+5. Person 1: Good A, Person 2: Good B, Good C, Good D, Person 3: Good E
+   Total value received: Person 1 = 40, Person 2 = 36, Person 3 = 40
+
+6. Person 1: Good A, Good B, Good C, Person 2: Good D, Person 3: Good E
+   Total value received: Person 1 = 45, Person 2 = 40, Person 3 = 38
+
+7. Person 1: Good A, Good B, Person 2: Good C, Good D, Person 3: Good E
+   Total value received: Person 1 = 42, Person 2 = 34, Person 3 = 38
+
+8. Person 1: Good A, Good B, Good C, Good D, Person 3: Good E
+   Total value received: Person 1 = 45, Person 2 = 40, Person 3 = 38
+
+We can see that the allocation where the maximum value received by the worst-off individual is the greatest is option 6, where the total value received by Person 3 is 38. Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1: Good A, Good B, Good C
+- Person 2: Good D
+- Person 3: Good E",1946,1,1,1,2,3
+10,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value each person would receive for each possible allocation.
+
+There are a total of 243 (3^5) possible allocations. To simplify the process, we can use a brute force method to calculate the minimum value each person would receive for each allocation.
+
+Here are the possible allocations and the minimum value each person would receive for each allocation:
+
+Allocation 1: (A, B, C, D, E)
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 2: (A, B, C, D, -)
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 3: (A, B, C, - ,E)
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 4: (A, B, - ,D, E)
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 5: (A, - ,C, D, E)
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 6: (- ,B, C, D, E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 7: (A, B, C, - , - )
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 8: (A, B, - ,D, - )
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 9: (A, B, - , - ,E)
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 10: (A, - ,C, D, - )
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 11: (A, - ,C, - ,E)
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 12: (A, - , - ,D, E)
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 13: (- ,B, C, D, - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 14: (- ,B, C, - ,E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 15: (- ,B, - ,D, E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 16: (A, B, - , - , - )
+Person 1: 40, Person 2: 14, Person 3: 10
+Minimum value: 10
+
+Allocation 17: (A, - ,C, - , - )
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 18: (A, - , - ,D, - )
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 19: (A, - , - , - ,E)
+Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 20: (- ,B, C, - , - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 21: (- ,B, - ,D, - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 22: (- ,B, - , - ,E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 23: (A, - , - , - , - )
+Person 1: 40, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 24: (- , - ,C, D, - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 25: (- , - ,C, - ,E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 26: (- , - , - ,D, E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 27: (A, - , - , - , - )
+Person 1: 40, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 28: (- , - ,C, - , - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 29: (- , - , - ,D, - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 30: (- , - , - , - ,E)
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Allocation 31: (- , - , - , - , - )
+Person 1: 25, Person 2: 26, Person 3: 12
+Minimum value: 12
+
+Based on the above calculations, it can be observed that the allocation with the highest minimum value for the worst-off individual is allocation 1: (A, B, C, D, E), where each person receives a value of at least 10 for the allocated goods. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is to allocate Good A to Person 1, Good B to Person 2, Good C to Person 3, Good D to Person 2, and Good E to Person 3.",3721,1,2,3,2,3
+11,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the worst-off individual.
+
+To start, let's consider all the possible allocations of the 5 goods among the 3 individuals. There are a total of 3^5 = 243 possible allocations.
+
+To simplify the process, we can rank the goods for each individual based on their values. Then, we can start by allocating the highest-ranked goods to the individuals with the highest value for that good.
+
+After considering all possible allocations, the one that satisfies the ""Max-Min"" criterion is as follows:
+- Person 1 receives Good A and Good E
+- Person 2 receives Good B, Good D, and Good C
+- Person 3 receives no goods (the remaining goods are not allocated)
+
+This allocation results in the following outcomes for each individual:
+- Person 1: 40 (value of Good A) + 30 (value of Good E) = 70
+- Person 2: 26 (value of Good B) + 26 (value of Good D) + 26 (value of Good C) = 78
+- Person 3: 0
+
+In this allocation, the worst-off individual (Person 3) obtains a value of 0, which is the highest minimum value among all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1345,1,2,2,2,1
+12,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+First, let's consider all possible allocations of the goods among the three individuals. There are a total of 2^5 = 32 possible allocations (each good can either be allocated to someone or not allocated at all).
+
+To find the allocation that maximizes the minimum value received by any individual, we need to calculate the value received by the worst-off individual for each of the 32 allocations and then choose the allocation that maximizes this minimum value.
+
+For example, we can calculate the value received by the worst-off individual for one allocation as follows:
+Allocation 1: Person 1 receives Good A, Person 2 receives Good B and Good C, Person 3 receives Good D and Good E.
+In this allocation, the worst-off individual (Person 3) receives a value of 12.
+
+We need to repeat this process for all 32 possible allocations and then identify the allocation that maximizes the minimum value received by any individual.
+
+Here are the worst-off values for each of the 32 possible allocations:
+Allocation 1: 12
+Allocation 2: 12
+Allocation 3: 12
+Allocation 4: 12
+...
+Allocation 32: 2
+
+After calculating the worst-off value for each allocation, we find that Allocation 4 maximizes the minimum value received by any individual, as the worst-off individual (Person 1) receives a value of 25.
+
+Therefore, under the ""Max-Min"" criterion, the fair allocation of goods is as follows:
+Person 1 receives Good A
+Person 2 receives Good B, Good C, and Good D
+Person 3 receives Good E",1480,1,2,2,2,3
+13,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is the highest across all possible allocations.
+
+We can start by calculating the minimum value each person would receive for each good in all possible allocations. Then, we can choose the allocation that maximizes the minimum value across all individuals.
+
+After calculating the minimum value each person would receive for each good in all possible allocations, let's determine the allocation that satisfies the ""Max-Min"" criterion:
+
+Allocation 1: 
+- Person 1 receives Good A, Good D, and Good E (Total value = 40 + 25 + 30 = 95)
+- Person 2 receives Good B and Good C (Total value = 26 + 8 = 34)
+- Person 3 receives nothing (Total value = 0)
+
+Minimum value derived by the worst-off individual (Person 2) = 34
+
+Allocation 2: 
+- Person 1 receives Good A, Good B, and Good E (Total value = 40 + 2 + 30 = 72)
+- Person 2 receives Good C and Good D (Total value = 26 + 26 = 52)
+- Person 3 receives nothing (Total value = 0)
+
+Minimum value derived by the worst-off individual (Person 2) = 52
+
+Allocation 3: 
+- Person 1 receives Good A, Good B, and Good D (Total value = 40 + 2 + 25 = 67)
+- Person 2 receives Good C and Good E (Total value = 26 + 26 = 52)
+- Person 3 receives nothing (Total value = 0)
+
+Minimum value derived by the worst-off individual (Person 2) = 52
+
+Allocation 4: 
+- Person 1 receives Good A, Good B, and Good C (Total value = 40 + 2 + 3 = 45)
+- Person 2 receives Good D and Good E (Total value = 26 + 26 = 52)
+- Person 3 receives nothing (Total value = 0)
+
+Minimum value derived by the worst-off individual (Person 1) = 45
+
+The allocation that satisfies the ""Max-Min"" criterion is Allocation 1, where the minimum value derived by the worst-off individual (Person 2) is 34. Therefore, the allocation that maximizes the minimum value across all individuals is:
+
+- Person 1 receives Good A, Good D, and Good E
+- Person 2 receives Good B and Good C
+- Person 3 receives nothing",1836,1,2,2,1,1
+14,"One way to approach this problem is to calculate the total value each individual would get for each possible allocation of the goods, and then choose the allocation that maximizes the minimum value received by any individual.
+
+First, let's calculate the total value each individual would get for each possible allocation:
+
+- If Person 1 gets Good A: 40
+- If Person 1 gets Good B: 2
+- If Person 1 gets Good C: 3
+- If Person 1 gets Good D: 25
+- If Person 1 gets Good E: 30
+
+- If Person 2 gets Good A: 14
+- If Person 2 gets Good B: 26
+- If Person 2 gets Good C: 8
+- If Person 2 gets Good D: 26
+- If Person 2 gets Good E: 26
+
+- If Person 3 gets Good A: 10
+- If Person 3 gets Good B: 26
+- If Person 3 gets Good C: 26
+- If Person 3 gets Good D: 12
+- If Person 3 gets Good E: 26
+
+Based on these calculations, we can see that the maximum minimum value is achieved when Person 1 gets Good A, Person 2 gets Good B, and Person 3 gets Goods C, D, and E. 
+
+So, the allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1 gets Good A
+- Person 2 gets Good B
+- Person 3 gets Good C, Good D, and Good E
+
+This allocation ensures that the value derived by the worst-off individual (Person 1) is maximized across all possible allocations.",1464,1,2,3,3,3
+15,"To solve this problem, we can consider all possible allocations of the goods to the individuals and calculate the minimum value obtained by the worst-off individual in each allocation. Then, we can select the allocation that maximizes this minimum value. 
+
+Let's consider all possible allocations:
+
+1. Allocate Good A to Person 1: (40, 0, 0)
+2. Allocate Good A to Person 2: (0, 14, 0)
+3. Allocate Good A to Person 3: (0, 0, 10)
+4. Allocate Good B to Person 1: (0, 2, 0)
+5. Allocate Good B to Person 2: (14, 26, 0)
+6. Allocate Good B to Person 3: (10, 0, 26)
+7. Allocate Good C to Person 1: (0, 0, 3)
+8. Allocate Good C to Person 2: (14, 8, 0)
+9. Allocate Good C to Person 3: (10, 26, 26)
+10. Allocate Good D to Person 1: (25, 0, 0)
+11. Allocate Good D to Person 2: (0, 26, 0)
+12. Allocate Good D to Person 3: (0, 0, 12)
+13. Allocate Good E to Person 1: (30, 0, 0)
+14. Allocate Good E to Person 2: (0, 26, 0)
+15. Allocate Good E to Person 3: (0, 0, 26)
+
+Now, let's calculate the minimum value obtained by the worst-off individual in each allocation:
+
+1. Person 1: 0
+2. Person 2: 0
+3. Person 3: 0
+4. Person 1: 0
+5. Person 2: 0
+6. Person 3: 0
+7. Person 1: 0
+8. Person 2: 0
+9. Person 3: 8
+10. Person 1: 0
+11. Person 2: 0
+12. Person 3: 0
+13. Person 1: 0
+14. Person 2: 0
+15. Person 3: 0
+
+The allocation that maximizes the minimum value obtained by the worst-off individual is Allocation 9, which is the allocation of Good C to Person 3, resulting in a value of 8 for Person 3. Therefore, the fair allocation that satisfies the Max-Min criterion is as follows:
+
+Good A: Not allocated
+Good B: Not allocated
+Good C: Allocated to Person 3
+Good D: Not allocated
+Good E: Not allocated
+
+This allocation ensures that Person 3 receives a value of 8, which is the maximum value obtained by the worst-off individual across all possible allocations.",1977,None,None,3,None,None
+16,"To solve this problem, we can consider all possible allocations and calculate the minimum value that each person would receive for each allocation. Then, we can choose the allocation that maximizes the minimum value across all individuals.
+
+Here are all the possible allocations for the 5 goods among 3 individuals:
+
+1. Person 1: Good A, Good B, Good C, Good D, Good E
+   Person 2: -
+   Person 3: -
+
+2. Person 1: Good A, Good B, Good C, Good D
+   Person 2: Good E
+   Person 3: -
+
+3. Person 1: Good A, Good B, Good C, Good E
+   Person 2: Good D
+   Person 3: -
+
+4. Person 1: Good A, Good B, Good D, Good E
+   Person 2: Good C
+   Person 3: -
+
+5. Person 1: Good A, Good C, Good D, Good E
+   Person 2: Good B
+   Person 3: -
+
+6. Person 1: Good B, Good C, Good D, Good E
+   Person 2: Good A
+   Person 3: -
+
+7. Person 1: Good A, Good B, Good C
+   Person 2: Good D, Good E
+   Person 3: -
+
+8. Person 1: Good A, Good B, Good D
+   Person 2: Good C, Good E
+   Person 3: -
+
+9. Person 1: Good A, Good B, Good E
+   Person 2: Good C, Good D
+   Person 3: -
+
+10. Person 1: Good A, Good C, Good D
+    Person 2: Good B, Good E
+    Person 3: -
+
+11. Person 1: Good B, Good C, Good D
+    Person 2: Good A, Good E
+    Person 3: -
+
+12. Person 1: Good A, Good B
+    Person 2: Good C, Good D, Good E
+    Person 3: -
+
+13. Person 1: Good A, Good C
+    Person 2: Good B, Good D, Good E
+    Person 3: -
+
+14. Person 1: Good A, Good D
+    Person 2: Good B, Good C, Good E
+    Person 3: -
+
+15. Person 1: Good A, Good E
+    Person 2: Good B, Good C, Good D
+    Person 3: -
+
+16. Person 1: Good B, Good C
+    Person 2: Good A, Good D, Good E
+    Person 3: -
+
+17. Person 1: Good B, Good D
+    Person 2: Good A, Good C, Good E
+    Person 3: -
+
+18. Person 1: Good B, Good E
+    Person 2: Good A, Good C, Good D
+    Person 3: -
+
+19. Person 1: Good C, Good D
+    Person 2: Good A, Good B, Good E
+    Person 3: -
+
+20. Person 1: Good C, Good E
+    Person 2: Good A, Good B, Good D
+    Person 3: -
+
+21. Person 1: Good D, Good E
+    Person 2: Good A, Good B, Good C
+    Person 3: -
+
+After calculating the minimum value for each person for each allocation, we find that the allocation ""Person 1: Good A, Good B, Good C, Good D"" and ""Person 2: Good E"" gives the maximum minimum value across all individuals, with the worst-off individual receiving a value of 25. Therefore, this allocation satisfies the ""Max-Min"" criterion and would be considered fair according to this criterion.",2389,1,1,1,1,2
+17,"To solve this problem, we can use a method called the ""divide and choose"" method. This method involves dividing the goods among the individuals in such a way that each person gets to choose the best available option in each round of allocation.
+
+First, we sort the individuals in decreasing order of their values for Good A, then for Good B, and so on. 
+
+Based on their values for Good A:
+1. Person 1: 40
+2. Person 2: 14
+3. Person 3: 10
+
+So, Person 1 gets Good A.
+
+Now, we look at their values for Good B:
+1. Person 2: 26
+2. Person 3: 26
+3. Person 1: 2
+
+Person 2 and Person 3 have the same value for Good B, so we move on to their values for Good C:
+1. Person 3: 26
+2. Person 2: 8
+
+Person 3 gets Good B.
+
+Now, we look at their values for Good D:
+1. Person 2: 26
+2. Person 1: 25
+
+Person 2 gets Good D.
+
+Finally, we allocate Good E by comparing the values of Person 1 and Person 3:
+1. Person 3: 26
+2. Person 1: 30
+
+Person 1 gets Good E.
+
+So, the allocation that satisfies the ""Max-Min"" criterion is as follows:
+- Person 1 gets Good A and Good E
+- Person 2 gets Good D
+- Person 3 gets Good B and Good C
+
+This allocation ensures that the value derived by the worst-off individual (Person 2, with a value of 8 for Good C) is maximized across all possible allocations.",1493,1,3,3,2,1
+18,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the worst-off individual. 
+
+One way to approach this problem is to assign each good to the person with the highest value for that particular good, as long as that person has not already been allocated the maximum number of goods. This will ensure that each person receives their most preferred goods, maximizing their value.
+
+Following this approach, the allocation for each good would be as follows:
+
+Good A: Person 1 (value = 40)
+Good B: Person 2 (value = 26)
+Good C: Person 3 (value = 26)
+Good D: Person 2 (value = 26)
+Good E: Person 2 (value = 26)
+
+This allocation ensures that each person receives their most preferred goods, resulting in the highest minimum value across all individuals. In this case, the worst-off individual (Person 1) receives a value of 40, which is the maximum value among all individuals.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is as follows:
+Good A: Person 1
+Good B: Person 2
+Good C: Person 3
+Good D: Person 2
+Good E: Person 2",1286,1,2,3,2,2
+19,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value obtained by each individual for all possible allocations. Then, we select the allocation that maximizes the minimum value.
+
+Let's consider all possible allocations:
+
+Allocation 1: Person 1 gets Good A (value 40)
+Allocation 2: Person 1 gets Good E (value 30)
+Allocation 3: Person 2 gets Good B (value 26)
+Allocation 4: Person 2 gets Good D (value 26)
+Allocation 5: Person 3 gets Good B (value 26)
+Allocation 6: Person 3 gets Good C (value 26)
+
+Now, we calculate the minimum value obtained by each individual for each allocation:
+
+Allocation 1: Person 1 (40), Person 2 (14), Person 3 (10) - min value = 10
+Allocation 2: Person 1 (30), Person 2 (14), Person 3 (10) - min value = 10
+Allocation 3: Person 1 (2), Person 2 (26), Person 3 (10) - min value = 2
+Allocation 4: Person 1 (2), Person 2 (26), Person 3 (10) - min value = 2
+Allocation 5: Person 1 (2), Person 2 (26), Person 3 (10) - min value = 2
+Allocation 6: Person 1 (2), Person 2 (8), Person 3 (10) - min value = 2
+
+The maximum minimum value is 10, which is obtained in Allocation 1 and Allocation 2.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is either Allocation 1 or Allocation 2, where Person 1 gets Good A or Good E. Both allocations result in the worst-off individual (Person 3) obtaining a value of 10, which is the highest minimum value across all possible allocations.",1577,1,None,None,None,1
+20,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+One way to approach this problem is to try all possible allocations and calculate the minimum value received by any individual for each allocation. However, since there are 3 individuals and 5 goods, there are potentially thousands of possible allocations to consider, making this approach impractical.
+
+Instead, we can use a more systematic approach to find the allocation that maximizes the minimum value received by any individual.
+
+One way to do this is to assign each good to the person who values it the most. We can then calculate the minimum value received by any individual for this allocation.
+
+Let's consider each good in turn:
+
+Good A:
+Person 1 values Good A the most (40), so we assign Good A to Person 1.
+
+Good B:
+Person 2 values Good B the most (26), so we assign Good B to Person 2.
+
+Good C:
+Person 2 and Person 3 both value Good C the most (26), so we can assign it to either person.
+
+Good D:
+Person 2 values Good D the most (26), so we assign Good D to Person 2.
+
+Good E:
+Person 2 and Person 3 both value Good E the most (26), so we can assign it to either person.
+
+Now, if we assign Good C and Good E to Person 3, then we have the following allocation:
+- Person 1: Good A (value: 40)
+- Person 2: Good B (value: 26), Good D (value: 26)
+- Person 3: Good C (value: 26), Good E (value: 26)
+
+In this allocation, the minimum value received by any individual is 26, which is the maximum among all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.
+
+So, the allocation that maximizes the minimum value received by any individual is:
+- Person 1 receives Good A
+- Person 2 receives Good B and Good D
+- Person 3 receives Good C and Good E",1632,1,2,3,2,3
+21,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by each person.
+
+One possible allocation that satisfies the ""Max-Min"" criterion is as follows:
+- Person 1 receives Good A with a value of 40
+- Person 2 receives Good B with a value of 26
+- Person 3 receives Good C with a value of 26
+- Goods D and E are not allocated
+
+With this allocation, the worst-off individual (Person 2) obtains a value of 26, which is the maximum minimum value across all possible allocations.
+
+Therefore, the allocation where Person 2 receives Good B, and Person 1 receives Good A, and Person 3 receives Good C, with Goods D and E not being allocated, satisfies the ""Max-Min"" criterion.",1101,1,2,3,None,None
+22,"To solve this problem, we can use the following approach:
+
+Step 1: Calculate the total value each individual would get if they received all 5 goods.
+
+- Person 1: 40 + 2 + 3 + 25 + 30 = 100
+- Person 2: 14 + 26 + 8 + 26 + 26 = 100
+- Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+Step 2: Sort the goods based on the value for each individual in descending order.
+
+- Person 1: Good A (40), Good E (30), Good D (25), Good C (3), Good B (2)
+- Person 2: Good B (26), Good D (26), Good E (26), Good A (14), Good C (8)
+- Person 3: Good B (26), Good C (26), Good E (26), Good D (12), Good A (10)
+
+Step 3: Allocate the goods to each individual one by one, making sure to give each person the good they value the most and that hasn't been allocated to someone else.
+
+Allocation:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C
+- Person 1: Good E
+- Person 2: Good D
+
+Step 4: Calculate the value each individual gets from the allocation.
+
+- Person 1: Good A (40), Good E (30), Total value = 70
+- Person 2: Good B (26), Good D (26), Total value = 52
+- Person 3: Good C (26), Total value = 26
+
+In this allocation, the worst-off individual is Person 3, who gets a total value of 26. This is the maximum value that the worst-off individual can get in any allocation. Therefore, the allocation that satisfies the ""Max-Min"" criterion is the one where Person 3 gets Good C, Person 2 gets Good B and Good D, and Person 1 gets Good A and Good E.",1639,1,2,3,2,1
+23,"To find the allocation that satisfies the ""Max-Min"" criterion, we can start by determining the minimum value for each good across all individuals:
+
+- Good A: minimum value is 10 (Person 3)
+- Good B: minimum value is 2 (Person 1)
+- Good C: minimum value is 3 (Person 1)
+- Good D: minimum value is 12 (Person 3)
+- Good E: minimum value is 26 (Person 2 and Person 3)
+
+Since we have 5 goods to allocate, we can initially allocate Good A to Person 3, Good B to Person 1, Good C to Person 1, Good D to Person 3, and then allocate Good E to maximize the minimum value. This means allocating Good E to Person 2, as allocating it to Person 3 would result in a minimum value of 26 for all individuals.
+
+Therefore, the fair allocation based on the ""Max-Min"" criterion is:
+- Person 1: Good B, Good C
+- Person 2: Good E
+- Person 3: Good A, Good D",1216,3,1,1,3,2
+24,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and determine the one that maximizes the minimum value received by any individual.
+
+Here are the values for each person's most preferred good:
+
+Person 1: 40
+Person 2: 26
+Person 3: 26
+
+If we allocate Good A to Person 1, Good B to Person 2, and Good C to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good A to Person 1, Good B to Person 2, and Good D to Person 3, the minimum value received by any individual is 25.
+
+If we allocate Good A to Person 1, Good B to Person 2, and Good E to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good A to Person 1, Good C to Person 2, and Good D to Person 3, the minimum value received by any individual is 25.
+
+If we allocate Good A to Person 1, Good C to Person 2, and Good E to Person 3, the minimum value received by any individual is 30.
+
+If we allocate Good A to Person 1, Good D to Person 2, and Good E to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good B to Person 1, Good C to Person 2, and Good D to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good B to Person 1, Good C to Person 2, and Good E to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good B to Person 1, Good D to Person 2, and Good E to Person 3, the minimum value received by any individual is 26.
+
+If we allocate Good C to Person 1, Good D to Person 2, and Good E to Person 3, the minimum value received by any individual is 26.
+
+The allocation that maximizes the minimum value received by any individual is allocating Good A to Person 1, Good C to Person 2, and Good E to Person 3, where the minimum value received by any individual is 30. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1736,1,None,2,None,3
+25,"To solve this problem, we can use a method called the Max-Min Fairness Criterion. This criterion ensures that the individual with the lowest value for their allocated goods receives the maximum possible value based on the available goods.
+
+To find the allocation that satisfies the Max-Min criterion in this case, we can evaluate all possible allocations and choose the one that maximizes the minimum value among the individuals.
+
+Here are the possible allocations for the 5 goods:
+
+- Allocate Good A to Person 1
+- Allocate Good B to Person 2
+- Allocate Good C to Person 3
+- Allocate Good D to Person 2
+- Allocate Good E to Person 2
+
+By allocating the goods in this way, the minimum value across all individuals is as follows:
+
+- Person 1: 40 (Good A)
+- Person 2: 26 (Good B) + 26 (Good D) + 26 (Good E) = 78
+- Person 3: 26 (Good C)
+
+The minimum value is 26, which is received by Person 1 and Person 3. Therefore, this allocation satisfies the Max-Min criterion because it maximizes the minimum value received by the worst-off individual.
+
+Therefore, the allocation of the goods that satisfies the Max-Min criterion is as follows:
+- Good A is allocated to Person 1
+- Good B is allocated to Person 2
+- Good C is allocated to Person 3
+- Good D is allocated to Person 2
+- Good E is allocated to Person 2
+
+This allocation ensures that the individual with the lowest value for their allocated goods (Person 1 and Person 3) receives the maximum possible value based on the available goods.",1458,1,2,3,2,2
+26,"To solve this problem, we can use the following approach:
+
+1. First, we need to generate all possible allocations of the 5 goods among the 3 individuals. There are a total of 3^5 = 243 possible allocations.
+
+2. For each allocation, we calculate the value derived by the worst-off individual (i.e. the individual with the lowest total value of allocated goods).
+
+3. Finally, we select the allocation with the highest value for the worst-off individual.
+
+Let's go through an example:
+
+Allocation 1: 
+- Person 1: Good A (Value: 40)
+- Person 2: Good B (Value: 26)
+- Person 3: Good C, Good D, Good E (Value: 64)
+
+In this allocation, the worst-off individual is Person 2 with a total value of 26.
+
+We would need to calculate the worst-off individual for all 243 possible allocations and then pick the one with the highest value for the worst-off individual. This is a complex optimization problem that may require a computer program to systematically evaluate all possibilities.
+
+Once all allocations have been evaluated, we can then determine the allocation that satisfies the ""Max-Min"" criterion, i.e., the allocation where the value derived by the worst-off individual is the highest.",1283,1,3,2,2,2
+27,"To determine the allocation that satisfies the ""Max-Min"" criterion, we will calculate the value of the worst-off individual for each possible allocation.
+
+We will consider all possible combinations of allocations and calculate the value for the worst-off individual for each allocation. Then we will select the allocation where the worst-off individual has the highest value.
+
+The possible allocations for the 5 goods among 3 individuals are:
+
+1. Person 1: Good A, Person 2: Good B, Person 3: Good C, D, E
+2. Person 1: Good A, Person 2: Good C, D, E, Person 3: Good B
+3. Person 1: Good A, Good D, Person 2: Good B, E, Person 3: Good C
+4. Person 1: Good A, Good E, Person 2: Good B, C, D, Person 3: None
+5. Person 1: Good B, Good D, E, Person 2: Good A, C, Person 3: None
+6. Person 1: Good B, Good E, Person 2: Good A, C, D, Person 3: None
+7. Person 1: Good C, Good D, E, Person 2: Good A, B, Person 3: None
+8. Person 1: Good C, Good E, Person 2: Good A, B, D, Person 3: None
+
+After calculating the value for the worst-off individual for each allocation, we find that the allocation where the worst-off individual has the highest value is:
+
+Person 1: Good A, Person 2: Good B, Person 3: Good C, D, E
+
+In this allocation, the worst-off individual is Person 1, with a value of 40 for Good A.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is the allocation where Person 1 receives Good A, Person 2 receives Good B, and Person 3 receives Good C, D, E.",1609,1,2,3,3,3
+28,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is the most. 
+
+Let's consider all possible allocations:
+- Allocate Good A to Person 1 and the rest of the goods to Persons 2 and 3.
+- Allocate Good A to Person 2 and the rest of the goods to Persons 1 and 3.
+- Allocate Good A to Person 3 and the rest of the goods to Persons 1 and 2.
+- Do not allocate Good A to any person.
+
+We calculate the minimum value each person will receive for each allocation:
+- Allocation 1: Person 1 receives 40, Person 2 receives 8 (Good B + Good C), Person 3 receives 38 (Good D + Good E). The minimum value is 8.
+- Allocation 2: Person 1 receives 29 (Good B + Good C + Good D), Person 2 receives 14, and Person 3 receives 38 (Good A + Good E). The minimum value is 14.
+- Allocation 3: Person 1 receives 40, Person 2 receives 14, and Person 3 receives 38 (Good B + Good C + Good D). The minimum value is 14.
+- Allocation 4: No goods are allocated, so the minimum value is 0.
+
+The allocation that provides the highest minimum value for the worst-off individual is Allocation 1, where Person 2 receives a minimum value of 8. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is to allocate Good A to Person 1 and the rest of the goods to Persons 2 and 3.",1459,1,2,1,3,3
+29,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual (the individual with the lowest value) is the most across all possible allocations. 
+
+Let's consider all possible allocations: 
+1. Allocate Good A to Person 1, and allocate the remaining 4 goods to Persons 2 and 3. 
+2. Allocate Good B to Person 1, and allocate the remaining 4 goods to Persons 2 and 3. 
+3. Allocate Good C to Person 1, and allocate the remaining 4 goods to Persons 2 and 3. 
+4. Allocate Good D to Person 1, and allocate the remaining 4 goods to Persons 2 and 3. 
+5. Allocate Good E to Person 1, and allocate the remaining 4 goods to Persons 2 and 3. 
+
+We will calculate the minimum value for each allocation and then select the allocation where the minimum value is the highest. 
+
+1. Allocation 1: Person 1 gets Good A (40), Person 2 gets Good D (26), Person 3 gets Good B (26) and Good C (26).
+   Minimum value = 26
+
+2. Allocation 2: Person 1 gets Good B (2), Person 2 gets Good A (14), Person 3 gets Good D (26) and Good E (26).
+   Minimum value = 2
+
+3. Allocation 3: Person 1 gets Good C (3), Person 2 gets Good A (14), Person 3 gets Good D (26) and Good E (26).
+   Minimum value = 3
+
+4. Allocation 4: Person 1 gets Good D (25), Person 2 gets Good A (14), Person 3 gets Good B (26) and Good E (26).
+   Minimum value = 14
+
+5. Allocation 5: Person 1 gets Good E (30), Person 2 gets Good A (14), Person 3 gets Good B (26) and Good C (26).
+   Minimum value = 14
+
+By comparing the minimum values for each allocation, we can see that Allocation 1 results in the highest minimum value (26). Therefore, the fair allocation of goods that satisfies the ""Max-Min"" criterion is:
+- Person 1 gets Good A
+- Person 2 gets Good D
+- Person 3 gets Good B and Good C",1771,1,3,3,2,None
+30,"To solve this problem using the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by any individual. 
+
+Let's consider all possible allocations and calculate the minimum value obtained by any individual for each allocation.
+
+1. Allocate Good A to Person 1, Good B to Person 2, Good C to Person 3, and leave Good D and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 26, Minimum value: 26
+2. Allocate Good A to Person 1, Good B to Person 3, Good C to Person 2, and leave Good D and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 26, Minimum value: 26
+3. Allocate Good A to Person 1, Good C to Person 2, Good D to Person 3, and leave Good B and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 12, Minimum value: 12
+4. Allocate Good A to Person 1, Good C to Person 3, Good D to Person 2, and leave Good B and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 26, Minimum value: 26
+5. Allocate Good B to Person 2, Good C to Person 1, Good D to Person 3, and leave Good A and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 12, Minimum value: 12
+6. Allocate Good B to Person 3, Good C to Person 1, Good D to Person 2, and leave Good A and Good E unallocated.
+   - Person 1: 40, Person 2: 26, Person 3: 26, Minimum value: 26
+
+From the above analysis, we can see that the allocation in option 3 yields the highest minimum value for any individual, with a minimum value of 12. Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+
+- Good A to Person 1
+- Good C to Person 2
+- Good D to Person 3
+
+This allocation ensures that the worst-off individual (Person 3) receives a value of 12, which is the highest minimum value across all possible allocations.",1811,1,None,2,3,None
+31,"To find the allocation that satisfies the ""Max-Min"" criterion, we can follow these steps:
+1. Calculate the minimum value each person assigns to the goods.
+2. Allocate the goods to the person with the highest minimum value for that good.
+
+Step 1:
+Person 1's minimum value: Good A = 40, Good B = 2, Good C = 3, Good D = 25, Good E = 30
+Person 2's minimum value: Good A = 14, Good B = 26, Good C = 8, Good D = 26, Good E = 26
+Person 3's minimum value: Good A = 10, Good B = 26, Good C = 26, Good D = 12, Good E = 26
+
+Step 2:
+Allocate Good A to Person 1 (as 40 is the highest minimum value for Good A)
+Allocate Good B to Person 2 (as 26 is the highest minimum value for Good B)
+Allocate Good C to Person 3 (as 26 is the highest minimum value for Good C)
+Allocate Good D to Person 1 (as 25 is the highest minimum value for Good D)
+Allocate Good E to Person 2 (as 26 is the highest minimum value for Good E)
+
+Now, the allocation of goods that satisfies the ""Max-Min"" criterion is:
+Good A to Person 1
+Good B to Person 2
+Good C to Person 3
+Good D to Person 1
+Good E to Person 2
+
+This allocation ensures that the value derived by the worst-off individual (Person 1, with a minimum value of 25 for Good D) is the highest across all possible allocations.",1474,1,2,3,1,2
+32,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual. 
+
+First, let's consider all possible allocations and calculate the value received by the worst-off individual in each allocation:
+
+Allocation 1: 
+- Person 1 receives Good A (value 40)
+- Person 2 receives Good B (value 26)
+- Person 3 receives Good C, Good D, and Good E (values 26, 26, 26)
+Minimum value received = 26
+
+Allocation 2: 
+- Person 1 receives Good A, Good E (values 40, 30)
+- Person 2 receives Good B, Good D (values 26, 26)
+- Person 3 receives Good C (value 26)
+Minimum value received = 26
+
+Allocation 3: 
+- Person 1 receives Good A, Good D (values 40, 25)
+- Person 2 receives Good B, Good E (values 26, 26)
+- Person 3 receives Good C (value 26)
+Minimum value received = 25
+
+Allocation 4: 
+- Person 1 receives Good A, Good C, Good E (values 40, 3, 30)
+- Person 2 receives Good B (value 26)
+- Person 3 receives Good D (value 12)
+Minimum value received = 12
+
+Allocation 5: 
+- Person 1 receives Good A, Good D, Good E (values 40, 25, 30)
+- Person 2 receives Good B (value 26)
+- Person 3 receives Good C (value 26)
+Minimum value received = 26
+
+Allocation 6: 
+- Person 1 receives Good A, Good B, Good E (values 40, 2, 30)
+- Person 2 receives Good D (value 26)
+- Person 3 receives Good C (value 26)
+Minimum value received = 26
+
+Allocation 7: 
+- Person 1 receives Good A, Good B, Good C, Good D, Good E (values 40, 2, 3, 25, 30)
+- No goods are allocated to Person 2 or Person 3
+Minimum value received = 0
+
+Based on these calculations, the allocation that maximizes the minimum value received by any individual is Allocation 1, where the minimum value received is 26. Therefore, the Max-Min fair allocation is:
+- Person 1 receives Good A
+- Person 2 receives Good B
+- Person 3 receives Good C, Good D, and Good E.",1853,1,2,3,3,3
+33,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations of the goods and calculate the minimum value obtained by the worst-off individual for each allocation.
+
+Let's consider all the possible allocations of the 5 goods among Person 1, Person 2, and Person 3:
+
+1. Good A: Person 1, Good B: Person 2, Good C: Person 3, Good D: Not allocated, Good E: Not allocated
+   - Person 1's value: 40
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 26
+
+2. Good A: Person 1, Good B: Person 2, Good C: Not allocated, Good D: Person 3, Good E: Not allocated
+   - Person 1's value: 40
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 26
+
+3. Good A: Person 1, Good B: Person 2, Good C: Not allocated, Good D: Not allocated, Good E: Person 3
+   - Person 1's value: 40
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 26
+
+4. Good A: Person 1, Good B: Not allocated, Good C: Person 2, Good D: Person 3, Good E: Not allocated
+   - Person 1's value: 40
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 26
+
+5. Good A: Person 1, Good B: Not allocated, Good C: Person 2, Good D: Not allocated, Good E: Person 3
+   - Person 1's value: 40
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 26
+
+6. Good A: Not allocated, Good B: Person 1, Good C: Person 2, Good D: Person 3, Good E: Not allocated
+   - Person 1's value: 0
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 0
+
+7. Good A: Not allocated, Good B: Person 1, Good C: Person 2, Good D: Not allocated, Good E: Person 3
+   - Person 1's value: 0
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 0
+
+8. Good A: Not allocated, Good B: Person 1, Good C: Not allocated, Good D: Person 2, Good E: Person 3
+   - Person 1's value: 0
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 0
+
+9. Good A: Not allocated, Good B: Not allocated, Good C: Person 1, Good D: Person 2, Good E: Person 3
+   - Person 1's value: 0
+   - Person 2's value: 26
+   - Person 3's value: 26
+   - Minimum value: 0
+
+10. Good A: Person 1, Good B: Not allocated, Good C: Not allocated, Good D: Person 2, Good E: Person 3
+    - Person 1's value: 40
+    - Person 2's value: 26
+    - Person 3's value: 26
+    - Minimum value: 26
+
+After considering all possible allocations, we find that allocation 1, 2, 3, 4, 5 all result in a minimum value of 26 for the worst-off individual. Therefore, any of these allocations would satisfy the ""Max-Min"" criterion.",2513,1,2,3,allocated,allocated
+34,"To determine the allocation that satisfies the ""Max-min"" criterion, we need to explore all possible allocations of the goods and calculate the minimum value for each individual in each allocation. The allocation with the highest minimum value will be considered the fairest.
+
+Let's first consider all possible allocations:
+
+1. Allocate all 5 goods to Person 1.
+2. Allocate all 5 goods to Person 2.
+3. Allocate all 5 goods to Person 3.
+4. Allocate 4 goods to Person 1 and 1 good to Person 2.
+5. Allocate 4 goods to Person 1 and 1 good to Person 3.
+6. Allocate 4 goods to Person 2 and 1 good to Person 1.
+7. Allocate 4 goods to Person 2 and 1 good to Person 3.
+8. Allocate 4 goods to Person 3 and 1 good to Person 1.
+9. Allocate 4 goods to Person 3 and 1 good to Person 2.
+10. Allocate 3 goods to Person 1 and 2 goods to Person 2.
+11. Allocate 3 goods to Person 1 and 2 goods to Person 3.
+12. Allocate 3 goods to Person 2 and 2 goods to Person 1.
+13. Allocate 3 goods to Person 2 and 2 goods to Person 3.
+14. Allocate 3 goods to Person 3 and 2 goods to Person 1.
+15. Allocate 3 goods to Person 3 and 2 goods to Person 2.
+16. Allocate 2 goods to Person 1 and 3 goods to Person 2.
+17. Allocate 2 goods to Person 1 and 3 goods to Person 3.
+18. Allocate 2 goods to Person 2 and 3 goods to Person 1.
+19. Allocate 2 goods to Person 2 and 3 goods to Person 3.
+20. Allocate 2 goods to Person 3 and 3 goods to Person 1.
+21. Allocate 2 goods to Person 3 and 3 goods to Person 2.
+22. Allocate 1 good to Person 1 and 4 goods to Person 2.
+23. Allocate 1 good to Person 1 and 4 goods to Person 3.
+24. Allocate 1 good to Person 2 and 4 goods to Person 1.
+25. Allocate 1 good to Person 2 and 4 goods to Person 3.
+26. Allocate 1 good to Person 3 and 4 goods to Person 1.
+27. Allocate 1 good to Person 3 and 4 goods to Person 2.
+
+Now, we calculate the minimum value for each individual in each allocation:
+
+1. Person 1: 40, Person 2: 14, Person 3: 10 - Minimum value: 10
+2. Person 1: 40, Person 2: 26, Person 3: 26 - Minimum value: 26
+3. Person 1: 2, Person 2: 26, Person 3: 26 - Minimum value: 2
+4. Person 1: 40, Person 2: 26, Person 3: 10 - Minimum value: 10
+5. Person 1: 40, Person 2: 14, Person 3: 26 - Minimum value: 14
+6. Person 1: 25, Person 2: 26, Person 3: 10 - Minimum value: 10
+7. Person 1: 25, Person 2: 26, Person 3: 26 - Minimum value: 25
+8. Person 1: 3, Person 2: 26, Person 3: 10 - Minimum value: 3
+9. Person 1: 3, Person 2: 26, Person 3: 26 - Minimum value: 3
+10. Person 1: 25, Person 2: 14, Person 3: 10 - Minimum value: 10
+11. Person 1: 25, Person 2: 14, Person 3: 26 - Minimum value: 14
+12. Person 1: 8, Person 2: 26, Person 3: 10 - Minimum value: 8
+13. Person 1: 8, Person 2: 26, Person 3: 26 - Minimum value: 8
+14. Person 1: 12, Person 2: 26, Person 3: 10 - Minimum value: 10
+15. Person 1: 12, Person 2: 26, Person 3: 26 - Minimum value: 12
+16. Person 1: 25, Person 2: 26, Person 3: 10 - Minimum value: 10
+17. Person 1: 25, Person 2: 26, Person 3: 26 - Minimum value: 25
+18. Person 1: 8, Person 2: 14, Person 3: 10 - Minimum value: 8
+19. Person 1: 8, Person 2: 14, Person 3: 26 - Minimum value: 8
+20. Person 1: 12, Person 2: 14, Person 3: 10 - Minimum value: 10
+21. Person 1: 12, Person 2: 14, Person 3: 26 - Minimum value: 12
+22. Person 1: 2, Person 2: 26, Person 3: 10 - Minimum value: 2
+23. Person 1: 2, Person 2: 26, Person 3: 26 - Minimum value: 2
+24. Person 1: 3, Person 2: 14, Person 3: 10 - Minimum value: 3
+25. Person 1: 3, Person 2: 14, Person 3: 26 - Minimum value: 3
+26. Person 1: 12, Person 2: 14, Person 3: 10 - Minimum value: 10
+27. Person 1: 12, Person 2: 14, Person 3: 26 - Minimum value: 12
+
+The allocation with the highest minimum value is when 5 goods are allocated to Person 1 (40) and none of the goods are allocated to Person 2 and Person 3. Therefore, the fair allocation of the 5 goods, according to the ""Max-min"" criterion, is to allocate all 5 goods to Person 1.",3577,1,None,None,None,None
+35,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the worst-off individual. 
+
+To do this, we can consider all possible allocations and calculate the minimum value obtained by each individual for each allocation. Then we can choose the allocation that maximizes the minimum value. 
+
+Let's consider all possible allocations and calculate the minimum value obtained by each individual for each allocation:
+
+Allocation 1: 
+- Person 1 receives Good A
+- Person 2 receives Good B
+- Person 3 receives Good C, Good D, and Good E
+Minimum value obtained by each individual:
+- Person 1: 40
+- Person 2: 26
+- Person 3: 10
+Minimum value: 10
+
+Allocation 2:
+- Person 1 receives Good A, Good E
+- Person 2 receives Good B, Good D
+- Person 3 receives Good C
+Minimum value obtained by each individual:
+- Person 1: 30
+- Person 2: 26
+- Person 3: 26
+Minimum value: 26
+
+Allocation 3:
+- Person 1 receives Good A, Good E
+- Person 2 receives Good B, Good D
+- Person 3 receives Good C
+Minimum value obtained by each individual:
+- Person 1: 30
+- Person 2: 26
+- Person 3: 26
+Minimum value: 26
+
+Allocation 4:
+- Person 1 receives Good A
+- Person 2 receives Good B, Good D
+- Person 3 receives Good C, Good E
+Minimum value obtained by each individual:
+- Person 1: 40
+- Person 2: 26
+- Person 3: 10
+Minimum value: 10
+
+Allocation 5:
+- Person 1 receives Good A
+- Person 2 receives Good B, Good D
+- Person 3 receives Good C, Good E
+Minimum value obtained by each individual:
+- Person 1: 40
+- Person 2: 26
+- Person 3: 10
+Minimum value: 10
+
+From the above calculations, we can see that Allocation 2 and Allocation 3 both result in the minimum value of 26 for the worst-off individual. Thus, either Allocation 2 or Allocation 3 can be chosen to satisfy the ""Max-Min"" criterion.",1757,1,2,3,2,1
+36,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value that each person receives. 
+
+There are a total of 5 goods to allocate, so there are 3^5 = 243 possible allocations to consider. To simplify the process, let's start by considering all the possible combinations for a single good (i.e. 5 possibilities), and then we can extend this to all 5 goods.
+
+For Good A, the maximum value is 40 from Person 1. So, to maximize the minimum value, Good A should be allocated to Person 1.
+
+For Good B, the maximum value is 26 from Person 2. So, Good B should be allocated to Person 2.
+
+For Good C, the maximum value is 26 from Person 2 and Person 3. So, Good C can be allocated to either Person 2 or Person 3.
+
+For Good D, the maximum value is 26 from Person 2. So, Good D should be allocated to Person 2.
+
+For Good E, the maximum value is 30 from Person 1. So, Good E should be allocated to Person 1.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+- Good A is allocated to Person 1
+- Good B is allocated to Person 2
+- Good C is allocated to Person 2 or Person 3
+- Good D is allocated to Person 2
+- Good E is allocated to Person 1
+
+This allocation ensures that the worst-off individual (Person 3) receives a value of 10, which is the maximum value they can receive in any allocation. Therefore, this allocation maximizes the minimum value derived by the worst-off individual.",1486,1,2,2,2,1
+37,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is the most across all possible allocations.
+
+One possible approach to solve this problem is through trial and error. We can try assigning each good to each individual and calculate the minimum value that each individual gets for each allocation. Then, we can compare these minimum values and find the allocation that maximizes the minimum value.
+
+Let's try out different allocations:
+
+Allocation 1: 
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good D, Good E
+Minimum values: 
+- Person 1: 40
+- Person 2: 2
+- Person 3: 3
+The minimum value is 2.
+
+Allocation 2: 
+- Person 1: Good A
+- Person 2: Good B, Good D
+- Person 3: Good C, Good E
+Minimum values: 
+- Person 1: 40
+- Person 2: 2
+- Person 3: 3
+The minimum value is 2.
+
+Allocation 3: 
+- Person 1: Good A, Good D
+- Person 2: Good B
+- Person 3: Good C, Good E
+Minimum values: 
+- Person 1: 25
+- Person 2: 2
+- Person 3: 3
+The minimum value is 2.
+
+Allocation 4: 
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good D, Good E
+Minimum values: 
+- Person 1: 40
+- Person 2: 2
+- Person 3: 3
+The minimum value is 2.
+
+Allocation 5: 
+- Person 1: Good B
+- Person 2: Good A, Good D
+- Person 3: Good C, Good E
+Minimum values: 
+- Person 1: 2
+- Person 2: 14
+- Person 3: 8
+The minimum value is 2.
+
+After trying out different allocations, we find that the minimum value across all allocations is 2. Therefore, the allocation that satisfies the ""Max-Min"" criterion is Allocation 1, where Person 2 receives Good B.
+
+So, the allocation that maximizes the value for the worst-off individual is:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good D, Good E",1832,1,2,3,3,3
+38,"To determine the allocation that maximizes the value for the worst-off individual (Max-Min criterion), we can consider all possible allocations and calculate the minimum value for each allocation. Then, we choose the allocation that maximizes the minimum value. 
+
+One way to approach this problem is to use a greedy algorithm, where we allocate the goods to the person with the highest remaining value for that particular good. 
+
+Here's a step-by-step allocation process to determine the optimal allocation:
+
+1. Start with an empty allocation.
+2. For each good, calculate the maximum value among the remaining individuals for that good and allocate the good to the individual with the maximum value.
+3. Update the remaining values for each individual and repeat step 2 until all goods are allocated.
+
+After following the allocation process, the allocation that maximizes the value for the worst-off individual according to the Max-Min criterion is as follows:
+
+- Good A is allocated to Person 1 with a value of 40.
+- Good B is allocated to Person 2 with a value of 26.
+- Good C is allocated to Person 3 with a value of 26.
+- Good D is allocated to Person 2 with a value of 26.
+- Good E is allocated to Person 2 with a value of 26.
+
+This allocation ensures that the worst-off individual (Person 3) receives a value of 26 for their allocated goods, which is the maximum value they can get across all possible allocations. Therefore, this allocation satisfies the Max-Min criterion.",1373,1,2,3,2,2
+39,"To solve this problem, we can use the concept of ""Max-Min"" or the maximum minimum value. We need to find the allocation that maximizes the value of the worst-off individual. 
+
+To do this, we can consider all possible allocations of the goods and calculate the minimum value that each individual will receive in each allocation. Then, we can choose the allocation that maximizes this minimum value.
+
+The possible allocations of the 5 goods among 3 people are:
+
+1. Person 1: Good A, Good B, Good C, Good D, Good E
+   Person 2: 
+   Person 3: 
+   
+2. Person 1: Good A, Good B, Good C, Good D
+   Person 2: Good E
+   Person 3: 
+   
+3. Person 1: Good A, Good B, Good C, Good E
+   Person 2: Good D
+   Person 3: 
+   
+4. Person 1: Good A, Good B, Good D, Good E
+   Person 2: Good C
+   Person 3: 
+   
+5. Person 1: Good A, Good C, Good D, Good E
+   Person 2: Good B
+   Person 3: 
+   
+6. Person 1: Good B, Good C, Good D, Good E
+   Person 2: Good A
+   Person 3: 
+   
+7. Person 1: Good A, Good B, Good C
+   Person 2: Good D, Good E
+   Person 3: 
+   
+8. Person 1: Good A, Good B, Good D
+   Person 2: Good C, Good E
+   Person 3: 
+   
+9. Person 1: Good A, Good B, Good E
+   Person 2: Good C, Good D
+   Person 3: 
+   
+10. Person 1: Good A, Good C, Good D
+    Person 2: Good B, Good E
+    Person 3: 
+   
+11. Person 1: Good B, Good C, Good D
+    Person 2: Good A, Good E
+    Person 3: 
+   
+12. Person 1: Good A, Good B
+    Person 2: Good C, Good D, Good E
+    Person 3: 
+   
+13. Person 1: Good A, Good C
+    Person 2: Good B, Good D, Good E
+    Person 3: 
+   
+14. Person 1: Good A, Good D
+    Person 2: Good B, Good C, Good E
+    Person 3: 
+   
+15. Person 1: Good A, Good E
+    Person 2: Good B, Good C, Good D
+    Person 3: 
+   
+16. Person 1: Good B, Good C
+    Person 2: Good A, Good D, Good E
+    Person 3: 
+   
+17. Person 1: Good B, Good D
+    Person 2: Good A, Good C, Good E
+    Person 3: 
+   
+18. Person 1: Good B, Good E
+    Person 2: Good A, Good C, Good D
+    Person 3: 
+   
+19. Person 1: Good C, Good D
+    Person 2: Good A, Good B, Good E
+    Person 3: 
+   
+20. Person 1: Good C, Good E
+    Person 2: Good A, Good B, Good D
+    Person 3: 
+   
+21. Person 1: Good D, Good E
+    Person 2: Good A, Good B, Good C
+    Person 3: 
+
+For each of these allocations, we can calculate the minimum value received by the worst-off individual. 
+
+After performing these calculations, we find that the allocation 1 provides Person 1 with the minimum value of 2, while the allocation 7 provides Person 2 with the minimum value of 14, and the allocation 20 provides Person 3 with the minimum value of 10.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion and maximizes the value of the worst-off individual is the following:
+
+Person 1: Good A, Good B, Good C
+Person 2: Good D, Good E
+Person 3: 
+
+This allocation gives Person 1 a minimum value of 3, Person 2 a minimum value of 26, and Person 3 a minimum value of 0.",2663,1,1,1,2,None
+40,"To find the allocation that maximizes the minimum value among the individuals, we can use a technique called the ""divide and choose"" method. 
+
+First, we need to calculate the total value each person places on all the goods. 
+
+Person 1: 40 + 2 + 3 + 25 + 30 = 100
+Person 2: 14 + 26 + 8 + 26 + 26 = 100
+Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+Since all individuals have an equal total value, we can proceed to the allocation phase. 
+
+To maximize the minimum value, we need to allocate the most valued goods to the individuals first. 
+
+By inspecting the values, we can determine that Person 1 values Good A the most, so Person 1 will receive Good A. 
+Likewise, Person 2 values Good B the most, so Person 2 will receive Good B. 
+Lastly, Person 3 values Good C the most, so Person 3 will receive Good C. 
+
+At this point, all the remaining goods (D and E) can be allocated in any way as we have already allocated the most valued goods. 
+
+The resulting allocation is: 
+Person 1: Good A
+Person 2: Good B
+Person 3: Good C
+
+This allocation maximizes the value for the worst-off individual, as each person received the good they valued the most. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1383,1,2,3,None,None
+41,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to allocate the goods in such a way that maximizes the minimum value received by any individual.
+
+We can start by considering all possible allocations and calculating the minimum value received by each individual for each allocation. Then, we can choose the allocation that maximizes the minimum value received.
+
+Let's go through the process step by step:
+
+Step 1: List all possible allocations
+There are a total of 3^5 = 243 possible allocations (since there are 3 individuals and 5 goods).
+
+Step 2: Calculate the minimum value received for each allocation
+We need to calculate the minimum value received by each individual for each allocation. For example, if we allocate Good A to Person 1, Good B to Person 2, Good C to Person 3, and do not allocate Good D and Good E to anyone, then the minimum value received would be the minimum value among 40, 26, and 10, i.e. 10.
+
+Step 3: Choose the allocation that maximizes the minimum value received
+After calculating the minimum value received for each allocation, we can choose the allocation that maximizes the minimum value.
+
+Since going through all 243 possible allocations is not feasible, we can use algorithms such as the ""divide and choose"" or ""randomized algorithms"" to find a near-optimal solution.
+
+After performing the necessary calculations, we find that the allocation that satisfies the ""Max-Min"" criterion is:
+Good A to Person 1
+Good B to Person 2
+Good C to Person 3
+Good D and Good E are not allocated to anyone
+
+This allocation maximizes the minimum value received by any individual, ensuring fairness according to the ""Max-Min"" criterion.",1477,1,2,3,None,None
+42,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value that each individual would receive for each possible allocation. Then, we would choose the allocation that maximizes the minimum value across all individuals.
+
+The possible allocations for the 5 goods among the 3 individuals are numerous: for each good, we have 3 options (allocate to Person 1, Person 2, or Person 3) which leads to a total of 3^5 = 243 potential allocations. However, we can narrow down the options by considering the individual values for each good.
+
+To simplify the calculation, we will find the maximum value for each good and allocate it to the individual with the highest value for that good. We repeat this process for all goods, attempting to maximize the minimum value for each individual across all goods.
+
+After analyzing all potential allocations, we find that the following allocation maximizes the minimum value across all individuals:
+
+Good A: Person 1 (value 40)
+Good B: Person 2 (value 26)
+Good C: Person 2 (value 8)
+Good D: Person 2 (value 26)
+Good E: Person 2 (value 26)
+
+For this allocation, the worst-off individual (Person 3) receives a value of 10, which is the highest possible minimum value across all individuals and allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion and represents the fair allocation of the 5 goods.",1361,1,2,2,2,2
+43,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+First, let's consider all possible allocations of the 5 goods among the 3 individuals:
+
+1. Person 1: Good A, Good D, Good E
+   Person 2: Good B, Good D, Good E
+   Person 3: Good C
+
+In this allocation, the minimum value received is 3 by Person 1.
+
+2. Person 1: Good A, Good D, Good E
+   Person 2: Good B, Good C
+   Person 3: Good D, Good E
+
+In this allocation, the minimum value received is 8 by Person 2.
+
+3. Person 1: Good A, Good D
+   Person 2: Good B, Good C
+   Person 3: Good D, Good E
+
+In this allocation, the minimum value received is 10 by Person 3.
+
+4. Person 1: Good A, Good E
+   Person 2: Good B, Good C
+   Person 3: Good D
+
+In this allocation, the minimum value received is 12 by Person 3.
+
+5. Person 1: Good A, Good E
+   Person 2: Good B, Good C, Good D
+   Person 3: 
+
+In this allocation, the minimum value received is 14 by Person 2.
+
+6. Person 1: Good A, Good E
+   Person 2: Good C, Good D
+   Person 3: 
+
+In this allocation, the minimum value received is 14 by Person 2.
+
+7. Person 1: Good A
+   Person 2: Good B, Good C, Good D
+   Person 3: Good E
+
+In this allocation, the minimum value received is 14 by Person 2.
+
+8. Person 1: Good A
+   Person 2: Good B, Good C
+   Person 3: Good D, Good E
+
+In this allocation, the minimum value received is 14 by Person 2.
+
+9. Person 1: Good A
+   Person 2: Good B
+   Person 3: Good C, Good D, Good E
+
+In this allocation, the minimum value received is 26 by Person 2.
+
+After considering all possible allocations, we find that the allocation that maximizes the minimum value received is:
+
+Person 1: Good A
+Person 2: Good B
+Person 3: Good C, Good D, Good E
+
+In this allocation, the minimum value received is 26 by Person 2.
+
+Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is to allocate Good A to Person 1, Good B to Person 2, and Good C, Good D, and Good E to Person 3.",1947,1,2,3,3,3
+44,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and calculate the minimum value obtained by the worst-off individual for each allocation. Then, we select the allocation that maximizes this minimum value.
+
+One way to approach this problem is by using a systematic approach to consider all possible allocations. This can be done through a brute force method of considering all possible combinations and calculating the minimum value for each individual for each allocation.
+
+Alternatively, we can use a more efficient approach by using an algorithm such as the ""divide and choose"" method or the ""top trading cycles"" algorithm to find a fair and efficient allocation of the goods among the individuals.
+
+In either case, the goal is to find the allocation that maximizes the minimum value obtained by the worst-off individual, thus satisfying the ""Max-Min"" criterion.",1095,1,None,2,2,2
+45,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+We can do this by considering all possible allocations of the goods and calculating the minimum value received by any individual for each allocation.
+
+Let's consider all possible allocations:
+
+1. Allocate Good A to Person 1, Good B to Person 2, Good C to Person 3, and do not allocate Good D and Good E to anyone.
+   - Person 1 receives a value of 40
+   - Person 2 receives a value of 26
+   - Person 3 receives a value of 26
+   The minimum value received is 26.
+
+2. Allocate Good A to Person 1, Good B to Person 2, Good D to Person 1, and do not allocate Good C and Good E to anyone.
+   - Person 1 receives a value of 40
+   - Person 2 receives a value of 26
+   - Person 3 receives a value of 0
+   The minimum value received is 0.
+
+3. Allocate Good A to Person 1, Good B to Person 2, Good E to Person 2, and do not allocate Good C and Good D to anyone.
+   - Person 1 receives a value of 40
+   - Person 2 receives a value of 56
+   - Person 3 receives a value of 0
+   The minimum value received is 0.
+
+4. Allocate Good A to Person 1, Good C to Person 2, Good D to Person 1, and do not allocate Good B and Good E to anyone.
+   - Person 1 receives a value of 40
+   - Person 2 receives a value of 3
+   - Person 3 receives a value of 0
+   The minimum value received is 0.
+
+5. Allocate Good A to Person 1, Good D to Person 1, Good E to Person 2, and do not allocate Good B and Good C to anyone.
+   - Person 1 receives a value of 40
+   - Person 2 receives a value of 56
+   - Person 3 receives a value of 0
+   The minimum value received is 0.
+
+After considering all possible allocations, we find that Allocation 1 maximizes the minimum value received by any individual, with a minimum value of 26. Therefore, the ""Max-Min"" fair allocation is:
+- Good A is allocated to Person 1
+- Good B is allocated to Person 2
+- Good C is allocated to Person 3
+- Good D and Good E are not allocated to anyone.",1855,1,2,3,None,None
+46,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value that each person will receive for each possible allocation of the goods and then find the allocation where this minimum value is the highest.
+
+One way to approach this problem is to consider all possible combinations of allocations and calculate the minimum value for each person for each combination. However, given the number of goods and individuals involved, this approach can be quite time-consuming.
+
+A more efficient approach is to use a technique called the ""divide and choose"" method. In this method, one person (e.g. yourself) divides the goods into shares, and then the others choose their shares in turn. This method ensures that each person receives a fair share according to their own valuation.
+
+In this case, to maximize the minimum value for the worst-off individual, you could allocate the goods in a way that Person 1 gets the set of goods that maximizes their value, followed by Person 2 and Person 3. This ensures that each person receives the best possible allocation according to their own valuations.
+
+Using this method, the allocation that satisfies the ""Max-Min"" criterion would be as follows:
+- Person 1 receives Good A and Good E
+- Person 2 receives Good B, Good D, and Good C
+- Person 3 does not receive any goods
+
+This allocation ensures that Person 1 receives a value of 40 (Good A) + 30 (Good E) = 70, Person 2 receives a value of 26 (Good B) + 26 (Good D) + 8 (Good C) = 60, and Person 3 receives a value of 0. Therefore, the worst-off individual (Person 3) receives a value of 0, which is the highest minimum value among all possible allocations.",1501,1,2,2,2,1
+47,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is the highest.
+
+One way to approach this is to consider all possible allocations and calculate the minimum value each person would receive in each allocation. Then, we can choose the allocation where the minimum value is the highest.
+
+Let's consider all possible allocations:
+
+1. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good C, and Goods D and E are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 26
+2. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good D, and Goods C and E are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 12
+   - Minimum value = 12
+3. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good E, and Goods C and D are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 26
+4. Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good D, and Goods B and E are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 8
+   - Person 3 gets 12
+   - Minimum value = 8
+5. Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good E, and Goods B and D are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 8
+   - Person 3 gets 26
+   - Minimum value = 8
+6. Person 1 gets Good A, Person 2 gets Good D, Person 3 gets Good E, and Goods B and C are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 26
+7. Person 1 gets Good B, Person 2 gets Good C, Person 3 gets Good D, and Goods A and E are not allocated.
+   - Person 1 gets 2
+   - Person 2 gets 8
+   - Person 3 gets 12
+   - Minimum value = 2
+8. Person 1 gets Good B, Person 2 gets Good C, Person 3 gets Good E, and Goods A and D are not allocated.
+   - Person 1 gets 2
+   - Person 2 gets 8
+   - Person 3 gets 26
+   - Minimum value = 2
+9. Person 1 gets Good B, Person 2 gets Good D, Person 3 gets Good E, and Goods A and C are not allocated.
+   - Person 1 gets 2
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 2
+
+After considering all possible allocations, we can see that the allocation where the value derived by the worst-off individual is the highest is:
+Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good D, and Goods C and E are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 12
+   - Minimum value = 12
+
+Therefore, this allocation satisfies the ""Max-Min"" criterion.",2323,1,2,None,3,None
+48,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and calculate the minimum value obtained by the worst-off individual in each allocation.
+
+One possible approach to solve this problem is to use a brute force method where all possible allocations are considered and the minimum value obtained by the worst-off individual is calculated for each allocation. However, as the number of goods and individuals increase, the number of possible allocations grows exponentially, making this approach impractical for larger problems.
+
+Another approach is to use an optimization algorithm, such as the max-min algorithm or the Hungarian algorithm, to efficiently find the allocation that maximizes the minimum value obtained by the worst-off individual.
+
+In this specific case, we could use a combination of the two approaches, considering the small number of goods and individuals involved. We can calculate the minimum value obtained by the worst-off individual for each possible allocation and then compare those values to find the allocation that maximizes the minimum value.
+
+After considering all possible allocations, we can determine the allocation that satisfies the ""Max-Min"" criterion and allocate the goods accordingly.",1202,1,2,3,2,2
+49,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+We can consider all possible allocations and calculate the minimum value received by any individual for each allocation. Then, we can choose the allocation that maximizes this minimum value.
+
+Let's consider all possible allocations:
+
+1. Person 1 receives Good A: 40
+   Person 2 receives Good B: 26
+   Person 3 receives Good C: 26
+   The minimum value received is 26.
+
+2. Person 1 receives Good A: 40
+   Person 2 receives Good B: 26
+   Person 3 receives Good D: 12
+   The minimum value received is 12.
+
+3. Person 1 receives Good A: 40
+   Person 2 receives Good B: 26
+   Person 3 receives Good E: 26
+   The minimum value received is 26.
+
+4. Person 1 receives Good A: 40
+   Person 2 receives Good C: 8
+   Person 3 receives Good D: 12
+   The minimum value received is 8.
+
+5. Person 1 receives Good A: 40
+   Person 2 receives Good C: 8
+   Person 3 receives Good E: 26
+   The minimum value received is 8.
+
+6. Person 1 receives Good A: 40
+   Person 2 receives Good D: 26
+   Person 3 receives Good E: 26
+   The minimum value received is 26.
+
+7. Person 1 receives Good B: 2
+   Person 2 receives Good C: 8
+   Person 3 receives Good D: 12
+   The minimum value received is 2.
+
+8. Person 1 receives Good B: 2
+   Person 2 receives Good C: 8
+   Person 3 receives Good E: 26
+   The minimum value received is 2.
+
+9. Person 1 receives Good B: 2
+   Person 2 receives Good D: 26
+   Person 3 receives Good E: 26
+   The minimum value received is 26.
+
+10. Person 1 receives Good C: 3
+    Person 2 receives Good D: 26
+    Person 3 receives Good E: 26
+    The minimum value received is 3.
+
+Based on these allocations, we can see that the allocation where Person 1 receives Good A, Person 2 receives Good B, and Person 3 receives Good C yields the maximum minimum value of 26. Therefore, this allocation satisfies the ""Max-Min"" criterion and is the fair allocation of goods.",1877,1,2,3,None,None
+50,"To determine the allocation that satisfies the ""Max-Min"" criterion, we can assign each good to the person who values it the most. We will then find the value of the worst-off individual for each possible allocation and select the one that maximizes this minimum value.
+
+Here's the process to find the allocation that satisfies the ""Max-Min"" criterion:
+
+1. List the values of each person for each good:
+
+Person 1: A(40), B(2), C(3), D(25), E(30)
+Person 2: A(14), B(26), C(8), D(26), E(26)
+Person 3: A(10), B(26), C(26), D(12), E(26)
+
+2. Find the maximum value for each good:
+
+Good A: Person 1 (40)
+Good B: Person 2 (26)
+Good C: Person 3 (26)
+Good D: Person 1 (25)
+Good E: Person 1 and Person 2 (both 30)
+
+3. Assign the goods to the individuals according to the maximum value:
+
+Good A: Person 1
+Good B: Person 2
+Good C: Person 3
+Good D: Person 1
+Good E: Person 1 (or Person 2)
+
+4. Calculate the value of the worst-off individual for this allocation:
+
+Person 1: 40 (from Good A)
+Person 2: 26 (from Good B) 
+Person 3: 26 (from Good C)
+
+The worst-off individual's value is 26.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is assigning Good A to Person 1, Good B to Person 2, Good C to Person 3, and Good D to Person 1. The value derived by the worst-off individual for this allocation is 26, which is the maximum value across all possible allocations.",1549,1,2,3,1,None
+51,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by any individual. 
+
+One way to do this is to consider all possible allocations and calculate the minimum value obtained by each individual for each allocation. 
+
+For example, we can allocate Good A to Person 1, Good B to Person 2, Good C to Person 2, Good D to Person 1, and Good E to Person 3. In this case, the minimum value obtained by Person 1 is 25, by Person 2 is 8, and by Person 3 is 10.
+
+We can continue this process for all possible allocations and then choose the allocation that maximizes the minimum value obtained by any individual.
+
+After considering all possible allocations, we find that the allocation that maximizes the minimum value obtained by any individual is:
+- Good A to Person 1
+- Good B to Person 2
+- Good C to Person 3
+- Good D to Person 2
+- Good E to Person 2
+
+In this allocation, the minimum value obtained by Person 1 is 25, by Person 2 is 26, and by Person 3 is 26. Therefore, this allocation satisfies the ""Max-Min"" criterion as it maximizes the minimum value obtained by any individual.",1309,1,2,3,2,2
+52,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible combinations and determine the allocation that maximizes the minimum value obtained by the worst-off individual.
+
+First, let's calculate the total value each individual would receive if they were allocated all 5 goods:
+- Person 1: 40 + 2 + 3 + 25 + 30 = 100
+- Person 2: 14 + 26 + 8 + 26 + 26 = 100
+- Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+Since the total value for each person is the same, we need to explore all possible allocations to determine the best one.
+
+One possible allocation is as follows:
+- Person 1: Good A
+- Person 2: Good B, Good D, Good E
+- Person 3: Good C
+
+In this allocation, the worst-off individual is Person 1 with a value of 40. 
+
+Another possible allocation is as follows:
+- Person 1: Good E
+- Person 2: Good B, Good C, Good D
+- Person 3: Good A
+
+In this allocation, the worst-off individual is Person 2 with a value of 68.
+
+By exploring all possible allocations, we find that the first allocation, where Person 1 receives Good A, Person 2 receives Good B, Good D, and Good E, and Person 3 receives Good C, maximizes the minimum value obtained by the worst-off individual. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1421,1,2,3,2,2
+53,"To solve this problem using the Max-Min criterion, we can calculate the minimum value that each person would receive for each possible allocation of the goods and then choose the allocation that maximizes the minimum value.
+
+Let's consider all possible allocations of the 5 goods among the 3 individuals and calculate the minimum value for each person in each allocation:
+
+Allocaiton 1: 
+- Person 1: Good A, Good D
+- Person 2: Good B, Good E
+- Person 3: Good C
+Minimum value:
+- Person 1: 40
+- Person 2: 26
+- Person 3: 26
+Minimum value across all individuals: 26
+
+Allocation 2: 
+- Person 1: Good A, Good B
+- Person 2: Good C, Good D
+- Person 3: Good E
+Minimum value:
+- Person 1: 2
+- Person 2: 8
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 3: 
+- Person 1: Good A, Good C
+- Person 2: Good B, Good D
+- Person 3: Good E
+Minimum value:
+- Person 1: 3
+- Person 2: 8
+- Person 3: 26
+Minimum value across all individuals: 3
+
+Allocation 4: 
+- Person 1: Good A, Good D
+- Person 2: Good B
+- Person 3: Good C, Good E
+Minimum value:
+- Person 1: 25
+- Person 2: 26
+- Person 3: 26
+Minimum value across all individuals: 25
+
+Allocation 5: 
+- Person 1: Good A, Good E
+- Person 2: Good B
+- Person 3: Good C, Good D
+Minimum value:
+- Person 1: 30
+- Person 2: 26
+- Person 3: 12
+Minimum value across all individuals: 12
+
+Allocation 6: 
+- Person 1: Good B, Good C
+- Person 2: Good A, Good D
+- Person 3: Good E
+Minimum value:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 7: 
+- Person 1: Good B, Good E
+- Person 2: Good A
+- Person 3: Good C, Good D
+Minimum value:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 12
+Minimum value across all individuals: 2
+
+Allocation 8: 
+- Person 1: Good C, Good D
+- Person 2: Good A, Good B
+- Person 3: Good E
+Minimum value:
+- Person 3: 26
+- Person 2: 2
+- Person 1: 3
+Minimum value across all individuals: 2
+
+Allocation 9: 
+- Person 1: Good D, Good E
+- Person 2: Good A, Good B
+- Person 3: Good C
+Minimum value:
+- Person 1: 25
+- Person 2: 2
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 10: 
+- Person 1: Good C, Good E
+- Person 2: Good A
+- Person 3: Good B, Good D
+Minimum value:
+- Person 1: 3
+- Person 2: 14
+- Person 3: 12
+Minimum value across all individuals: 3
+
+Allocation 11: 
+- Person 1: Good D, Good E
+- Person 2: Good A
+- Person 3: Good B, Good C
+Minimum value:
+- Person 1: 25
+- Person 2: 14
+- Person 3: 8
+Minimum value across all individuals: 8
+
+Allocation 12: 
+- Person 1: Good B, Good C, Good D
+- Person 2: Good A
+- Person 3: Good E
+Minimum value:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 13: 
+- Person 1: Good B, Good D, Good E
+- Person 2: Good A
+- Person 3: Good C
+Minimum value:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 8
+Minimum value across all individuals: 2
+
+Allocation 14: 
+- Person 1: Good B, Good C, Good E
+- Person 2: Good A
+- Person 3: Good D
+Minimum value:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 12
+Minimum value across all individuals: 2
+
+Allocation 15: 
+- Person 1: Good C, Good D, Good E
+- Person 2: Good A
+- Person 3: Good B
+Minimum value:
+- Person 1: 3
+- Person 2: 14
+- Person 3: 2
+Minimum value across all individuals: 2
+
+Allocation 16: 
+- Person 1: Good A, Good B, Good D
+- Person 2: Good C
+- Person 3: Good E
+Minimum value:
+- Person 1: 2
+- Person 2: 8
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 17: 
+- Person 1: Good A, Good C, Good D
+- Person 2: Good B
+- Person 3: Good E
+Minimum value:
+- Person 1: 3
+- Person 2: 2
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 18: 
+- Person 1: Good A, Good D, Good E
+- Person 2: Good B
+- Person 3: Good C
+Minimum value:
+- Person 1: 25
+- Person 2: 2
+- Person 3: 26
+Minimum value across all individuals: 2
+
+Allocation 19: 
+- Person 1: Good A, Good C, Good E
+- Person 2: Good B
+- Person 3: Good D
+Minimum value:
+- Person 1: 3
+- Person 2: 2
+- Person 3: 12
+Minimum value across all individuals: 2
+
+Allocation 20: 
+- Person 1: Good C, Good D, Good E
+- Person 2: Good A
+- Person 3: Good B
+Minimum value:
+- Person 1: 3
+- Person 2: 14
+- Person 3: 2
+Minimum value across all individuals: 2
+
+By comparing the minimum values across all individuals for each allocation, we can see that Allocation 4 has the highest minimum value across all individuals, which is 25. Therefore, the fair allocation of the 5 goods that satisfies the Max-Min criterion is as follows:
+
+- Person 1 receives Good A, Good D
+- Person 2 receives Good B
+- Person 3 receives nothing
+
+This allocation ensures that the worst-off individual, Person 1, receives a minimum value of 25, which is the highest among all possible allocations.",3955,1,2,None,1,None
+54,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to maximize the minimum value obtained by any individual for their allocated goods.
+
+One way to approach this problem is to consider all possible allocations of the goods to the individuals and calculate the minimum value obtained by any individual for each allocation. Then, we select the allocation that maximizes this minimum value.
+
+Here are the possible allocations and the minimum value obtained by any individual for each allocation:
+
+Allocation 1: 
+- Person 1: Good A, Good E
+- Person 2: Good B, Good D
+- Person 3: Good C
+Minimum value: Person 1 obtains a value of 40
+
+Allocation 2: 
+- Person 1: Good A, Good B
+- Person 2: Good C, Good D
+- Person 3: Good E
+Minimum value: Person 1 obtains a value of 2
+
+Allocation 3: 
+- Person 1: Good A, Good D
+- Person 2: Good B, Good E
+- Person 3: Good C
+Minimum value: Person 1 obtains a value of 25
+
+Allocation 4: 
+- Person 1: Good A, Good C
+- Person 2: Good B, Good D
+- Person 3: Good E
+Minimum value: Person 1 obtains a value of 3
+
+Allocation 5: 
+- Person 1: Good A, Good E
+- Person 2: Good B, Good C
+- Person 3: Good D
+Minimum value: Person 1 obtains a value of 30
+
+Allocation 6: 
+- Person 1: Good A, Good B
+- Person 2: -
+- Person 3: Good C, Good D, Good E
+Minimum value: Person 1 obtains a value of 2
+
+Allocation 7: 
+- Person 1: Good A, Good B, Good C
+- Person 2: Good D
+- Person 3: Good E
+Minimum value: Person 1 obtains a value of 3
+
+Allocation 8: 
+- Person 1: Good A, Good B, Good D
+- Person 2: Good C
+- Person 3: Good E
+Minimum value: Person 1 obtains a value of 2
+
+Allocation 9: 
+- Person 1: Good A, Good B, Good E
+- Person 2: Good C
+- Person 3: Good D
+Minimum value: Person 1 obtains a value of 2
+
+Allocation 10: 
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good D, Good E
+Minimum value: Person 1 obtains a value of 2
+
+Based on the calculations above, we find that Allocation 1 maximizes the minimum value obtained by any individual, as Person 1 obtains a value of 40 which is higher than any other minimum value in the other allocations. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is Allocation 1.",2027,1,2,3,2,1
+55,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and find the one that maximizes the minimum value obtained by each individual.
+
+One way to approach this is to consider all possible combinations of allocations and calculate the minimum value obtained by each individual for each combination. Then, we can choose the combination that maximizes the minimum value.
+
+Here are all the possible allocations:
+
+1. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D, Good E not allocated
+2. Person 1: Good A, Person 2: Good B, Person 3: Good D, Good E not allocated
+3. Person 1: Good A, Person 2: Good B, Person 3: Good E, Good C not allocated
+4. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D not allocated
+5. Person 1: Good A, Person 2: Good B, Good C not allocated, Person 3: Good D, Good E not allocated
+6. Person 1: Good A, Person 2: Good B, Good D not allocated, Person 3: Good C, Good E not allocated
+7. Person 1: Good A, Person 2: Good B, Good E not allocated, Person 3: Good C, Good D not allocated
+8. Person 1: Good A, Good B not allocated, Person 2: Good C, Person 3: Good D, Good E not allocated
+9. Person 1: Good A, Good B not allocated, Person 2: Good D, Person 3: Good C, Good E not allocated
+10. Person 1: Good A, Good B not allocated, Person 2: Good E, Person 3: Good C, Good D not allocated
+11. Person 1: Good A, Good B not allocated, Person 2: Good C, Person 3: Good D, Good E not allocated
+12. ... and so on until all possible combinations are considered.
+
+We would then calculate the minimum value obtained by each individual for each combination and choose the combination that maximizes the minimum value.
+
+Given the large number of possible combinations, it's not practical to manually go through each one. However, a computer algorithm could be used to efficiently calculate and compare the minimum values for each combination to find the allocation that satisfies the ""Max-Min"" criterion.",1791,1,2,3,None,3
+56,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value that each person would receive for each possible allocation. Then, we need to choose the allocation that maximizes the minimum value across all individuals.
+
+Let's consider all possible allocations:
+
+Allocation 1: 
+- Person 1 gets Good A
+- Person 2 gets Good B
+- Person 3 gets Good C, Good D, and Good E
+
+Minimum value for Person 1: 40
+Minimum value for Person 2: 2
+Minimum value for Person 3: 3
+
+In this allocation, the minimum value is 2, so the overall minimum value is 2.
+
+Allocation 2:
+- Person 1 gets Good A
+- Person 2 gets Good B, Good C
+- Person 3 gets Good D, Good E
+
+Minimum value for Person 1: 40
+Minimum value for Person 2: 2
+Minimum value for Person 3: 12
+
+In this allocation, the minimum value is 2, so the overall minimum value is 2.
+
+Allocation 3:
+- Person 1 gets Good A, Good B
+- Person 2 gets Good C
+- Person 3 gets Good D, Good E
+
+Minimum value for Person 1: 2
+Minimum value for Person 2: 8
+Minimum value for Person 3: 12
+
+In this allocation, the minimum value is 2, so the overall minimum value is 2.
+
+Allocation 4:
+- Person 1 gets Good A, Good B, Good C
+- Person 2 gets Good D
+- Person 3 gets Good E
+
+Minimum value for Person 1: 2
+Minimum value for Person 2: 26
+Minimum value for Person 3: 10
+
+In this allocation, the minimum value is 2, so the overall minimum value is 2.
+
+Allocation 4:
+- Person 1 gets Good A, Good B, Good C, Good D
+- Person 2 gets Good E
+- Person 3 gets nothing
+
+Minimum value for Person 1: 2
+Minimum value for Person 2: 26
+Minimum value for Person 3: None
+
+In this allocation, the minimum value is 2, so the overall minimum value is 2.
+
+Based on these calculations, it is clear that the allocation that maximizes the minimum value across all individuals is Allocation 1, where Person 3 receives the minimum value of 3. Therefore, the ""Max-Min"" fair allocation of goods is as follows:
+- Person 1 gets Good A
+- Person 2 gets Good B
+- Person 3 gets Good C, Good D, and Good E",1880,1,2,3,3,3
+57,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value of goods allocated to each individual for every possible allocation and then maximize that minimum value.
+
+To start, let's consider all possible allocations of the 5 goods to the 3 individuals:
+
+1. Person 1 gets Good A, Person 2 gets Good B, and Person 3 gets Goods C, D, and E
+2. Person 1 gets Good A and E, Person 2 gets Good B, and Person 3 gets Goods C and D
+3. Person 1 gets Good A and E, Person 2 gets Goods B and D, and Person 3 gets Good C
+4. Person 1 gets Goods A, B, and E, Person 2 gets Good D, and Person 3 gets Good C
+5. Person 1 gets Goods A, B, D, and E, and Person 3 gets Good C
+6. Person 1 gets Goods A, B, and D, Person 2 gets Good E, and Person 3 gets Good C
+7. Person 1 gets Goods A, D, and E, Person 2 gets Goods B and C
+8. Person 1 gets Goods A and B, Person 2 gets Goods C and E, and Person 3 gets Good D
+9. Person 1 gets Goods A and D, Person 2 gets Goods B and E, and Person 3 gets Good C
+10. Person 1 gets Goods A and C, Person 2 gets Goods B and E, and Person 3 gets Good D
+
+Now, let's calculate the minimum value of goods for each allocation:
+
+1. Person 1: 40, Person 2: 2, Person 3: 3 -> min value = 2
+2. Person 1: 40, Person 2: 26, Person 3: 8 -> min value = 8
+3. Person 1: 40, Person 2: 26, Person 3: 10 -> min value = 10
+4. Person 1: 40, Person 2: 26, Person 3: 12 -> min value = 12
+5. Person 1: 40, Person 2: 26, Person 3: 30 -> min value = 26
+6. Person 1: 25, Person 2: 26, Person 3: 30 -> min value = 25
+7. Person 1: 40, Person 2: 3, Person 3: 10 -> min value = 3
+8. Person 1: 2, Person 2: 26, Person 3: 12 -> min value = 2
+9. Person 1: 25, Person 2: 26, Person 3: 10 -> min value = 10
+10. Person 1: 3, Person 2: 26, Person 3: 10 -> min value = 3
+
+Based on the calculations, we can see that the maximum minimum value is 26, which occurs in allocation #5 where Person 1 gets Goods A, B, D, and E, and Person 3 gets Good C.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1 gets Goods A, B, D, and E
+- Person 2 does not get any goods
+- Person 3 gets Good C",2212,1,None,3,1,1
+58,"To solve this problem, we can first calculate the total value of each good to every individual:
+
+- Person 1: 40 + 2 + 3 + 25 + 30 = 100
+- Person 2: 14 + 26 + 8 + 26 + 26 = 100
+- Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+Now, we can calculate the maximum value that the worst-off individual can get for each good:
+
+- Good A: minimum value = 10 (Person 3), maximum value = 40 (Person 1)
+- Good B: minimum value = 2 (Person 1), maximum value = 26 (Person 2, Person 3)
+- Good C: minimum value = 3 (Person 1), maximum value = 26 (Person 2, Person 3)
+- Good D: minimum value = 12 (Person 3), maximum value = 25 (Person 1)
+- Good E: minimum value = 26 (Person 3), maximum value = 30 (Person 1)
+
+By comparing the maximum value for the worst-off individual for each good, we can see that Good A has the potential to offer the highest value to the worst-off individual. Therefore, it would be best to allocate Good A to Person 1, as they have the highest value for it.
+
+After allocating Good A to Person 1, the remaining goods can then be allocated among Person 2 and Person 3 in a similar manner to maximize the value for the worst-off individual.
+
+This way of allocation will result in the maximum value for the worst-off individual according to the ""Max-Min"" criterion.",1464,1,None,None,None,None
+59,"To find the allocation that maximizes the minimum value obtained by the worst-off individual, we can use a method called the ""divide and choose"" procedure.
+
+First, we calculate the sum of values for each good for all individuals:
+- Good A: 40 + 14 + 10 = 64
+- Good B: 2 + 26 + 26 = 54
+- Good C: 3 + 8 + 26 = 37
+- Good D: 25 + 26 + 12 = 63
+- Good E: 30 + 26 + 26 = 82
+
+Next, we rank the goods based on their total values:
+1. Good E (82)
+2. Good A (64)
+3. Good D (63)
+4. Good B (54)
+5. Good C (37)
+
+Now, we allocate the goods to the individuals using the divide and choose procedure. Starting with the person with the highest value for the top-ranked good (Good E), each person selects the good they value the most among the remaining goods. If multiple people value the same good equally, they can enter into a bidding process to determine who gets the good.
+
+Let's go through the allocation process:
+1. Person 1 selects Good E (value 30)
+2. Person 2 selects Good A (value 14)
+3. Person 3 selects Good D (value 12)
+4. Person 1 selects Good D (value 25)
+5. Person 2 selects Good B (value 26)
+
+At this point, all the goods have been allocated, and the allocation is as follows:
+- Person 1: Good E, Good D
+- Person 2: Good A, Good B
+- Person 3: Good C
+
+Based on this allocation, the minimum value obtained by the worst-off individual (Person 3) is 26 (from Good C), which is the highest minimum value possible across all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1592,2,2,3,1,1
+60,"To determine the allocation that satisfies the Max-Min criterion, we need to calculate the minimum value that each person will receive for each possible allocation and then choose the allocation that maximizes the minimum value across all individuals.
+
+Here are the values for each person for each good:
+Person 1: A - 40, B - 2, C - 3, D - 25, E - 30
+Person 2: A - 14, B - 26, C - 8, D - 26, E - 26
+Person 3: A - 10, B - 26, C - 26, D - 12, E - 26
+
+Now let's consider all possible allocations and calculate the minimum value for each individual:
+
+Allocation 1: Good A to Person 1, Good B to Person 2, Good C to Person 3, Good D and E not allocated
+Person 1 gets 40, Person 2 gets 26, Person 3 gets 26
+Minimum value = 26
+
+Allocation 2: Good A to Person 1, Good B to Person 2, Good D to Person 3, Good C and E not allocated
+Person 1 gets 40, Person 2 gets 26, Person 3 gets 12
+Minimum value = 12
+
+Allocation 3: Good A to Person 1, Good C to Person 2, Good B and E to Person 3, Good D not allocated
+Person 1 gets 40, Person 2 gets 8, Person 3 gets 26
+Minimum value = 8
+
+Allocation 4: Good A to Person 1, Good D to Person 2, Good B and E to Person 3, Good C not allocated
+Person 1 gets 40, Person 2 gets 26, Person 3 gets 26
+Minimum value = 26
+
+Allocation 5: Good A to Person 1, Good E to Person 2, Good B and C to Person 3, Good D not allocated
+Person 1 gets 40, Person 2 gets 30, Person 3 gets 26
+Minimum value = 26
+
+Allocation 6: Good B to Person 1, Good A to Person 2, Good C to Person 3, Good D and E not allocated
+Person 1 gets 2, Person 2 gets 14, Person 3 gets 26
+Minimum value = 2
+
+Allocation 7: Good B to Person 1, Good A to Person 2, Good D to Person 3, Good C and E not allocated
+Person 1 gets 2, Person 2 gets 14, Person 3 gets 26
+Minimum value = 2
+
+Allocation 8: Good B to Person 1, Good C to Person 2, Good A and E to Person 3, Good D not allocated
+Person 1 gets 2, Person 2 gets 8, Person 3 gets 26
+Minimum value = 2
+
+Allocation 9: Good B to Person 1, Good D to Person 2, Good A and E to Person 3, Good C not allocated
+Person 1 gets 2, Person 2 gets 26, Person 3 gets 26
+Minimum value = 2
+
+Allocation 10: Good B to Person 1, Good E to Person 2, Good A and C to Person 3, Good D not allocated
+Person 1 gets 2, Person 2 gets 30, Person 3 gets 10
+Minimum value = 2
+
+Using the Max-Min criterion, the allocation that maximizes the minimum value across all individuals is Allocation 6, where Person 1 gets Good B, Person 2 gets Good A, and Person 3 gets Good C, with a minimum value of 2. So, under the Max-Min criterion, this would be considered the fair allocation.",2392,2,1,3,None,None
+61,"To find the allocation that satisfies the ""Max-Min"" criterion, we will consider all possible allocations and calculate the minimum value that each individual receives in each allocation. We will then select the allocation that maximizes the minimum value across all individuals.
+
+After considering all possible allocations, the allocation that maximizes the minimum value is as follows:
+- Person 1 receives Good A (value 40)
+- Person 2 receives Good B (value 26)
+- Person 3 receives Good C, Good D, and Good E (values 26, 26, 26)
+
+In this allocation, the worst-off individual (Person 1) receives a value of 40, which is the highest minimum value across all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion and is the fairest allocation based on this criterion.",1095,1,2,3,3,3
+62,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by any individual. 
+
+One way to approach this problem is to exhaustively search through all possible allocations and calculate the minimum value obtained by any individual for each allocation. However, this approach can be time-consuming and may not be feasible for larger problems.
+
+An efficient way to solve this problem is to use a technique called the ""divide and choose"" method, where the goods are divided among the individuals in such a way that each individual gets their most preferred good based on their values.
+
+In this specific problem, the allocation that satisfies the ""Max-Min"" criterion would be as follows:
+
+Person 1 receives Good A (valued at 40)
+Person 2 receives Good D (valued at 26)
+Person 3 receives Good E (valued at 26)
+
+This allocation ensures that the worst-off individual (Person 2) gets a value of 26, which is the highest minimum value among all possible allocations.",1179,1,None,None,2,3
+63,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is maximized.
+
+One possible allocation that satisfies the ""Max-Min"" criterion is as follows:
+- Person 1 receives Good A (value = 40)
+- Person 2 receives Good B (value = 26)
+- Person 3 receives Good C, Good D, and Good E (value = 26)
+
+In this allocation, the worst-off individual (Person 2) receives a value of 26, which is the maximum value among all possible allocations. Therefore, this allocation maximizes the value derived by the worst-off individual and satisfies the ""Max-Min"" criterion.",1058,1,2,3,3,3
+64,"To solve this problem and find the allocation that satisfies the ""Max-Min"" criterion, we can start by listing out all possible allocations of the 5 goods among the 3 persons. Since each good can only be allocated to one person or left unallocated, there are a total of 3^5 = 243 possible allocations.
+
+To simplify the process, we can use a systematic approach to systematically go through all possible allocations and calculate the value derived by the worst-off individual for each allocation.
+
+Here are the steps to find the allocation that maximizes the value derived by the worst-off individual:
+1. List out all possible allocations of the 5 goods among the 3 persons.
+2. For each allocation, calculate the value derived by the worst-off individual (i.e. the individual with the lowest value for the allocated goods).
+3. Find the allocation where the value derived by the worst-off individual is the highest across all possible allocations.
+
+After going through all possible allocations, we find the following allocation:
+
+- Person 1: Good A, Good D
+- Person 2: Good B, Good E
+- Person 3: Good C
+
+With this allocation, the value derived by the worst-off individual (Person 3) is 26, which is the maximum value derived by the worst-off individual across all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion and is the fair allocation of the 5 goods among the 3 persons.",1351,1,2,3,1,2
+65,"To determine the fair allocation using the Max-Min criterion, we need to calculate the minimum value each individual would receive for each possible allocation. Then, we need to find the allocation that maximizes the minimum value for the worst-off individual.
+
+There are 3^5 = 243 possible allocations of the 5 goods among the 3 persons. However, we can use a more systematic approach to narrow down the possibilities.
+
+First, let's calculate the minimum value for each individual for each good:
+
+- Person 1: min(40, 14, 10) = 10
+- Person 2: min(2, 26, 26) = 2
+- Person 3: min(3, 8, 26) = 3
+
+Now, let's consider the allocations that maximize the minimum value for Person 1:
+
+- If Person 1 gets Good A, the minimum value is 40
+- If Person 1 gets Good D, the minimum value is 25 (as Person 2 and Person 3 both value Good D at 26)
+
+So, the allocation that maximizes the minimum value for Person 1 is giving Good A to Person 1.
+
+Next, let's consider the remaining goods (B, C, and E) and calculate the minimum values for Person 2 and Person 3:
+
+- Person 2: min(2, 8, 26) = 2
+- Person 3: min(26, 26, 26) = 26
+
+So, the allocation that maximizes the minimum value for Person 2 and Person 3 is giving Good C to Person 2 and allocating Good B and Good E to Person 3.
+
+Therefore, the fair allocation that satisfies the Max-Min criterion is as follows:
+- Person 1 gets Good A
+- Person 2 gets Good C
+- Person 3 gets Good B and Good E
+
+This allocation ensures that the minimum value derived by the worst-off individual (Person 2) is maximized at 2.",1591,1,3,2,None,3
+66,"To find the allocation that satisfies the ""Max-Min"" criterion, we will consider all possible allocations and calculate the minimum value obtained by the worst-off individual in each allocation.
+
+Allocation 1: Person 1 gets Good A, Person 2 gets Good B and Good D, and Person 3 gets Good C and Good E.
+Minimum value obtained: Person 1 gets 40, Person 2 gets 2, and Person 3 gets 26. The minimum value is 2.
+
+Allocation 2: Person 1 gets Good A, Person 2 gets Good B and Good E, and Person 3 gets Good C and Good D.
+Minimum value obtained: Person 1 gets 40, Person 2 gets 26, and Person 3 gets 10. The minimum value is 10.
+
+Allocation 3: Person 1 gets Good A, Person 2 gets Good C and Good D, and Person 3 gets Good B and Good E.
+Minimum value obtained: Person 1 gets 40, Person 2 gets 8, and Person 3 gets 26. The minimum value is 8.
+
+Allocation 4: Person 1 gets Good A, Person 2 gets Good C and Good E, and Person 3 gets Good B and Good D.
+Minimum value obtained: Person 1 gets 40, Person 2 gets 26, and Person 3 gets 10. The minimum value is 10.
+
+Allocation 5: Person 1 gets Good A, Person 2 gets Good D and Good E, and Person 3 gets Good B and Good C.
+Minimum value obtained: Person 1 gets 40, Person 2 gets 26, and Person 3 gets 8. The minimum value is 8.
+
+Allocation 3 and Allocation 5 both result in the minimum value of 8, which is the highest minimum value across all allocations. Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1 gets Good A
+- Person 2 gets Good C and Good D
+- Person 3 gets Good B and Good E.",1619,1,3,2,2,3
+67,"To find the allocation that maximizes the minimum value derived by the worst-off individual, we can go through all possible allocations and calculate the minimum value for each allocation. Then, we can choose the allocation that maximizes this minimum value.
+
+Let's consider all possible allocations:
+
+1. Give Good A to Person 1: Person 1 gets a value of 40. 
+2. Give Good A to Person 2: Person 2 gets a value of 14.
+3. Give Good A to Person 3: Person 3 gets a value of 10.
+4. Give Good B to Person 1: Person 1 gets a value of 2.
+5. Give Good B to Person 2: Person 2 gets a value of 26.
+6. Give Good B to Person 3: Person 3 gets a value of 26.
+7. Give Good C to Person 1: Person 1 gets a value of 3.
+8. Give Good C to Person 2: Person 2 gets a value of 8.
+9. Give Good C to Person 3: Person 3 gets a value of 26.
+10. Give Good D to Person 1: Person 1 gets a value of 25.
+11. Give Good D to Person 2: Person 2 gets a value of 26.
+12. Give Good D to Person 3: Person 3 gets a value of 12.
+13. Give Good E to Person 1: Person 1 gets a value of 30.
+14. Give Good E to Person 2: Person 2 gets a value of 26.
+15. Give Good E to Person 3: Person 3 gets a value of 26.
+
+Now, we can calculate the minimum value for each allocation:
+
+1. Person 1 gets a value of 40. 
+2. Person 2 gets a value of 14.
+3. Person 3 gets a value of 10.
+4. Person 1 gets a value of 2.
+5. Person 2 gets a value of 26.
+6. Person 3 gets a value of 26.
+7. Person 1 gets a value of 3.
+8. Person 2 gets a value of 8.
+9. Person 3 gets a value of 26.
+10. Person 1 gets a value of 25.
+11. Person 2 gets a value of 26.
+12. Person 3 gets a value of 12.
+13. Person 1 gets a value of 30.
+14. Person 2 gets a value of 26.
+15. Person 3 gets a value of 26.
+
+The minimum values for each allocation are: 40, 14, 10, 2, 26, 26, 3, 8, 26, 25, 26, 12, 30, 26, 26.
+
+The maximum of these minimum values is 30, which occurs when we allocate Good E to Person 1 and allocate the rest of the goods to Person 2 and Person 3. Therefore, the allocation that maximizes the minimum value derived by the worst-off individual is:
+
+- Good A: Not allocated
+- Good B: Person 2
+- Good C: Person 3
+- Good D: Person 2
+- Good E: Person 1
+
+This allocation maximizes the minimum value derived by the worst-off individual, which is the allocation that satisfies the ""Max-Min"" criterion.",2204,None,2,3,2,1
+68,"To determine the allocation that satisfies the ""Max-Min"" criterion, we can go through all possible allocations and calculate the minimum value each person would receive for each allocation.
+
+One possible method to approach this problem is to use a brute-force method, where we calculate the minimum value for each person for all possible allocations, and then choose the allocation that maximizes the minimum value across all individuals.
+
+Let's consider all possible allocations:
+
+1. Allocate Good A to Person 1: 
+   - Person 1: 40
+   - Person 2: 14
+   - Person 3: 10
+
+2. Allocate Good B to Person 1: 
+   - Person 1: 2
+   - Person 2: 26
+   - Person 3: 26
+
+3. Allocate Good C to Person 1: 
+   - Person 1: 3
+   - Person 2: 8
+   - Person 3: 26
+
+4. Allocate Good D to Person 1: 
+   - Person 1: 25
+   - Person 2: 26
+   - Person 3: 12
+
+5. Allocate Good E to Person 1: 
+   - Person 1: 30
+   - Person 2: 26
+   - Person 3: 26
+
+6. Allocate Good A to Person 2: 
+   - Person 1: 14
+   - Person 2: 14
+   - Person 3: 10
+
+7. Allocate Good B to Person 2: 
+   - Person 1: 14
+   - Person 2: 26
+   - Person 3: 26
+
+8. Allocate Good C to Person 2: 
+   - Person 1: 14
+   - Person 2: 8
+   - Person 3: 26
+
+9. Allocate Good D to Person 2: 
+   - Person 1: 14
+   - Person 2: 26
+   - Person 3: 12
+
+10. Allocate Good E to Person 2: 
+   - Person 1: 14
+   - Person 2: 26
+   - Person 3: 26
+
+11. Allocate Good A to Person 3: 
+   - Person 1: 10
+   - Person 2: 14
+   - Person 3: 10
+
+12. Allocate Good B to Person 3: 
+   - Person 1: 10
+   - Person 2: 26
+   - Person 3: 10
+
+13. Allocate Good C to Person 3: 
+   - Person 1: 10
+   - Person 2: 26
+   - Person 3: 10
+
+14. Allocate Good D to Person 3: 
+   - Person 1: 10
+   - Person 2: 26
+   - Person 3: 12
+
+15. Allocate Good E to Person 3: 
+   - Person 1: 10
+   - Person 2: 26
+   - Person 3: 26
+
+From these calculations, we can see that the maximum minimum value is achieved when Person 1 receives Good A (40), Person 2 receives Good E (26), and Person 3 receives Good B (26). This allocation gives the worst-off individual (Person 3) a minimum value of 26, which is the highest minimum value across all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.",2233,1,3,None,None,2
+69,"To solve this problem, we can use the following approach:
+
+Step 1: Calculate the total value each person assigns to all the goods.
+
+Person 1: 40 (Good A) + 2 (Good B) + 3 (Good C) + 25 (Good D) + 30 (Good E) = 100
+Person 2: 14 (Good A) + 26 (Good B) + 8 (Good C) + 26 (Good D) + 26 (Good E) = 100
+Person 3: 10 (Good A) + 26 (Good B) + 26 (Good C) + 12 (Good D) + 26 (Good E) = 100
+
+Step 2: Calculate the total value each person assigns to all the goods, except the one assigned the least value.
+
+Person 1: 2 (Good B) + 3 (Good C) + 25 (Good D) + 30 (Good E) = 60
+Person 2: 14 (Good A) + 8 (Good C) + 26 (Good D) + 26 (Good E) = 74
+Person 3: 26 (Good B) + 26 (Good C) + 12 (Good D) + 26 (Good E) = 90
+
+Step 3: Allocate the goods based on the highest total value derived after removing the good with the least value for each person.
+
+In this case, the allocation that satisfies the ""Max-Min"" criterion is:
+
+Person 1 receives Good A, Person 2 receives Good D and Good E, and Person 3 receives Good B and Good C.
+
+This allocation ensures that the worst-off individual (Person 1) receives the maximum value (40) compared to the other allocations.",1515,1,3,3,2,2
+70,"To solve this problem using the Max-Min criterion, we need to consider all possible allocations of the goods and calculate the minimum value that each person receives in each allocation. Then, we select the allocation that maximizes the minimum value across all individuals.
+
+First, let's consider all possible allocations:
+
+1. Allocate Good A to Person 1, Good B to Person 2, Good C to Person 3
+2. Allocate Good A to Person 1, Good D to Person 2, Good E to Person 3
+3. Allocate Good B to Person 1, Good C to Person 2, Good D to Person 3
+4. Allocate Good B to Person 1, Good D to Person 2, Good E to Person 3
+5. Allocate Good C to Person 1, Good A to Person 2, Good D to Person 3
+6. Allocate Good C to Person 1, Good B to Person 2, Good E to Person 3
+7. Allocate Good D to Person 1, Good A to Person 2, Good B to Person 3
+8. Allocate Good D to Person 1, Good B to Person 2, Good E to Person 3
+9. Allocate Good E to Person 1, Good A to Person 2, Good B to Person 3
+10. Allocate Good E to Person 1, Good C to Person 2, Good D to Person 3
+
+Next, we calculate the minimum value for each person in each allocation:
+
+Allocation 1: Person 1 receives 40, Person 2 receives 26, Person 3 receives 10.
+Allocation 2: Person 1 receives 40, Person 2 receives 26, Person 3 receives 10.
+Allocation 3: Person 1 receives 2, Person 2 receives 8, Person 3 receives 12.
+Allocation 4: Person 1 receives 2, Person 2 receives 26, Person 3 receives 10.
+Allocation 5: Person 1 receives 3, Person 2 receives 14, Person 3 receives 12.
+Allocation 6: Person 1 receives 3, Person 2 receives 26, Person 3 receives 10.
+Allocation 7: Person 1 receives 25, Person 2 receives 14, Person 3 receives 10.
+Allocation 8: Person 1 receives 25, Person 2 receives 26, Person 3 receives 10.
+Allocation 9: Person 1 receives 30, Person 2 receives 14, Person 3 receives 10.
+Allocation 10: Person 1 receives 30, Person 2 receives 8, Person 3 receives 12.
+
+Finally, we select the allocation that maximizes the minimum value, which is Allocation 7: Person 1 receives 25, Person 2 receives 14, and Person 3 receives 10. In this allocation, the minimum value received by any person is 10, and this is the maximum among all the possible allocations.
+
+Therefore, the fair allocation using the Max-Min criterion is:
+- Person 1 receives Good D
+- Person 2 receives Good C
+- Person 3 receives Good E",2084,None,None,2,1,3
+71,"One approach to solve this problem is to use the Max-Min fair allocation algorithm. 
+
+First, we calculate the total value each person assigns to all goods:
+
+Person 1: 40 + 2 + 3 + 25 + 30 = 100
+Person 2: 14 + 26 + 8 + 26 + 26 = 100
+Person 3: 10 + 26 + 26 + 12 + 26 = 100
+
+Now, we allocate one good to each person, starting with the good that has the highest value for each person:
+
+Person 1 gets Good A (value 40)
+Person 2 gets Good B (value 26)
+Person 3 gets Good C (value 26)
+
+After the initial allocation, we have two goods left (Good D and Good E) and two people (Person 1 and Person 2) who have not yet received a good.
+
+We allocate Good D to Person 1 (value 25) and Good E to Person 2 (value 26).
+
+This allocation ensures that the worst-off individual (Person 1) has a value of 25, which is the highest possible value for the worst-off individual in any allocation.
+
+Therefore, the fair allocation according to the Max-Min criterion is:
+Person 1 gets Good A and Good D
+Person 2 gets Good B and Good E
+Person 3 gets Good C",1338,1,2,3,1,2
+72,"To find the allocation that satisfies the ""Max-Min"" criterion, we can find the allocation that maximizes the minimum value obtained by each person. 
+
+Let's calculate the value obtained by each person for each possible allocation:
+
+Allocation 1: 
+Person 1: Good A
+Person 2: Good B
+Person 3: Good C, Good D, Good E
+Total value: 40 (Person 1), 26 (Person 2), 64 (Person 3)
+
+Allocation 2: 
+Person 1: Good A
+Person 2: Good B, Good C
+Person 3: Good D, Good E
+Total value: 40 (Person 1), 34 (Person 2), 52 (Person 3)
+
+Allocation 3: 
+Person 1: Good A
+Person 2: Good B, Good C, Good D
+Person 3: Good E
+Total value: 40 (Person 1), 48 (Person 2), 26 (Person 3)
+
+Allocation 4: 
+Person 1: Good A
+Person 2: Good B, Good C, Good E
+Person 3: Good D
+Total value: 40 (Person 1), 48 (Person 2), 52 (Person 3)
+
+Allocation 5: 
+Person 1: Good A
+Person 2: Good B, Good C, Good D, Good E
+Person 3: -
+Total value: 40 (Person 1), 64 (Person 2), 0 (Person 3)
+
+Allocation 6: 
+Person 1: Good A, Good B
+Person 2: Good C
+Person 3: Good D, Good E
+Total value: 42 (Person 1), 26 (Person 2), 64 (Person 3)
+
+Allocation 7: 
+Person 1: Good A, Good B
+Person 2: Good C, Good D
+Person 3: Good E
+Total value: 65 (Person 1), 34 (Person 2), 26 (Person 3)
+
+Allocation 8: 
+Person 1: Good A, Good B
+Person 2: Good C, Good D, Good E
+Person 3: -
+Total value: 65 (Person 1), 64 (Person 2), 0 (Person 3)
+
+Allocations 7 and 8 are the allocations that satisfy the ""Max-Min"" criterion, as they maximize the minimum value obtained by each person. In this case, allocation 7 is the best allocation, as it yields a minimum value of 26 for Person 3, compared to a minimum value of 0 for Person 3 in allocation 8. Therefore, the fair allocation of goods A, B, C, D, and E among Person 1, Person 2, and Person 3, according to the ""Max-Min"" criterion, is as follows:
+Person 1: Good A, Good B
+Person 2: Good C, Good D
+Person 3: Good E",2036,1,1,2,2,3
+73,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the individuals.
+
+Let's consider all possible allocations of the 5 goods among the 3 individuals:
+
+1. Good A: Person 1; Good B: Person 2; Good C: Person 3; Good D: Person 1; Good E: Person 1
+   Person 1's value: 40 (Good A), 2 (Good B), 3 (Good C), 25 (Good D), 30 (Good E) => minimum value: 2
+   Person 2's value: 14 (Good A), 26 (Good B), 8 (Good C), 26 (Good D), 26 (Good E) => minimum value: 8
+   Person 3's value: 10 (Good A), 26 (Good B), 26 (Good C), 12 (Good D), 26 (Good E) => minimum value: 10
+   Minimum value among individuals: 2
+
+2. Good A: Person 1; Good B: Person 2; Good C: Person 3; Good D: Person 1; Good E: Person 2
+   Person 1's value: 40 (Good A), 2 (Good B), 3 (Good C), 25 (Good D), 30 (Good E) => minimum value: 2
+   Person 2's value: 14 (Good A), 26 (Good B), 8 (Good C), 26 (Good D), 26 (Good E) => minimum value: 8
+   Person 3's value: 10 (Good A), 26 (Good B), 26 (Good C), 12 (Good D), 26 (Good E) => minimum value: 10
+   Minimum value among individuals: 2
+
+3. Good A: Person 1; Good B: Person 2; Good C: Person 3; Good D: Person 1; Good E: Not allocated
+   Minimum value among individuals: 2
+
+4. Good A: Person 1; Good B: Person 2; Good C: Person 3; Good D: Not allocated; Good E: Person 2
+   Minimum value among individuals: 2
+
+5. Good A: Person 1; Good B: Person 2; Good C: Not allocated; Good D: Person 1; Good E: Person 2
+   Minimum value among individuals: 2
+
+6. Good A: Person 1; Good B: Not allocated; Good C: Person 3; Good D: Person 1; Good E: Person 2
+   Minimum value among individuals: 2
+
+7. Good A: Not allocated; Good B: Person 2; Good C: Person 3; Good D: Person 1; Good E: Person 2
+   Minimum value among individuals: 2
+
+8. Good A: Person 1; Good B: Person 2; Good C: Person 3; Good D: Not allocated; Good E: Not allocated
+   Minimum value among individuals: 2
+
+9. Good A: Person 1; Good B: Person 2; Good C: Not allocated; Good D: Person 1; Good E: Not allocated
+   Minimum value among individuals: 2
+
+10. Good A: Person 1; Good B: Not allocated; Good C: Person 3; Good D: Not allocated; Good E: Person 2
+    Minimum value among individuals: 2
+
+11. Good A: Person 1; Good B: Not allocated; Good C: Not allocated; Good D: Person 1; Good E: Person 2
+    Minimum value among individuals: 2
+
+12. Good A: Not allocated; Good B: Person 2; Good C: Person 3; Good D: Person 1; Good E: Not allocated
+    Minimum value among individuals: 2
+
+13. Good A: Not allocated; Good B: Person 2; Good C: Not allocated; Good D: Person 1; Good E: Person 2
+    Minimum value among individuals: 2
+
+14. Good A: Not allocated; Good B: Not allocated; Good C: Person 3; Good D: Person 1; Good E: Person 2
+    Minimum value among individuals: 2
+
+15. Good A: Person 1; Good B: Not allocated; Good C: Person 3; Good D: Not allocated; Good E: Not allocated
+    Minimum value among individuals: 2
+
+16. Good A: Person 1; Good B: Not allocated; Good C: Not allocated; Good D: Person 1; Good E: Not allocated
+    Minimum value among individuals: 2
+
+17. Good A: Person 1; Good B: Not allocated; Good C: Not allocated; Good D: Not allocated; Good E: Person 2
+    Minimum value among individuals: 2
+
+18. Good A: Not allocated; Good B: Person 2; Good C: Not allocated; Good D: Person 1; Good E: Not allocated
+    Minimum value among individuals: 2
+
+19. Good A: Not allocated; Good B: Person 2; Good C: Not allocated; Good D: Not allocated; Good E: Person 2
+    Minimum value among individuals: 2
+
+20. Good A: Not allocated; Good B: Not allocated; Good C: Person 3; Good D: Not allocated; Good E: Person 2
+    Minimum value among individuals: 2
+
+21. Good A: Not allocated; Good B: Not allocated; Good C: Person 3; Good D: Not allocated; Good E: Not allocated
+    Minimum value among individuals: 3
+
+22. Good A: Not allocated; Good B: Not allocated; Good C: Not allocated; Good D: Person 1; Good E: Person 2
+    Minimum value among individuals: 2
+
+23. Good A: Not allocated; Good B: Not allocated; Good C: Not allocated; Good D: Person 1; Good E: Not allocated
+    Minimum value among individuals: 3
+
+24. Good A: Not allocated; Good B: Not allocated; Good C: Not allocated; Good D: Not allocated; Good E: Person 2
+    Minimum value among individuals: 10
+
+25. Good A: Not allocated; Good B: Not allocated; Good C: Not allocated; Good D: Not allocated; Good E: Not allocated
+    Minimum value among individuals: 10
+
+The allocation that satisfies the ""Max-Min"" criterion is:
+Good A: Person 1
+Good B: Person 2
+Good C: Person 3
+Good D: Person 1
+Good E: Not allocated
+
+In this allocation, the minimum value obtained by the individuals is 2, which is the highest among all possible allocations. Therefore, this allocation maximizes the minimum value derived by the worst-off individual.",3737,1,2,3,1,None
+74,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to allocate goods in a way that maximizes the minimum value received by any individual.
+
+First, let's find the maximum value for each good:
+
+Good A:
+Person 1: 40
+Person 2: 14
+Person 3: 10
+Maximum: 40 (Person 1)
+
+Good B:
+Person 1: 2
+Person 2: 26
+Person 3: 26
+Maximum: 26 (Person 2 and Person 3)
+
+Good C:
+Person 1: 3
+Person 2: 8
+Person 3: 26
+Maximum: 26 (Person 3)
+
+Good D:
+Person 1: 25
+Person 2: 26
+Person 3: 12
+Maximum: 26 (Person 2)
+
+Good E:
+Person 1: 30
+Person 2: 26
+Person 3: 26
+Maximum: 30 (Person 1)
+
+Based on the maximum values, we can allocate Good A to Person 1, Good B to Person 2, Good C to Person 3, Good D to Person 2, and Good E to Person 1. This allocation ensures that the worst-off individual (Person 3) receives a value of 26, which is the maximum value for any individual across all goods. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1368,1,2,3,2,1
+75,"To find the allocation that maximizes the minimum value obtained by the worst-off individual, we can use the following approach:
+
+Step 1: Calculate the total value obtained by each person for all possible allocations of the goods.
+Step 2: Identify the allocation that maximizes the minimum value obtained by the worst-off individual.
+
+Let's calculate the total value obtained by each person for all possible allocations:
+
+Allocation 1: Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Goods C, D, and E.
+Total value obtained:
+- Person 1: 40
+- Person 2: 26
+- Person 3: 64
+Worst-off individual: Person 2 (value = 26)
+
+Allocation 2: Person 1 gets Good A, Person 2 gets Goods B and D, Person 3 gets Goods C and E.
+Total value obtained:
+- Person 1: 40
+- Person 2: 51
+- Person 3: 52
+Worst-off individual: Person 3 (value = 52)
+
+Allocation 3: Person 1 gets Goods A and D, Person 2 gets Good B, Person 3 gets Goods C and E.
+Total value obtained:
+- Person 1: 65
+- Person 2: 26
+- Person 3: 52
+Worst-off individual: Person 2 (value = 26)
+
+Allocation 4: Person 1 gets Goods A, B, and D, Person 2 gets Good E, Person 3 gets Good C.
+Total value obtained:
+- Person 1: 67
+- Person 2: 26
+- Person 3: 26
+Worst-off individual: Person 3 (value = 26)
+
+Allocation 5: Person 1 gets Goods A and E, Person 2 gets Goods B and D, Person 3 gets Good C.
+Total value obtained:
+- Person 1: 70
+- Person 2: 52
+- Person 3: 26
+Worst-off individual: Person 3 (value = 26)
+
+Allocation 6: Person 1 gets Good A, Person 2 gets Goods B and E, Person 3 gets Goods C and D.
+Total value obtained:
+- Person 1: 40
+- Person 2: 52
+- Person 3: 38
+Worst-off individual: Person 3 (value = 38)
+
+Based on the calculations, the allocation that maximizes the minimum value obtained by the worst-off individual is ""Allocation 2,"" where Person 3 obtains a total value of 52.
+
+Therefore, the fair allocation of the 5 goods based on the ""Max-Min"" criterion is:
+- Person 1 gets Good A
+- Person 2 gets Goods B and D
+- Person 3 gets Goods C and E",1940,1,2,3,2,3
+76,"To solve this problem using the ""Max-Min"" criterion, we need to consider all possible allocations and calculate the minimum value that each person will receive in each allocation. Then we will choose the allocation where the maximum of these minimum values is the highest.
+
+Let's calculate the minimum value for each person in each allocation:
+- Allocation 1: Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good C, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 8
+   - Minimum value = 8
+- Allocation 2: Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good D, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 12
+   - Minimum value = 12
+- Allocation 3: Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good E, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 26
+- Allocation 4: Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good D, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 8
+   - Person 3 gets 12
+   - Minimum value = 8
+- Allocation 5: Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good E, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 8
+   - Person 3 gets 26
+   - Minimum value = 8
+- Allocation 6: Person 1 gets Good A, Person 2 gets Good D, Person 3 gets Good E, and the remaining goods are not allocated.
+   - Person 1 gets 40
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 26
+- Allocation 7: Person 1 gets Good B, Person 2 gets Good C, Person 3 gets Good D, and the remaining goods are not allocated.
+   - Person 1 gets 2
+   - Person 2 gets 8
+   - Person 3 gets 12
+   - Minimum value = 2
+- Allocation 8: Person 1 gets Good B, Person 2 gets Good B, Person 3 gets Good E, and the remaining goods are not allocated.
+   - Person 1 gets 2
+   - Person 2 gets 26
+   - Person 3 gets 26
+   - Minimum value = 2
+
+After analyzing all possible allocations, it is clear that Allocation 3 yields the maximum minimum value, which is 26. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1 gets Good A
+- Person 2 gets Good B
+- Person 3 gets Good E
+- The remaining goods, Good C and Good D, are not allocated.",2141,1,2,None,None,3
+77,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+First, we calculate the minimum value for each good:
+
+Good A: Minimum value = min(40, 14, 10) = 10
+Good B: Minimum value = min(2, 26, 26) = 2
+Good C: Minimum value = min(3, 8, 26) = 3
+Good D: Minimum value = min(25, 26, 12) = 12
+Good E: Minimum value = min(30, 26, 26) = 26
+
+Now, we need to find the allocation that maximizes the minimum value. We can do this by considering all possible allocations and calculating the minimum value for each allocation.
+
+One possible allocation that maximizes the minimum value is:
+
+Person 1 receives Good A (Value = 40)
+Person 2 receives Good B (Value = 26)
+Person 2 receives Good C (Value = 8)
+Person 2 receives Good D (Value = 26)
+Person 3 receives Good E (Value = 26)
+
+In this allocation, the minimum value received by any individual is 8, which is the highest among all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.",1321,1,2,2,2,3
+78,"To solve this problem, we can consider all possible allocations of the goods and calculate the minimum value obtained by the worst-off individual for each allocation. Then, we choose the allocation that maximizes this minimum value.
+
+First, let's list all possible allocations:
+
+1. Allocate all 5 goods to Person 1
+2. Allocate all 5 goods to Person 2
+3. Allocate all 5 goods to Person 3
+4. Allocate 4 goods to Person 1 and 1 good to Person 2
+5. Allocate 4 goods to Person 1 and 1 good to Person 3
+6. Allocate 4 goods to Person 2 and 1 good to Person 1
+7. Allocate 4 goods to Person 2 and 1 good to Person 3
+8. Allocate 4 goods to Person 3 and 1 good to Person 1
+9. Allocate 4 goods to Person 3 and 1 good to Person 2
+10. Allocate 3 goods to Person 1 and 2 goods to Person 2
+11. Allocate 3 goods to Person 1 and 2 goods to Person 3
+12. Allocate 3 goods to Person 2 and 2 goods to Person 1
+13. Allocate 3 goods to Person 2 and 2 goods to Person 3
+14. Allocate 3 goods to Person 3 and 2 goods to Person 1
+15. Allocate 3 goods to Person 3 and 2 goods to Person 2
+
+Now we calculate the value obtained by the worst-off individual for each allocation:
+
+1. Person 1 gets 40, worst-off value is 30 (Person 3)
+2. Person 2 gets 26, worst-off value is 26 (Person 1)
+3. Person 3 gets 26, worst-off value is 10 (Person 1)
+4. Person 1 gets 40, worst-off value is 26 (Person 3)
+5. Person 1 gets 40, worst-off value is 26 (Person 2)
+6. Person 2 gets 26, worst-off value is 25 (Person 1)
+7. Person 2 gets 26, worst-off value is 26 (Person 1)
+8. Person 3 gets 26, worst-off value is 10 (Person 2)
+9. Person 3 gets 26, worst-off value is 12 (Person 1)
+10. Person 1 gets 40, worst-off value is 26 (Person 3)
+11. Person 1 gets 40, worst-off value is 26 (Person 2)
+12. Person 2 gets 26, worst-off value is 26 (Person 1)
+13. Person 2 gets 26, worst-off value is 26 (Person 1)
+14. Person 3 gets 26, worst-off value is 12 (Person 1)
+15. Person 3 gets 26, worst-off value is 12 (Person 1)
+
+Based on the calculations, we see that the allocation that maximizes the minimum value obtained by the worst-off individual is to allocate all 5 goods to Person 1, which gives a worst-off value of 30 for Person 3. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is to allocate all 5 goods to Person 1.",2163,1,1,1,1,1
+79,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is maximized.
+
+We can start by considering all possible allocations of the 5 goods among Person 1, Person 2, and Person 3. There are a total of 3^5 = 243 possible allocations, so we will use a systematic approach to consider each allocation.
+
+To simplify the process, let's start by considering the allocation of Good A. We can allocate Good A to Person 1, Person 2, or Person 3, or we can choose not to allocate it at all. We will then move on to consider the allocation of Good B, and so on.
+
+After considering all possible allocations, we will then calculate the value derived by the worst-off individual (i.e., the individual with the lowest total value of allocated goods) for each allocation.
+
+By comparing the values derived by the worst-off individual for each allocation, we can determine the allocation that maximizes the value for the worst-off individual, thus satisfying the ""Max-Min"" criterion.",1207,1,None,2,2,2
+80,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and calculate the minimum value obtained by the worst-off individual for each allocation.
+
+For Good A:
+- Person 1's value: 40
+- Person 2's value: 14
+- Person 3's value: 10
+
+The maximum value for Person 1, the worst-off individual, is 40 when Good A is allocated to Person 1.
+
+For Good B:
+- Person 1's value: 2
+- Person 2's value: 26
+- Person 3's value: 26
+
+The maximum value for Person 1, the worst-off individual, is 26 when Good B is allocated to Person 2 or Person 3.
+
+For Good C:
+- Person 1's value: 3
+- Person 2's value: 8
+- Person 3's value: 26
+
+The maximum value for Person 1, the worst-off individual, is 26 when Good C is allocated to Person 3.
+
+For Good D:
+- Person 1's value: 25
+- Person 2's value: 26
+- Person 3's value: 12
+
+The maximum value for Person 1, the worst-off individual, is 26 when Good D is allocated to Person 2 or Person 3.
+
+For Good E:
+- Person 1's value: 30
+- Person 2's value: 26
+- Person 3's value: 26
+
+The maximum value for Person 1, the worst-off individual, is 30 when Good E is allocated to Person 1.
+
+Now, we compare the maximum values obtained for each good:
+
+- Good A: 40
+- Good B: 26
+- Good C: 26
+- Good D: 26
+- Good E: 30
+
+The minimum value among the maximum values is 26. This means that the ""Max-Min"" allocation would be to allocate Good A to Person 1, Good B to Person 2 or Person 3, Good C to Person 3, Good D to Person 2 or Person 3, and Good E to Person 1. This allocation ensures that the worst-off individual (Person 1) obtains a value of at least 26 for the allocated goods.",1727,1,3,3,2,1
+81,"To find the allocation that satisfies the Max-Min criterion, we need to consider all possible allocations and find the one where the value for the worst-off individual is maximized.
+
+One possible approach is to use a brute force method of considering all possible allocations of the goods and calculating the value for the worst-off individual for each allocation. However, given the number of goods and individuals, this approach may be impractical.
+
+Another approach is to use a more systematic method to find the allocation that satisfies the Max-Min criterion. One such method is the divide and choose method, also known as the ""adjusted winner"" procedure. In this method, each individual sequentially selects their most preferred good from the remaining goods, and the process continues until all goods are allocated.
+
+Using this method, we can determine the allocation that maximizes the value for the worst-off individual. In this case, the allocation would be:
+
+Person 1: Good A
+Person 2: Good E
+Person 3: Good B, Good C, Good D
+
+This allocation ensures that the worst-off individual (Person 1) receives the good with the highest value, while the other individuals receive goods according to their preferences.
+
+Therefore, the allocation that satisfies the Max-Min criterion in this scenario is:
+Good A to Person 1
+Good E to Person 2
+Good B, Good C, Good D to Person 3",1314,1,None,None,3,2
+82,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and determine the minimum value received by the worst-off individual for each allocation. Then, we choose the allocation where this minimum value is the highest.
+
+We can start by considering all possible combinations of allocations and calculating the minimum value received by the worst-off individual for each combination. 
+
+One possible approach is to use a computer program or algorithm to systematically determine all possible allocations and calculate the minimum value received by the worst-off individual for each allocation. 
+
+After evaluating all possible allocations, we can then determine which allocation satisfies the ""Max-Min"" criterion by choosing the allocation where the minimum value received by the worst-off individual is the highest.
+
+This approach ensures that the allocation chosen maximizes the value derived by the worst-off individual, ultimately leading to a fair and equitable distribution of goods.",1105,1,3,2,2,None
+83,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the worst-off individual across all possible allocations.
+
+First, let's calculate the maximum value for each good among the three individuals:
+- Max value for Good A: 40 (Person 1)
+- Max value for Good B: 26 (Person 2 and Person 3)
+- Max value for Good C: 26 (Person 2 and Person 3)
+- Max value for Good D: 26 (Person 2)
+- Max value for Good E: 30 (Person 1)
+
+With this information, we can now determine the allocation that maximizes the minimum value for the worst-off individual. 
+
+After analyzing the values, we can allocate the goods in the following way to maximize the minimum value:
+
+Good A: Person 1 (Value: 40)
+Good B: Person 2 (Value: 26)
+Good C: Person 2 (Value: 26)
+Good D: Person 2 (Value: 26)
+Good E: Person 1 (Value: 30)
+
+This allocation ensures that the worst-off individual (Person 3) receives a value of 10 for Good A and a value of 12 for Good D, resulting in a maximum minimum value of 10. Therefore, the allocation of goods A, B, C, D, and E to Person 1, Person 2, and Person 2, respectively, satisfies the ""Max-Min"" criterion.
+",1395,1,2,2,2,1
+84,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+We can start by considering all possible allocations of the goods among the three individuals. Then, for each allocation, we can calculate the minimum value received by any individual and choose the allocation that maximizes this minimum value.
+
+Let's consider all possible allocations:
+
+1) Person 1: Good A, Person 2: Good B, Person 3: Good C, D, E
+2) Person 1: Good A, Person 2: Good B, Person 3: Good C, D
+3) Person 1: Good A, Person 2: Good B, Person 3: Good C, E
+4) Person 1: Good A, Person 2: Good B, Person 3: Good D, E
+5) Person 1: Good A, Person 2: Good B, Person 3: Good D
+6) Person 1: Good A, Person 2: Good B, Person 3: Good E
+7) Person 1: Good A, Person 2: Good C, Person 3: Good B, D, E
+8) Person 1: Good A, Person 2: Good C, Person 3: Good B, D
+9) Person 1: Good A, Person 2: Good C, Person 3: Good B, E
+10) Person 1: Good A, Person 2: Good C, Person 3: Good D, E
+11) Person 1: Good A, Person 2: Good C, Person 3: Good D
+12) Person 1: Good A, Person 2: Good C, Person 3: Good E
+13) Person 1: Good A, Person 2: Good D, Person 3: Good B, C, E
+14) Person 1: Good A, Person 2; Good D, Person 3: Good B, C
+15) Person 1: Good A, Person 2: Good D, Person 3: Good B, E
+16) Person 1: Good A, Person 2: Good D, Person 3: Good C, E
+17) Person 1: Good A, Person 2: Good D, Person 3: Good C
+18) Person 1: Good A, Person 2: Good D, Person 3: Good E
+19) Person 1: Good A, Person 2: Good E, Person 3: Good B, C, D
+20) Person 1: Good A, Person 2: Good E, Person 3: Good B, C
+21) Person 1: Good A, Person 2: Good E, Person 3: Good B, D
+22) Person 1: Good A, Person 2: Good E, Person 3: Good C, D
+23) Person 1: Good A, Person 2: Good E, Person 3: Good C
+24) Person 1: Good A, Person 2: Good E, Person 3: Good D
+25) Person 1: Good B, Person 2: Good A, Person 3: Good C, D, E
+26) Person 1: Good B, Person 2: Good A, Person 3: Good C, D
+27) Person 1: Good B, Person 2: Good A, Person 3: Good C, E
+28) Person 1: Good B, Person 2: Good A, Person 3: Good D, E
+29) Person 1: Good B, Person 2: Good A, Person 3: Good D
+30) Person 1: Good B, Person 2: Good A, Person 3: Good E
+31) Person 1: Good B, Person 2: Good C, Person 3: Good A, D, E
+32) Person 1: Good B, Person 2: Good C, Person 3: Good A, D
+33) Person 1: Good B, Person 2: Good C, Person 3: Good A, E
+34) Person 1: Good B, Person 2: Good C, Person 3: Good D, E
+35) Person 1: Good B, Person 2: Good C, Person 3: Good D
+36) Person 1: Good B, Person 2: Good C, Person 3: Good E
+37) Person 1: Good B, Person 2: Good D, Person 3: Good A, C, E
+38) Person 1: Good B, Person 2: Good D, Person 3: Good A, C
+39) Person 1: Good B, Person 2: Good D, Person 3: Good A, E
+40) Person 1: Good B, Person 2: Good D, Person 3: Good C, E
+41) Person 1: Good B, Person 2: Good D, Person 3: Good C
+42) Person 1: Good B, Person 2: Good D, Person 3: Good E
+43) Person 1: Good B, Person 2: Good E, Person 3: Good A, C, D
+44) Person 1: Good B, Person 2: Good E, Person 3: Good A, C
+45) Person 1: Good B, Person 2: Good E, Person 3: Good A, D
+46) Person 1: Good B, Person 2: Good E, Person 3: Good C, D
+47) Person 1: Good B, Person 2: Good E, Person 3: Good C
+48) Person 1: Good B, Person 2: Good E, Person 3: Good D
+49) Person 1: Good C, Person 2: Good A, Person 3: Good B, D, E
+50) Person 1: Good C, Person 2: Good A, Person 3: Good B, D
+51) Person 1: Good C, Person 2: Good A, Person 3: Good B, E
+52) Person 1: Good C, Person 2: Good A, Person 3: Good D, E
+53) Person 1: Good C, Person 2: Good A, Person 3: Good D
+54) Person 1: Good C, Person 2: Good A, Person 3: Good E
+55) Person 1: Good C, Person 2: Good B, Person 3: Good A, D, E
+56) Person 1: Good C, Person 2: Good B, Person 3: Good A, D
+57) Person 1: Good C, Person 2: Good B, Person 3: Good A, E
+58) Person 1: Good C, Person 2: Good B, Person 3: Good D, E
+59) Person 1: Good C, Person 2: Good B, Person 3: Good D
+60) Person 1: Good C, Person 2: Good B, Person 3: Good E
+61) Person 1: Good C, Person 2: Good D, Person 3: Good A, B, E
+62) Person 1: Good C, Person 2: Good D, Person 3: Good A, B
+63) Person 1: Good C, Person 2: Good D, Person 3: Good A, E
+64) Person 1: Good C, Person 2: Good D, Person 3: Good B, E
+65) Person 1: Good C, Person 2: Good D, Person 3: Good B
+66) Person 1: Good C, Person 2: Good D, Person 3: Good E
+67) Person 1: Good C, Person 2: Good E, Person 3: Good A, B, D
+68) Person 1: Good C, Person 2: Good E, Person 3: Good A, B
+69) Person 1: Good C, Person 2: Good E, Person 3: Good A, D
+70) Person 1: Good C, Person 2: Good E, Person 3: Good B, D
+71) Person 1: Good C, Person 2: Good E, Person 3: Good B
+72) Person 1: Good C, Person 2: Good E, Person 3: Good D
+73) Person 1: Good D, Person 2: Good A, Person 3: Good B, C, E
+74) Person 1: Good D, Person 2: Good A, Person 3: Good B, C
+75) Person 1: Good D, Person 2: Good A, Person 3: Good B, E
+76) Person 1: Good D, Person 2: Good A, Person 3: Good C, E
+77) Person 1: Good D, Person 2: Good A, Person 3: Good C
+78) Person 1: Good D, Person 2: Good A, Person 3: Good E
+79) Person 1: Good D, Person 2: Good B, Person 3: Good A, C, E
+80) Person 1: Good D, Person 2: Good B, Person 3: Good A, C
+81) Person 1: Good D, Person 2: Good B, Person 3: Good A, E
+82) Person 1: Good D, Person 2: Good B, Person 3: Good C, E
+83) Person 1: Good D, Person 2: Good B, Person 3: Good C
+84) Person 1: Good D, Person 2: Good B, Person 3: Good E
+85) Person 1: Good D, Person 2: Good C, Person 3: Good A, B, E
+86) Person 1: Good D, Person 2: Good C, Person 3: Good A, B
+87) Person 1: Good D, Person 2: Good C, Person 3: Good A, E
+88) Person 1: Good D, Person 2: Good C, Person 3: Good B, E
+89) Person 1: Good D, Person 2: Good C, Person 3: Good B
+90) Person 1: Good D, Person 2: Good C, Person 3: Good E
+91) Person 1: Good D, Person 2: Good E, Person 3: Good A, B, C
+92) Person 1: Good D, Person 2: Good E, Person 3: Good A, B
+93) Person 1: Good D, Person 2: Good E, Person 3: Good A, C
+94) Person 1: Good D, Person 2: Good E, Person 3: Good B, C
+95) Person 1: Good D, Person 2: Good E, Person 3: Good B
+96) Person 1: Good D, Person 2: Good E, Person 3: Good C
+97) Person 1: Good E, Person 2: Good A, Person 3: Good B, C, D
+98) Person 1: Good E, Person 2: Good A, Person 3: Good B, C
+99) Person 1: Good E, Person 2: Good A, Person 3: Good B, D
+100) Person 1: Good E, Person 2: Good A, Person 3: Good C, D
+101) Person 1: Good E, Person 2: Good A, Person 3: Good C
+102) Person 1: Good E, Person 2: Good A, Person 3: Good D
+103) Person 1: Good E, Person 2: Good B, Person 3: Good A, C, D
+104) Person 1: Good E, Person 2: Good B, Person 3: Good A, C
+105) Person 1: Good E, Person 2: Good B, Person 3: Good A, D
+106) Person 1: Good E, Person 2: Good B, Person 3: Good C, D
+107) Person 1: Good E, Person 2: Good B, Person 3: Good C
+108) Person 1: Good E, Person 2: Good B, Person 3: Good D
+109) Person 1: Good E, Person 2: Good C, Person 3: Good A, B, D
+110) Person 1: Good E, Person 2: Good C, Person 3: Good A, B
+111) Person 1: Good E, Person 2: Good C, Person 3: Good A, D
+112) Person 1: Good E, Person 2: Good C, Person 3: Good B, D
+113) Person 1: Good E, Person 2: Good C, Person 3: Good B
+114) Person 1: Good E, Person 2: Good C, Person 3: Good D
+115) Person 1: Good E, Person 2: Good D, Person 3: Good A, B, C
+116) Person 1: Good E, Person 2: Good D, Person 3: Good A, B
+117) Person 1: Good E, Person 2: Good D, Person 3: Good A, C
+118) Person 1: Good E, Person 2: Good D, Person 3: Good B, C
+119) Person 1: Good E, Person 2: Good D, Person 3: Good B
+120) Person 1: Good E, Person 2: Good D, Person 3: Good C
+
+Once we have all possible allocations, we can calculate the minimum value received by any individual for each allocation, and then choose the allocation that maximizes this minimum value. This will give us the fair allocation that satisfies the ""Max-Min"" criterion.",6935,1,None,2,2,2
+85,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value for each individual. In other words, we want to find the allocation that gives the highest value to the individual with the lowest value.
+
+To do this, we can consider each possible allocation and calculate the minimum value for each individual for that allocation. Then, we can compare these minimum values across all allocations to find the one that maximizes the minimum value.
+
+Here are the possible allocations and their minimum values for each individual:
+
+1. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good C. Minimum values: 40, 26, 26. Max-min value: 26.
+2. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good D. Minimum values: 40, 26, 12. Max-min value: 12.
+3. Person 1 gets Good A, Person 2 gets Good B, Person 3 gets Good E. Minimum values: 40, 26, 26. Max-min value: 26.
+4. Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good D. Minimum values: 40, 8, 12. Max-min value: 8.
+5. Person 1 gets Good A, Person 2 gets Good C, Person 3 gets Good E. Minimum values: 40, 8, 26. Max-min value: 8.
+6. Person 1 gets Good A, Person 2 gets Good D, Person 3 gets Good E. Minimum values: 40, 26, 26. Max-min value: 26.
+7. Person 1 gets Good B, Person 2 gets Good C, Person 3 gets Good D. Minimum values: 2, 8, 12. Max-min value: 2.
+8. Person 1 gets Good B, Person 2 gets Good C, Person 3 gets Good E. Minimum values: 2, 8, 26. Max-min value: 2.
+9. Person 1 gets Good B, Person 2 gets Good D, Person 3 gets Good E. Minimum values: 2, 26, 26. Max-min value: 26.
+10. Person 1 gets Good C, Person 2 gets Good D, Person 3 gets Good E. Minimum values: 3, 8, 12. Max-min value: 3.
+
+Based on these calculations, the allocation that satisfies the ""Max-Min"" criterion is the one where Person 1 gets Good A, Person 2 gets Good C, and Person 3 gets Good E. This allocation has a max-min value of 8, which is the highest among all possible allocations. Therefore, this is the fair allocation that maximizes the minimum value for each individual.",1969,1,None,2,None,3
+86,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by any individual. 
+
+One way to approach this problem is by systematically considering all possible allocations of the goods and calculating the minimum value obtained by any individual for each allocation. 
+
+Here are the steps to find the allocation that satisfies the ""Max-Min"" criterion:
+
+Step 1: List all possible allocations of the 5 goods among the 3 individuals. There are 3^5 = 243 possible allocations, as each good can be allocated to one of the three individuals or not allocated at all.
+
+Step 2: For each allocation, calculate the value obtained by each individual based on the goods allocated to them. Then, find the minimum value obtained by any individual for that allocation.
+
+Step 3: Identify the allocation that yields the highest minimum value across all possible allocations. This allocation would satisfy the ""Max-Min"" criterion.
+
+Given the large number of possible allocations, it would be impractical to enumerate and calculate the minimum value for each allocation. Instead, an optimization algorithm or a computer program could be used to systematically search for the allocation that maximizes the minimum value obtained by any individual.
+
+The allocation that satisfies the ""Max-Min"" criterion may not be unique, so it's important to verify the result and ensure that it indeed maximizes the minimum value obtained by any individual.",1331,1,3,2,3,2
+87,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to calculate the minimum value for each good across all individuals and then allocate each good to the person who values it the most among those with the minimum value.
+
+Good A:
+Person 1 values Good A the most (40), so allocate Good A to Person 1.
+
+Good B:
+Person 2 and Person 3 both value Good B the most (26), so we can allocate Good B to either of them without affecting the minimum value. Let's allocate Good B to Person 2.
+
+Good C:
+All individuals value Good C equally (26), so let's allocate Good C to Person 2.
+
+Good D:
+Person 3 values Good D the most (12), so allocate Good D to Person 3.
+
+Good E:
+Person 2 and Person 3 both value Good E the most (26), so we can allocate Good E to either of them without affecting the minimum value. Let's allocate Good E to Person 2.
+
+After this allocation, the minimum value for each person is:
+Person 1: 30 (Good E)
+Person 2: 40 (Good A)
+Person 3: 12 (Good D)
+
+The worst-off individual, Person 3, has a value of 12, which is the highest minimum value across all possible allocations. Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+Good A to Person 1
+Good B to Person 2
+Good C to Person 2
+Good D to Person 3
+Good E to Person 2",1404,1,2,2,3,2
+88,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value obtained by the worst-off individual. In other words, we need to find the allocation that maximizes the minimum value obtained by any person.
+
+One way to find this allocation is to consider all possible allocations of the goods and calculate the minimum value obtained by each person for each allocation. Then, we can choose the allocation that maximizes the minimum value obtained.
+
+Here's how we can calculate the minimum value obtained by each person for each allocation:
+
+1. Allocate Good A to Person 1, and the remaining goods to Person 2 and Person 3.
+   - Person 1 gets 40, Person 2 gets 34, Person 3 gets 46.
+   - Minimum value obtained: 34 (Person 2)
+2. Allocate Good A to Person 1, and Good B to Person 2, and the remaining goods to Person 3.
+   - Person 1 gets 40, Person 2 gets 26, Person 3 gets 59.
+   - Minimum value obtained: 26 (Person 2)
+3. Allocate Good A to Person 1, and Good C to Person 2, and the remaining goods to Person 3.
+   - Person 1 gets 40, Person 2 gets 26, Person 3 gets 55.
+   - Minimum value obtained: 26 (Person 2)
+4. Allocate Good A to Person 1, and Good D to Person 2, and the remaining goods to Person 3.
+   - Person 1 gets 40, Person 2 gets 26, Person 3 gets 53.
+   - Minimum value obtained: 26 (Person 2)
+5. Allocate Good A to Person 1, and Good E to Person 2, and the remaining goods to Person 3.
+   - Person 1 gets 40, Person 2 gets 26, Person 3 gets 56.
+   - Minimum value obtained: 26 (Person 2)
+6. Allocate Good A to Person 1, and allocate Good B to Person 2, and Good C to Person 3, and the remaining goods to Person 2.
+   - Person 1 gets 40, Person 2 gets 26, Person 3 gets 52.
+   - Minimum value obtained: 26 (Person 2)
+
+By examining all possible allocations, we can see that the allocation that maximizes the minimum value obtained by the worst-off individual (Person 2) is the allocation where Good A is allocated to Person 1 and Good B is allocated to Person 2. This allocation yields the highest minimum value of 26 for Person 2, which is the best outcome for the worst-off individual according to the ""Max-Min"" criterion.",1917,1,2,3,None,None
+89,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to maximize the value of the worst-off individual across all possible allocations. 
+
+We can start by listing all the possible allocations and calculating the minimum value for each allocation.
+
+Allocation 1: Person 1 - Good A, Person 2 - Good B, Person 3 - Good C, D, E
+Minimum value: 3
+
+Allocation 2: Person 1 - Good A, Person 2 - Good B, Person 3 - Good C, D
+Minimum value: 8
+
+Allocation 3: Person 1 - Good A, Person 2 - Good B, Person 3 - Good C, E
+Minimum value: 10
+
+Allocation 4: Person 1 - Good A, Person 2 - Good B, Person 3 - Good D, E
+Minimum value: 12
+
+Allocation 5: Person 1 - Good A, Person 2 - Good B, Person 3 - Good C
+Minimum value: 14
+
+...and so on for all possible allocations.
+
+After calculating the minimum value for each allocation, we find that Allocation 1 gives us the maximum minimum value of 3, which occurs when Person 3 receives Good C and Person 1 receives Good A.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+Person 1 - Good A
+Person 2 - Good B
+Person 3 - Good C, D, E
+
+This allocation ensures that the worst-off individual (Person 1) receives a value of 40, which is the maximum value among all possible allocations.",1425,1,2,3,3,3
+90,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and find the one that maximizes the minimum value for each person.
+
+One way to do this is to list all possible allocations and calculate the minimum value for each person in each allocation. Then, we can compare the minimum values across all allocations to find the one that maximizes the minimum value for the worst-off individual.
+
+Here are all the possible allocations:
+
+Allocation 1:
+- Person 1: Good A
+- Person 2: Good B, Good C
+- Person 3: Good D, Good E
+
+Min values:
+- Person 1: 40
+- Person 2: 8
+- Person 3: 12
+
+Allocation 2:
+- Person 1: Good A
+- Person 2: Good B, Good D
+- Person 3: Good C, Good E
+
+Min values:
+- Person 1: 40
+- Person 2: 14
+- Person 3: 10
+
+Allocation 3:
+- Person 1: Good A
+- Person 2: Good B, Good E
+- Person 3: Good C, Good D
+
+Min values:
+- Person 1: 40
+- Person 2: 14
+- Person 3: 10
+
+Allocation 4:
+- Person 1: Good A
+- Person 2: Good C, Good D
+- Person 3: Good B, Good E
+
+Min values:
+- Person 1: 40
+- Person 2: 8
+- Person 3: 10
+
+Allocation 5:
+- Person 1: Good A
+- Person 2: Good C, Good E
+- Person 3: Good B, Good D
+
+Min values:
+- Person 1: 40
+- Person 2: 8
+- Person 3: 10
+
+Allocation 6:
+- Person 1: Good B
+- Person 2: Good A, Good D
+- Person 3: Good C, Good E
+
+Min values:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 10
+
+Allocation 7:
+- Person 1: Good B
+- Person 2: Good A, Good E
+- Person 3: Good C, Good D
+
+Min values:
+- Person 1: 2
+- Person 2: 14
+- Person 3: 10
+
+Allocation 8:
+- Person 1: Good B
+- Person 2: Good C, Good D
+- Person 3: Good A, Good E
+
+Min values:
+- Person 1: 2
+- Person 2: 8
+- Person 3: 10
+
+Allocation 9:
+- Person 1: Good B
+- Person 2: Good C, Good E
+- Person 3: Good A, Good D
+
+Min values:
+- Person 1: 2
+- Person 2: 8
+- Person 3: 10
+
+Allocation 10:
+- Person 1: Good C
+- Person 2: Good A, Good D
+- Person 3: Good B, Good E
+
+Min values:
+- Person 1: 3
+- Person 2: 14
+- Person 3: 10
+
+Allocation 11:
+- Person 1: Good C
+- Person 2: Good A, Good E
+- Person 3: Good B, Good D
+
+Min values:
+- Person 1: 3
+- Person 2: 14
+- Person 3: 10
+
+Allocation 12:
+- Person 1: Good C
+- Person 2: Good B, Good D
+- Person 3: Good A, Good E
+
+Min values:
+- Person 1: 3
+- Person 2: 8
+- Person 3: 10
+
+Allocation 13:
+- Person 1: Good C
+- Person 2: Good B, Good E
+- Person 3: Good A, Good D
+
+Min values:
+- Person 1: 3
+- Person 2: 8
+- Person 3: 10
+
+Allocation 14:
+- Person 1: Good D
+- Person 2: Good A, Good B
+- Person 3: Good C, Good E
+
+Min values:
+- Person 1: 25
+- Person 2: 14
+- Person 3: 10
+
+Allocation 15:
+- Person 1: Good D
+- Person 2: Good A, Good C
+- Person 3: Good B, Good E
+
+Min values:
+- Person 1: 25
+- Person 2: 14
+- Person 3: 8
+
+Allocation 16:
+- Person 1: Good D
+- Person 2: Good B, Good C
+- Person 3: Good A, Good E
+
+Min values:
+- Person 1: 25
+- Person 2: 8
+- Person 3: 10
+
+Allocation 17:
+- Person 1: Good D
+- Person 2: Good B, Good E
+- Person 3: Good A, Good C
+
+Min values:
+- Person 1: 25
+- Person 2: 8
+- Person 3: 10
+
+Allocation 18:
+- Person 1: Good E
+- Person 2: Good A, Good B
+- Person 3: Good C, Good D
+
+Min values:
+- Person 1: 30
+- Person 2: 14
+- Person 3: 10
+
+Allocation 19:
+- Person 1: Good E
+- Person 2: Good A, Good C
+- Person 3: Good B, Good D
+
+Min values:
+- Person 1: 30
+- Person 2: 14
+- Person 3: 8
+
+Allocation 20:
+- Person 1: Good E
+- Person 2: Good B, Good C
+- Person 3: Good A, Good D
+
+Min values:
+- Person 1: 30
+- Person 2: 8
+- Person 3: 10
+
+Allocation 21:
+- Person 1: Good E
+- Person 2: Good B, Good D
+- Person 3: Good A, Good C
+
+Min values:
+- Person 1: 30
+- Person 2: 8
+- Person 3: 10
+
+Now, let's compare the minimum values for each person across all allocations to find the allocation that maximizes the minimum value for the worst-off individual.
+
+Allocation 1: Min values (40, 8, 10)
+Allocation 2: Min values (40, 14, 10)
+Allocation 3: Min values (40, 14, 10)
+Allocation 4: Min values (40, 8, 10)
+Allocation 5: Min values (40, 8, 10)
+Allocation 6: Min values (2, 14, 10)
+Allocation 7: Min values (2, 14, 10)
+Allocation 8: Min values (2, 8, 10)
+Allocation 9: Min values (2, 8, 10)
+Allocation 10: Min values (3, 14, 10)
+Allocation 11: Min values (3, 14, 10)
+Allocation 12: Min values (3, 8, 10)
+Allocation 13: Min values (3, 8, 10)
+Allocation 14: Min values (25, 14, 10)
+Allocation 15: Min values (25, 14, 8)
+Allocation 16: Min values (25, 8, 10)
+Allocation 17: Min values (25, 8, 10)
+Allocation 18: Min values (30, 14, 10)
+Allocation 19: Min values (30, 14, 8)
+Allocation 20: Min values (30, 8, 10)
+Allocation 21: Min values (30, 8, 10)
+
+Based on the comparison, we can see that Allocation 14 maximizes the minimum value for the worst-off individual, which is Person 3 with a minimum value of 10. Therefore, Allocation 14 is the fair allocation that satisfies the ""Max-Min"" criterion. In this allocation, Person 1 receives Good D, Person 2 receives Good A and Good B, and Person 3 receives Good C and Good E.",4365,2,2,3,1,3
+91,"To solve this problem, we will consider all possible allocations of the goods to the individuals and calculate the minimum value obtained by the worst-off individual for each allocation. Then we will choose the allocation where this minimum value is the highest.
+
+Allocation 1: 
+- Person 1 gets Good A and Good E
+- Person 2 gets Good B and Good D
+- Person 3 gets Good C
+
+Minimum value obtained:
+- Person 1: 30 (from Good E)
+- Person 2: 26 (from Good B)
+- Person 3: 10 (from Good A)
+
+Minimum value = 10
+
+Allocation 2: 
+- Person 1 gets Good A and Good D
+- Person 2 gets Good B and Good E
+- Person 3 gets Good C
+
+Minimum value obtained:
+- Person 1: 25 (from Good D)
+- Person 2: 26 (from Good B)
+- Person 3: 10 (from Good A)
+
+Minimum value = 10
+
+Allocation 3:
+- Person 1 gets Good A and Good C
+- Person 2 gets Good B and Good E
+- Person 3 gets Good D
+
+Minimum value obtained:
+- Person 1: 3 (from Good C)
+- Person 2: 26 (from Good B)
+- Person 3: 12 (from Good D)
+
+Minimum value = 3
+
+Allocation 4:
+- Person 1 gets Good A and Good D
+- Person 2 gets Good B and Good C
+- Person 3 gets Good E
+
+Minimum value obtained:
+- Person 1: 25 (from Good D)
+- Person 2: 8 (from Good C)
+- Person 3: 26 (from Good E)
+
+Minimum value = 8
+
+Allocation 5: 
+- Person 1 gets Good B and Good D
+- Person 2 gets Good A and Good E
+- Person 3 gets Good C
+
+Minimum value obtained:
+- Person 1: 2 (from Good B)
+- Person 2: 14 (from Good A)
+- Person 3: 10 (from Good C)
+
+Minimum value = 2
+
+Allocation 6:
+- Person 1 gets Good C and Good E
+- Person 2 gets Good A and Good D
+- Person 3 gets Good B
+
+Minimum value obtained:
+- Person 1: 3 (from Good C)
+- Person 2: 14 (from Good A)
+- Person 3: 26 (from Good B)
+
+Minimum value = 3
+
+From the above allocations, we can see that Allocation 5 yields the highest minimum value for the worst-off individual, which is 2. Therefore, the fair allocation based on the Max-Min criterion is:
+- Person 1 gets Good B and Good D
+- Person 2 gets Good A and Good E
+- Person 3 gets Good C",1956,2,1,3,1,2
+92,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation where the value derived by the worst-off individual is maximized.
+
+We can approach this problem using the following steps:
+
+Step 1: Calculate the total value each person assigns to all goods.
+Person 1's total value = 40 + 2 + 3 + 25 + 30 = 100
+Person 2's total value = 14 + 26 + 8 + 26 + 26 = 100
+Person 3's total value = 10 + 26 + 26 + 12 + 26 = 100
+
+Step 2: Determine the allocation that maximizes the value for the worst-off individual.
+We can consider all possible allocations of the goods and evaluate the worst-off individual's value for each allocation. The allocation that maximizes the worst-off individual's value will be the solution.
+
+One possible allocation that satisfies the Max-Min criterion is:
+Person 1: Good A
+Person 2: Good B, Good D
+Person 3: Good C, Good E
+
+In this allocation, the worst-off individual is Person 3, and their total value is 26 + 26 = 52.
+
+We can compare this to other allocations and verify that this allocation indeed maximizes the value for the worst-off individual.
+
+Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is:
+Person 1: Good A
+Person 2: Good B, Good D
+Person 3: Good C, Good E.",1400,1,2,3,2,3
+93,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+To do this, we can calculate all possible allocations and then find the one that maximizes the minimum value received by any individual. Here are the possible allocations:
+
+1. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D, Good E
+   Minimum value = 2
+
+2. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good D
+   Minimum value = 3
+
+3. Person 1: Good A, Person 2: Good B, Person 3: Good C, Good E
+   Minimum value = 3
+
+4. Person 1: Good A, Person 2: Good B, Person 3: Good C
+   Minimum value = 3
+
+5. and so on...
+
+By calculating all possible allocations, we find that the allocation where Person 1 receives Good A, Person 2 receives Good D, and Person 3 receives Good E maximizes the minimum value received by any individual. In this allocation, the minimum value received is 30, which is the highest among all possible allocations.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+Person 1: Good A
+Person 2: Good D
+Person 3: Good E",1352,1,None,None,2,3
+94,"To find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and find the one that maximizes the minimum value obtained by any individual.
+
+One approach to solve this problem is to use a systematic method to evaluate all possible allocations and determine the one that yields the maximum minimum value.
+
+For simplicity, let's consider all possible allocations of the goods to the three individuals:
+
+1. Each individual gets one good: There are 5 possible allocations of one good to each individual.
+2. Two individuals get two goods each, while the third gets one: There are 10 possible allocations for this case.
+3. One individual gets three goods, while the other two get one each: There are 10 possible allocations for this case.
+4. One individual gets four goods, while the other two get none: There are 5 possible allocations for this case.
+5. All goods go to one individual, while the other two get none: There are 3 possible allocations for this case.
+
+In total, there are 33 possible allocations to consider. For each allocation, we can calculate the value obtained by the worst-off individual and then compare them to find the one that maximizes the minimum value.
+
+After evaluating all possible allocations, we can determine the allocation that satisfies the ""Max-Min"" criterion, which would be the best solution for this problem.
+
+I can certainly help you find the best allocation based on the ""Max-Min"" criterion if you'd like to proceed.",1359,1,3,2,2,2
+95,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+One way to approach this problem is to consider all possible allocations of the goods and calculate the minimum value received by any individual for each allocation. Then, we can choose the allocation that maximizes this minimum value.
+
+Let's consider all possible allocations:
+
+1. Allocate Good A to Person 1
+2. Allocate Good A to Person 2
+3. Allocate Good A to Person 3
+4. Do not allocate Good A to anyone
+
+For each allocation, we calculate the minimum value received by any individual:
+
+1. Allocation 1: Person 1 receives Good A (value 40)
+   - Person 2: min value = 14
+   - Person 3: min value = 10
+   - Minimum value = 10
+
+2. Allocation 2: Person 2 receives Good A (value 14)
+   - Person 1: min value = 2
+   - Person 3: min value = 10
+   - Minimum value = 2
+
+3. Allocation 3: Person 3 receives Good A (value 10)
+   - Person 1: min value = 3
+   - Person 2: min value = 8
+   - Minimum value = 3
+
+4. Do not allocate Good A to anyone
+   - Person 1: min value = 2
+   - Person 2: min value = 8
+   - Person 3: min value = 10
+   - Minimum value = 2
+
+We repeat this process for the remaining goods (B, C, D, and E) and their respective allocations.
+
+After evaluating all possible allocations, we find that the allocation that maximizes the minimum value received by any individual is as follows:
+
+Good A is allocated to Person 1
+Good B is allocated to Person 3
+Good C is allocated to Person 2
+Good D is not allocated to anyone
+Good E is allocated to Person 2
+
+In this allocation, the minimum value received by any individual is 25, which occurs for Person 1. Therefore, this allocation satisfies the ""Max-Min"" criterion and is the fair allocation of the goods.",1693,1,3,2,None,2
+96,"To solve this problem using the ""Max-Min"" criterion, we need to consider all the possible allocations of the goods and calculate the minimum value that each person will receive for each allocation. Then, we will choose the allocation where the minimum value across all individuals is the highest.
+
+For simplicity, let's consider all 3! = 6 possible allocations of the goods, where each individual receives a different combination of the goods. We will calculate the minimum value for each allocation and then choose the allocation with the highest minimum value.
+
+Allocation 1:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good D, Good E
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 2:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good C, Good E, Good D
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 3:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good D, Good E, Good C
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 4:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good E, Good C, Good D
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 5:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good D, Good C, Good E
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+Allocation 6:
+- Person 1: Good A
+- Person 2: Good B
+- Person 3: Good E, Good D, Good C
+Minimum values: Person 1: 40, Person 2: 26, Person 3: 10
+Minimum value: 10
+
+In this case, all allocations result in the same minimum value of 10. Therefore, any of these allocations will satisfy the ""Max-Min"" criterion.",1799,1,2,3,3,3
+97,"To determine the allocation that satisfies the ""Max-Min"" criterion, we need to find the allocation that maximizes the minimum value received by any individual.
+
+We can start by considering all possible combinations of allocations and calculate the minimum value received by any individual for each allocation.
+
+One possible allocation would be to give Good A to Person 1, Good B to Person 2, Good C to Person 3, and not allocate Good D and Good E to anyone.
+
+In this allocation:
+- Person 1's value = 40
+- Person 2's value = 26
+- Person 3's value = 26
+
+The minimum value received by any individual in this allocation is 26.
+
+We can continue to find all possible allocations and calculate the minimum value received by any individual in each allocation. Then, we choose the allocation that maximizes this minimum value.
+
+After considering all possible allocations, we find that the allocation where Good A is given to Person 1, Good D is given to Person 2, and Good E is given to Person 3, with Goods B and C not being allocated to anyone, results in the maximum minimum value received by any individual.
+
+In this allocation:
+- Person 1's value = 40
+- Person 2's value = 26
+- Person 3's value = 26
+
+The minimum value received by any individual in this allocation is 26.
+
+Therefore, the allocation that satisfies the ""Max-Min"" criterion is:
+- Good A to Person 1
+- Good D to Person 2
+- Good E to Person 3
+- Goods B and C are not allocated to anyone.",1426,1,None,None,2,3
+98,"In order to find the allocation that satisfies the ""Max-Min"" criterion, we need to consider all possible allocations and calculate the value received by the worst-off individual for each allocation.
+
+Here are all the possible allocations of the 5 goods among the 3 individuals:
+
+1. Person 1: Good A, Good B
+   Person 2: Good D, Good E
+   Person 3: Good C
+   Worst-off individual (Person 3) value = 26
+
+2. Person 1: Good A, Good B
+   Person 2: Good D, Good E
+   Person 3: No allocation
+   Worst-off individual (Person 3) value = 0
+
+3. Person 1: Good A, Good B
+   Person 2: Good C, Good E
+   Person 3: Good D
+   Worst-off individual (Person 1) value = 40
+
+4. Person 1: Good A, Good B
+   Person 2: Good C, Good D
+   Person 3: Good E
+   Worst-off individual (Person 3) value = 26
+
+5. Person 1: Good A, Good B
+   Person 2: Good C, Good D
+   Person 3: No allocation
+   Worst-off individual (Person 3) value = 0
+
+6. Person 1: Good A, Good B
+   Person 2: Good E
+   Person 3: Good C, Good D
+   Worst-off individual (Person 2) value = 26
+
+7. Person 1: Good A, Good B
+   Person 2: Good C
+   Person 3: Good D, Good E
+   Worst-off individual (Person 2) value = 26
+
+8. Person 1: Good A, Good B
+   Person 2: No allocation
+   Person 3: Good C, Good D, Good E
+   Worst-off individual (Person 2) value = 0
+
+9. Person 1: Good A, Good B
+   Person 2: No allocation
+   Person 3: Good C, Good D
+   Worst-off individual (Person 2) value = 0
+
+10. Person 1: Good A
+    Person 2: Good B, Good D
+    Person 3: Good C, Good E
+    Worst-off individual (Person 3) value = 26
+
+11. Person 1: Good A
+    Person 2: Good B, Good E
+    Person 3: Good C, Good D
+    Worst-off individual (Person 1) value = 40
+
+12. Person 1: Good A
+    Person 2: Good B, Good C
+    Person 3: Good D, Good E
+    Worst-off individual (Person 3) value = 26
+
+13. Person 1: Good A
+    Person 2: Good B, Good C
+    Person 3: Good E
+    Worst-off individual (Person 1) value = 40
+
+14. Person 1: Good A
+    Person 2: Good D, Good E
+    Person 3: Good B, Good C
+    Worst-off individual (Person 3) value = 26
+
+15. Person 1: Good A
+    Person 2: Good D, Good E
+    Person 3: No allocation
+    Worst-off individual (Person 3) value = 0
+
+16. Person 1: Good A
+    Person 2: Good C, Good E
+    Person 3: Good B, Good D
+    Worst-off individual (Person 1) value = 40
+
+17. Person 1: Good A
+    Person 2: Good C, Good D
+    Person 3: Good B, Good E
+    Worst-off individual (Person 3) value = 26
+
+18. Person 1: Good A
+    Person 2: Good C, Good D
+    Person 3: No allocation
+    Worst-off individual (Person 3) value = 0
+
+19. Person 1: Good A
+    Person 2: Good E
+    Person 3: Good B, Good C, Good D
+    Worst-off individual (Person 2) value = 26
+
+20. Person 1: Good A
+    Person 2: Good D
+    Person 3: Good B, Good C, Good E
+    Worst-off individual (Person 2) value = 26
+
+21. Person 1: Good A
+    Person 2: Good D
+    Person 3: Good E
+    Worst-off individual (Person 2) value = 26
+
+22. Person 1: Good A
+    Person 2: Good C
+    Person 3: Good B, Good D, Good E
+    Worst-off individual (Person 2) value = 26
+
+23. Person 1: Good A
+    Person 2: Good C
+    Person 3: No allocation
+    Worst-off individual (Person 2) value = 0
+
+24. Person 1: Good A
+    Person 2: No allocation
+    Person 3: Good B, Good C, Good D, Good E
+    Worst-off individual (Person 2) value = 0
+
+25. Person 2: Good A, Good B
+    Person 1: Good D, Good E
+    Person 3: Good C
+    Worst-off individual (Person 3) value = 26
+
+26. Person 2: Good A, Good B
+    Person 1: Good D, Good E
+    Person 3: No allocation
+    Worst-off individual (Person 3) value = 0
+
+27. Person 2: Good A, Good B
+    Person 1: Good C, Good E
+    Person 3: Good D
+    Worst-off individual (Person 1) value = 40
+
+28. Person 2: Good A, Good B
+    Person 1: Good C, Good D
+    Person 3: Good E
+    Worst-off individual (Person 3) value = 26
+
+29. Person 2: Good A, Good B
+    Person 1: Good C, Good D
+    Person 3: No allocation
+    Worst-off individual (Person 3) value = 0
+
+30. Person 2: Good A, Good B
+    Person 1: Good E
+    Person 3: Good C, Good D
+    Worst-off individual (Person 1) value = 40
+
+31. Person 2: Good A, Good B
+    Person 1: Good C
+    Person 3: Good D, Good E
+    Worst-off individual (Person 1) value = 40
+
+32. Person 2: Good A, Good B
+    Person 1: No allocation
+    Person 3: Good C, Good D, Good E
+    Worst-off individual (Person 1) value = 0
+
+33. Person 2: Good A, Good B
+    Person 1: No allocation
+    Person 3: Good C, Good D
+    Worst-off individual (Person 1) value = 0
+
+34. Person 2: Good A, Good D
+    Person 1: Good B, Good E
+    Person 3: Good C
+    Worst-off individual (Person 3) value = 26
+
+35. Person 2: Good A, Good E
+    Person 1: Good B, Good D
+    Person 3: Good C
+    Worst-off individual (Person 3) value = 26
+
+36. Person 2: Good A, Good B
+    Person 1: Good C
+    Person 3: Good D, Good E
+    Worst-off individual (Person 1) value = 40
+
+37. Person 2: Good A
+    Person 1: Good B, Good C
+    Person 3: Good D, Good E
+    Worst-off individual (Person 3) value = 26
+
+38. Person 2: Good A
+    Person 1: Good C, Good D
+    Person 3: Good B, Good E
+    Worst-off individual (Person 1) value = 40
+
+39. Person 2: Good A
+    Person 1: Good C, Good D
+    Person 3: No allocation
+    Worst-off individual (Person 3) value = 0
+
+40. Person 2: Good A
+    Person 1: Good E
+    Person 3: Good B, Good C, Good D
+    Worst-off individual (Person 1) value = 40
+
+41. Person 2: Good A
+    Person 1: Good D
+    Person 3: Good B, Good C, Good E
+    Worst-off individual (Person 1) value = 40
+
+42. Person 2: Good A
+    Person 1: Good D
+    Person 3: Good E
+    Worst-off individual (Person 2) value = 26
+
+43. Person 2: Good A
+    Person 1: Good C
+    Person 3: Good B, Good D, Good E
+    Worst-off individual (Person 1) value = 40
+
+44. Person 3: Good A, Good C
+    Person 1: Good B, Good D, Good E
+    Worst-off individual (Person 3) value = 26
+
+45. Person 3: Good A
+    Person 1: Good B, Good C, Good D
+    Person 2: Good E
+    Worst-off individual (Person 3) value = 26
+
+46. Person 3: Good C
+    Person 1: Good A, Good B, Good D
+    Person 2: Good E
+    Worst-off individual (Person 1) value = 40
+
+47. Person 3: Good C
+    Person 1: Good D, Good E
+    Person 2: Good A, Good B
+    Worst-off individual (Person 2) value = 26
+
+48. Person 3: Good C
+    Person 1: No allocation
+    Person 2: Good A, Good B, Good D, Good E
+    Worst-off individual (Person 1) value = 0
+
+From the above calculations, we can see that the allocation that satisfies the ""Max-Min"" criterion is:
+
+Person 1: Good A, Good B
+Person 2: Good C, Good E
+Person 3: Good D
+
+In this allocation:
+- Person 1's value = 42 (40 + 2)
+- Person 2's value = 34 (8 + 26)
+- Person 3's value = 26
+
+So, the worst-off individual (Person 3) receives a value of 26, which is the highest value across all possible allocations. Therefore, this allocation satisfies the ""Max-Min"" criterion.",5405,1,1,2,3,2
+99,"To determine the allocation that satisfies the ""Max-Min"" criterion, we can calculate the minimum value that each person would receive for each possible allocation and then allocate the goods in a way that maximizes the minimum value for the worst-off individual.
+
+To do this, we first calculate the total value each person would receive for each possible allocation. Then, we determine the minimum value for the worst-off individual in each allocation scenario. Finally, we choose the allocation that maximizes the minimum value for the worst-off individual.
+
+Here are the calculations for each possible allocation:
+
+1. Person 1: 40, 2, 3, 25, 30
+   Person 2: 14, 26, 8, 26, 26
+   Person 3: 10, 26, 26, 12, 26
+   Minimum value for worst-off individual: 10
+
+2. Person 1: 40, 2, 3, 25, 0
+   Person 2: 14, 26, 8, 26, 30
+   Person 3: 10, 26, 26, 12, 0
+   Minimum value for worst-off individual: 0
+
+3. Person 1: 40, 2, 3, 0, 30
+   Person 2: 14, 26, 8, 26, 26
+   Person 3: 10, 26, 26, 12, 0
+   Minimum value for worst-off individual: 0
+
+4. Person 1: 40, 2, 0, 25, 30
+   Person 2: 14, 26, 11, 26, 26
+   Person 3: 10, 26, 26, 12, 0
+   Minimum value for worst-off individual: 0
+
+5. Person 1: 40, 0, 3, 25, 30
+   Person 2: 14, 28, 8, 26, 26
+   Person 3: 10, 26, 26, 12, 0
+   Minimum value for worst-off individual: 0
+
+6. Person 1: 0, 2, 3, 25, 30
+   Person 2: 54, 0, 8, 26, 26
+   Person 3: 10, 26, 26, 12, 0
+   Minimum value for worst-off individual: 0
+
+The allocation that maximizes the minimum value for the worst-off individual is the first one, where the minimum value is 10. Therefore, the fair allocation that satisfies the ""Max-Min"" criterion is:
+- Person 1 receives Good A
+- Person 2 receives Good B and Good D
+- Person 3 receives Good C and Good E",1986,1,2,3,2,3

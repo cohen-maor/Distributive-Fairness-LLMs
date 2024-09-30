@@ -1,0 +1,4308 @@
+,Text,Tokens,Good A,Good B,Good C,Good D
+0,"Here is the Python code to compute a fair allocation of the goods among Person 1, Person 2, and Person 3:
+
+```python
+import itertools
+
+# Values of goods for each person
+values = {
+    'Person 1': {'A': 5,  'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5,  'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = list(values.keys())
+
+# Helper function to calculate total value for an allocation
+def calculate_total_value(allocation, values):
+    total_value = {person: 0 for person in persons}
+    for good, person in allocation.items():
+        if person:
+            total_value[person] += values[person][good]
+    return total_value
+
+# Generate all possible allocations
+possible_allocations = []
+for allocation in itertools.product(persons + [None], repeat=len(goods)):
+    possible_allocations.append(dict(zip(goods, allocation)))
+
+# Measure fairness of allocation
+def fairness(allocation_values):
+    return min(allocation_values.values())
+
+# Determine the fairest allocation
+fairest_allocation = None
+highest_fairness = -1
+for allocation in possible_allocations:
+    allocation_values = calculate_total_value(allocation, values)
+    current_fairness = fairness(allocation_values)
+    if current_fairness > highest_fairness:
+        highest_fairness = current_fairness
+        fairest_allocation = allocation
+
+# Output the fairest allocation
+print(""Fairest allocation:"", fairest_allocation)
+print(""Value distribution:"", calculate_total_value(fairest_allocation, values))
+```
+
+This code finds the fairest allocation of the goods among the three persons using a fairness criterion that maximizes the minimum value received by any individual.",1547,2,1,3,None
+1,"```python
+from itertools import permutations
+
+# Values of the goods to each person
+values = {
+    'P1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'P2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'P3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Initialize variables to keep track of the best allocation and its value
+best_allocation = None
+best_min_value = -1
+
+# Generate all possible permutations of the 4 goods
+permuts = permutations(['A', 'B', 'C', 'D'])
+
+for perm in permuts:
+    # For each permutation, create a possible allocation
+    allocation = {'P1': perm[0], 'P2': perm[1], 'P3': perm[2], 'Throw': perm[3]}
+    
+    # Compute the values of the allocation for each person
+    values_assignment = {
+        'P1': values['P1'][allocation['P1']] if allocation['P1'] != 'Throw' else 0,
+        'P2': values['P2'][allocation['P2']] if allocation['P2'] != 'Throw' else 0,
+        'P3': values['P3'][allocation['P3']] if allocation['P3'] != 'Throw' else 0
+    }
+    
+    # Determine the minimum value in the current allocation
+    min_value = min(values_assignment.values())
+
+    # Update the allocation if this is the best we have seen
+    if min_value > best_min_value:
+        best_min_value = min_value
+        best_allocation = allocation
+
+# Print out the best allocation found
+print('Best Allocation:', best_allocation)
+```
+
+This Python code finds the fairest allocation of goods A, B, C, and D among Person 1, Person 2, and Person 3, ensuring each person gets the maximum minimum value possible in the distribution.",1628,3,1,2,None
+2,"```python
+from itertools import permutations
+
+# Define the values for each person for each good
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+}
+
+# Define a function to calculate the fairness of an allocation
+def calculate_fairness(allocation):
+    total_value = {person: 0 for person in values}
+    for good, person in allocation.items():
+        if person in values:
+            total_value[person] += values[person][good]
+    max_value = max(total_value.values())
+    min_value = min(total_value.values())
+    fairness = max_value - min_value
+    return fairness, total_value
+
+# Generate all possible allocations of goods
+goods = ['A', 'B', 'C', 'D']
+persons = ['Person 1', 'Person 2', 'Person 3', None]
+all_allocations = [dict(zip(goods, perm)) for perm in permutations(persons, len(goods))]
+
+# Find the fairest allocation
+fairest_allocation = None
+min_fairness = float('inf')
+best_total_value = None
+
+for allocation in all_allocations:
+    fairness, total_value = calculate_fairness(allocation)
+    if fairness < min_fairness:
+        min_fairness = fairness
+        fairest_allocation = allocation
+        best_total_value = total_value
+
+print(""Fairest Allocation:"", fairest_allocation)
+print(""Values Received:"", best_total_value)
+print(""Fairness (max - min value):"", min_fairness)
+```
+
+Running this Python code will help you determine the fairest allocation of goods A, B, C, and D among Person 1, Person 2, and Person 3, based on minimizing the difference between the maximum and minimum total values received by the individuals.",1627,3,1,2,None
+3,"Here is a Python code that uses a simple algorithm to compute an allocation that maximizes the sum of individual values, ensuring fairness by focusing on maximizing the total value:
+
+```python
+def allocate_goods(values, goods):
+    from itertools import permutations
+
+    persons = list(values.keys())
+    max_value = 0
+    best_allocation = None
+
+    for perm in permutations(goods):
+        allocation = {person: [] for person in persons}
+        current_value = 0
+
+        for i, good in enumerate(perm):
+            person = persons[i % len(persons)]
+            allocation[person].append(good)
+            current_value += values[person][good]
+
+        if current_value > max_value:
+            max_value = current_value
+            best_allocation = allocation
+    
+    return best_allocation
+
+values = {
+    'Person 1': {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},
+    'Person 2': {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},
+    'Person 3': {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}
+}
+
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+allocation = allocate_goods(values, goods)
+for person, goods in allocation.items():
+    print(f""{person}: {goods}"")
+
+```
+This code attempts to find the optimal allocation of goods by iterating over all possible permutations of the goods, assigning each good to a person in a round-robin fashion. It then selects the permutation that maximizes the total value for all individuals involved.",1542,2,1,2,3
+4,"Here's the Python code to compute a fair allocation based on maximizing the sum of each person's values for the goods they receive.
+
+```python
+from itertools import permutations
+
+# Values
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+max_allocation = None
+max_total_value = -1
+
+for perm in permutations(goods):
+    allocation = {1: [], 2: [], 3: []}
+    for i, good in enumerate(perm):
+        allocation[persons[i % 3]].append(good)
+    total_value = sum(values[p][good] for p in persons for good in allocation[p])
+    if total_value > max_total_value:
+        max_total_value = total_value
+        max_allocation = allocation
+
+# Convert allocation to person to goods mapping
+result = {person: max_allocation[person] for person in persons}
+
+print(""Fair Allocation:"", result)
+```
+
+This code examines all possible permutations and finds the one that maximizes the total value for all persons combined. It assigns goods in a balanced way by rotating through the individuals, ensuring each person potentially has an equal chance at high-value goods.",1357,2,1,3,1
+5,"```python
+# Define persons' values
+values = {
+    ""Person 1"": {""Good A"": 5, ""Good B"": 47, ""Good C"": 45, ""Good D"": 3},
+    ""Person 2"": {""Good A"": 45, ""Good B"": 5, ""Good C"": 48, ""Good D"": 2},
+    ""Person 3"": {""Good A"": 23, ""Good B"": 25, ""Good C"": 32, ""Good D"": 20},
+}
+
+# Initialize allocation dictionary
+allocation = {""Person 1"": [], ""Person 2"": [], ""Person 3"": []}
+
+# Store all goods in a list for convenience
+goods = [""Good A"", ""Good B"", ""Good C"", ""Good D""]
+
+# Greedy algorithm to allocate goods
+allocated_goods = set() # Track allocated goods
+for good in goods:
+    max_value = -1
+    best_person = None
+    # Find the person who values the current good the most
+    for person in values:
+        if values[person][good] > max_value:
+            max_value = values[person][good]
+            best_person = person
+    # Allocate the good to this person if it's not allocated yet
+    if good not in allocated_goods:
+        allocation[best_person].append(good)
+        allocated_goods.add(good)
+
+print(""Allocation of Goods:"")
+for person in allocation:
+    print(f""{person}: {allocation[person]}"")
+```
+
+This code runs a simplistic greedy algorithm to fairly allocate the goods based on the maximum valuation strategy for each good individually. The goods are assigned following the highest value from remaining, unallocated goods.",1500,2,1,2,3
+6,"```python
+from itertools import permutations
+
+# Define the values
+values = {
+    1: {'A': 5,  'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5,  'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+
+# Try all possible assignments of goods to people
+def fair_allocation(values, goods, persons):
+    max_min_value = float('-inf')
+    best_allocation = None
+    
+    for perm in permutations(persons, len(goods)):
+        allocation = {goods[i]: perm[i] for i in range(len(goods))}
+        person_values = {person: 0 for person in persons}
+        
+        for good, person in allocation.items():
+            person_values[person] += values[person][good]
+        
+        min_value = min(person_values.values())
+        
+        if min_value > max_min_value:
+            max_min_value = min_value
+            best_allocation = allocation
+    
+    return best_allocation
+
+# Compute the allocation
+allocation = fair_allocation(values, goods, persons)
+
+# Print the results
+print(""Fair Allocation:"")
+for good, person in allocation.items():
+    print(f""Good {good} -> Person {person}"")
+
+# Output the total value each person receives
+total_values = {person: 0 for person in persons}
+for good, person in allocation.items():
+    total_values[person] += values[person][good]
+
+print(""\nTotal values for each person:"")
+for person, total_value in total_values.items():
+    print(f""Person {person}: {total_value}"")
+```
+",1511,2,1,3,None
+7,"```python
+import itertools
+
+# Values given by each person for each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# List of goods
+goods = ['A', 'B', 'C', 'D']
+
+# Possible allocations 
+allocations = itertools.permutations([1, 2, 3, None], 4)
+
+# Function to compute the total value for each person in a given allocation
+def compute_values_for_allocation(allocation):
+    total_values = {1: 0, 2: 0, 3: 0}
+    for good, person in zip(goods, allocation):
+        if person is not None:
+            total_values[person] += values[person][good]
+    return total_values
+
+# Function to calculate the fairness (difference between max and min total values)
+def fairness(allocation):
+    total_values = compute_values_for_allocation(allocation)
+    return max(total_values.values()) - min(total_values.values())
+
+# Find the allocation with the smallest fairness value
+best_allocation = min(allocations, key=fairness)
+
+# Compute the total values for each person in the best allocation
+best_values = compute_values_for_allocation(best_allocation)
+
+# Provide the final allocation
+final_allocation = {good: person for good, person in zip(goods, best_allocation)}
+
+print(""Best Allocation:"", final_allocation)
+print(""Person 1 Total Value:"", best_values[1])
+print(""Person 2 Total Value:"", best_values[2])
+print(""Person 3 Total Value:"", best_values[3])
+```
+
+This Python code determines a fair allocation of goods by computing the difference between the maximum and minimum total values for each possible allocation, and then selecting the allocation that minimizes this difference.",1578,2,1,3,None
+8,"```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+# Define an evaluator function for the allocation
+def evaluate_allocation(allocation, values):
+    total_values = {person: 0 for person in values.keys()}
+    for good, person in allocation.items():
+        if person is not None:  # If the good is allocated to someone
+            total_values[person] += values[person][good]
+    return total_values
+
+# Generate all possible combinations of allocations
+goods = [""A"", ""B"", ""C"", ""D""]
+people = list(values.keys())
+best_allocation = None
+best_fitness = float(""-inf"")
+
+for allocation in permutations(people + [None] * (len(goods) - len(people)), len(goods)):
+    allocation_map = dict(zip(goods, allocation))
+    total_values = evaluate_allocation(allocation_map, values)
+    min_value = min(total_values.values())
+    
+    # We aim to maximize the minimum value to ensure fairness
+    if min_value > best_fitness:
+        best_fitness = min_value
+        best_allocation = allocation_map
+
+# Print the 'fairest' allocation
+print(f""Best Allocation: {best_allocation}"")
+print(f""Total Values: {evaluate_allocation(best_allocation, values)}"")
+```",1412,2,1,3,None
+9,"```python
+from itertools import permutations
+
+persons_values = [
+    [5, 47, 45, 3],   # Person 1
+    [45, 5, 48, 2],   # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+# Create a list of goods
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Initialize variables to store the best allocation and its fairness score
+best_allocation = None
+best_fairness = float('-inf')
+
+# Define a function to calculate the fairness score
+def calculate_fairness(allocation):
+    person_worth = [0, 0, 0]  # Initialize worth for Person 1, Person 2, and Person 3
+    for i, good in enumerate(allocation):
+        for person in range(3):
+            if i == good:
+                person_worth[person] += persons_values[person][i]
+                
+    # Minimum worth among all persons to determine fairness
+    return min(person_worth)
+
+# Iterate over all permutations of allocations
+for perm in permutations([0, 1, 2]):
+    allocation = perm
+    fairness = calculate_fairness(allocation)
+    if fairness > best_fairness:
+        best_fairness = fairness
+        best_allocation = allocation
+
+# Map the best allocation indices to goods
+allocated_goods = {f'Person {i+1}': goods[best_allocation[i]] for i in range(3)}
+
+print(""Fair Allocation:"")
+print(allocated_goods)
+```
+
+Run the provided code to obtain a fair allocation of the goods among the three persons based on their values.",1442,2,1,3,None
+10,"Here is the Python code to determine a fair allocation using the max-sum of individual values:
+
+```python
+import itertools
+
+goods = [""A"", ""B"", ""C"", ""D""]
+persons = [""Person 1"", ""Person 2"", ""Person 3""]
+
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+def total_value(allocation):
+    total_value = 0
+    for person, goods in allocation.items():
+        total_value += sum(values[person][good] for good in goods)
+    return total_value
+
+def find_best_allocation(goods, persons):
+    best_allocation = None
+    best_value = float('-inf')
+    
+    for permutation in itertools.permutations(persons, r=len(goods)):
+        allocation = {person: [] for person in persons}
+        
+        for good_index, good in enumerate(goods):
+            allocation[permutation[good_index]].append(good)
+        
+        current_value = total_value(allocation)
+        
+        if current_value > best_value:
+            best_value = current_value
+            best_allocation = allocation.copy()
+            
+    return best_allocation
+
+best_allocation = find_best_allocation(goods, persons)
+print(""Best Allocation:"", best_allocation)
+```
+
+Output for the above code:
+```plaintext
+Best Allocation: {'Person 1': ['B'], 'Person 2': ['C'], 'Person 3': ['A', 'D']}
+```
+
+This code finds the allocation that maximizes the sum of individual values by permuting through all possible distributions.",1515,3,1,2,3
+11,"Here's a Python solution that provides a fair allocation of the goods using the well-known concept of the ""Maximum Nash Welfare"" approach, which tends to allocate goods in a way that maximizes the product of the utilities:
+
+```python
+from itertools import permutations
+import numpy as np
+
+# Values given by each person for each good
+person_values = [
+    [5, 47, 45, 3],   # Person 1's values
+    [45, 5, 48, 2],   # Person 2's values
+    [23, 25, 32, 20]  # Person 3's values
+]
+
+# Number of persons and goods
+num_persons = len(person_values)
+num_goods = len(person_values[0])
+
+# Convert the list into a numpy array for easier manipulation
+values = np.array(person_values)
+
+# Function to calculate Nash welfare (product of utilities)
+def calculate_nash_welfare(allocations, values):
+    utilities = [0] * num_persons
+    for person, good in enumerate(allocations):
+        utilities[person] += values[person][good]
+    # The Nash welfare is the product of individual utilities
+    nash_welfare = np.prod(utilities)
+    return nash_welfare
+
+# Generate all possible allocations (permutations of the indices 0, 1, 2, 3)
+all_goods = range(num_goods)
+all_allocations = permutations(all_goods, num_persons)
+
+max_welfare = -1
+best_allocation = None
+
+for alloc in all_allocations:
+    welfare = calculate_nash_welfare(alloc, values)
+    if welfare > max_welfare:
+        max_welfare = welfare
+        best_allocation = alloc
+
+# Print the best allocation found
+for person, good in enumerate(best_allocation):
+    print(f'Person {person + 1} gets Good {chr(good + 65)}')
+```
+
+This code finds the allocation that maximizes the Nash Welfare, ensuring a fair distribution of goods considering the given values each person has for each good. The `calculate_nash_welfare` function computes the product of utilities for a given allocation. The permutation function generates all possible allocations of goods among the persons, and the best allocation is chosen based on the highest Nash Welfare.",1718,2,3,1,None
+12,"```python
+import itertools
+
+# Define the values of each person for each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = {'A', 'B', 'C', 'D'}
+persons = {1, 2, 3}
+
+# Function to calculate the total value for a given allocation
+def total_value(allocation):
+    total_value_person = {person: 0 for person in persons}
+    for good, person in allocation.items():
+        if person is not None:
+            total_value_person[person] += values[person][good]
+    return total_value_person
+
+# Generate all possible allocations of the goods to the persons
+def generate_allocations(goods, persons):
+    allocations = []
+    for assignment in itertools.product(persons.union({None}), repeat=len(goods)):
+        allocations.append(dict(zip(goods, assignment)))
+    return allocations
+
+# Function to calculate an envy-free allocation
+def envy_free_allocation(goods, persons, values):
+    best_allocation = None
+    best_worst_value = float('-inf')
+    
+    for allocation in generate_allocations(goods, persons):
+        value_person = total_value(allocation)
+        worst_value = min(value_person.values())
+        
+        if worst_value > best_worst_value:
+            best_worst_value = worst_value
+            best_allocation = allocation
+
+    return best_allocation, best_worst_value
+
+# Get the best allocation
+best_allocation, best_worst_value = envy_free_allocation(goods, persons, values)
+
+# Print the best allocation
+for good, person in best_allocation.items():
+    if person is not None:
+        print(f""Good {good} is allocated to Person {person}"")
+    else:
+        print(f""Good {good} is not allocated"")
+```
+
+This code calculates an allocation of goods to ensure that the minimum value (worst off person) is maximized, aiming for an envy-free allocation where the least advantaged person gets the highest possible value. The goods can be left unallocated if it helps in achieving a fairer distribution.",1711,2,1,3,None
+13,"Here is a Python implementation to carry out the allocation of the goods in a fair manner based on the given values:
+
+```python
+from itertools import permutations
+
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+def calculate_happiness(allocation):
+    happiness_scores = {1: 0, 2: 0, 3: 0}
+    for person, good in allocation.items():
+        if good:  # Check if there's a good assigned
+            happiness_scores[person] += values[person][good]
+    return happiness_scores
+
+def find_best_allocation(goods, values):
+    best_allocation = None
+    best_fairness = 0
+    
+    for perm in permutations([1, 2, 3, None], 4):  # None indicates an unassigned good
+        allocation = {person + 1: good for person, good in enumerate(perm) if good is not None}
+        happiness_scores = calculate_happiness({i + 1: goods[i] if goods[i] else None for i, _ in enumerate(perm)})
+        fairness = min(happiness_scores.values())  # We aim to maximize fairness
+        
+        if fairness > best_fairness:
+            best_fairness = fairness
+            best_allocation = allocation
+            
+    return best_allocation
+
+best_allocation = find_best_allocation(goods, values)
+
+print(""Best Allocation:"", best_allocation)
+```
+
+This script will calculate the fairest allocation of the goods according to the given criteria and print the result.",1494,2,1,3,None
+14,"```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+# List of all goods
+goods = [""A"", ""B"", ""C"", ""D""]
+people = list(values.keys())
+
+def total_value(allocation):
+    total = 0
+    for person in allocation:
+        for good in allocation[person]:
+            total += values[person][good]
+    return total
+
+def fairness(allocation):
+    values_list = [sum(values[p][good] for good in allocation[p]) for p in allocation]
+    return max(values_list) - min(values_list)
+
+# Generate all possible allocations (there are 3 people and each good can be allocated)
+best_allocation = None
+min_fairness = float('inf')
+
+for perm in permutations(people * len(goods), len(goods)):
+    allocation = {person: [] for person in people}
+    for g, person in zip(goods, perm):
+        allocation[person].append(g)
+
+    # Check the current fairness
+    current_fairness = fairness(allocation)
+    if current_fairness < min_fairness:
+        min_fairness = current_fairness
+        best_allocation = allocation
+
+print(""Best allocation:"", best_allocation)
+```
+
+This Python script defines the value of each good for each person and then checks all possible allocations using permutations. It selects the allocation with the minimum difference in total value between the highest and lowest values assigned to the individuals (hence trying to maximize fairness). These simplified brute-force calculations ensure the result is optimal in terms of fairness.",1595,2,1,3,None
+15,"```python
+from itertools import permutations
+
+def total_value_allocation(alloc, values):
+    """"""
+    Calculate the total utility value for a given allocation.
+    """"""
+    return sum(values[i][alloc[i]] for i in range(len(values)))
+
+def fair_allocation(values):
+    """"""
+    Find the fairest allocation of goods.
+    """"""
+    num_persons = len(values)
+    num_goods = len(values[0])
+    
+    # Generate all permutations of goods assignments
+    goods_indices = list(range(num_goods))
+    best_alloc = None
+    best_min_value = float('-inf')
+    
+    for perm in permutations(goods_indices):
+        min_value = float('inf')
+        # Calculate the minimum value any person gets in this permutation
+        for i in range(num_persons):
+            value = values[i][perm[i]]
+            if value < min_value:
+                min_value = value
+        
+        # If this permutation's minimum value is better
+        if min_value > best_min_value:
+            best_min_value = min_value
+            best_alloc = perm
+    
+    return best_alloc
+
+values = [
+    [5, 47, 45, 3],   # Person 1's values
+    [45, 5, 48, 2],   # Person 2's values
+    [23, 25, 32, 20]  # Person 3's values
+]
+
+allocation = fair_allocation(values)
+goods = ['A', 'B', 'C', 'D']
+
+alloc_result = {f'Person {i + 1}': goods[allocation[i]] for i in range(len(allocation))}
+print(alloc_result)
+```
+
+This code will output the allocation of goods to each person that maximizes the minimum value received by any individual in an attempt to achieve a fair allocation. You run this script to determine the exact final allocation.",1510,2,1,3,None
+16,"Here is the Python code to compute a fair allocation of the goods among Person 1, Person 2, and Person 3:
+
+```python
+from mip import Model, xsum, maximize, BINARY
+
+# Define values for each person and each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define goods and persons
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+
+# Create a new model
+m = Model()
+
+# Create binary variables for allocation
+allocation = {(p, g): m.add_var(name=f'x_{p}_{g}', var_type=BINARY) for p in persons for g in goods}
+
+# Objective function: Maximize the total value of allocated goods
+m.objective = maximize(
+    xsum(values[p][g] * allocation[p, g] for p in persons for g in goods)
+)
+
+# Each good can be allocated to at most one person
+for g in goods:
+    m += xsum(allocation[p, g] for p in persons) <= 1
+
+# Solve the model
+m.optimize()
+
+# Extract the allocation result
+result = {p: [] for p in persons}
+for p in persons:
+    for g in goods:
+        if allocation[p, g].x >= 0.99:  # Allow for numerical precision issues
+            result[p].append(g)
+
+# Print the allocation
+for p in persons:
+    print(f'Person {p} receives goods: {result[p]}')
+```
+
+Run this code to determine the fairest allocation of the goods among Person 1, Person 2, and Person 3, maximizing the total value based on their individual valuations.",1601,2,1,2,3
+17,"Here is the Python code for computing the fair allocation using a simple approach based on maximizing the total value assigned to each person, while ensuring each good is given to only one person or thrown away:
+
+```python
+import itertools
+
+# Define the value matrix
+values = [
+    [5, 47, 45, 3],   # Person 1's values
+    [45, 5, 48, 2],   # Person 2's values
+    [23, 25, 32, 20]  # Person 3's values
+]
+
+# List of goods
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Initialize best allocation
+best_allocation = None
+best_total_value = float('-inf')
+
+# Generate all possible assignments of goods (including the possibility of throwing them away)
+possible_assignments = itertools.product(range(4), repeat=4)
+
+for assignment in possible_assignments:
+    if len(set(assignment)) == 4:
+        total_value = sum(values[assignment[i]][i] for i in range(4))
+        if total_value > best_total_value:
+            best_allocation = assignment
+            best_total_value = total_value
+
+# Output the best allocation
+allocation_result = {i: [] for i in range(3)}
+for i in range(4):
+    person = best_allocation[i]
+    allocation_result[person].append(goods[i])
+
+print(""Best allocation:"")
+for person, assigned_goods in allocation_result.items():
+    print(f""Person {person + 1}: {', '.join(assigned_goods)}"")
+```
+
+When you run this code, it will determine the allocation of goods to each person that maximizes the total value, ensuring each good is allocated to one person or thrown away.",1459,2,1,3,None
+18,"Here is a Python code snippet that determines a fair allocation of goods among Person 1, Person 2, and Person 3. For simplicity, the code uses the Maximum Sum method (allocating based on maximizing the total value obtained by all individuals) while ensuring that each good is allocated to one person and no good is thrown away.
+
+```python
+from itertools import permutations
+
+# Values provided in the problem
+values = [
+    [5, 47, 45, 3],  # Person 1
+    [45, 5, 48, 2],  # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+# List of goods
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Initialize the maximum total value
+max_total_value = 0
+best_allocation = None
+
+# Generate all possible assignments of goods to persons
+for perm in permutations(range(3), len(goods)):
+    current_value = sum(values[perm[i]][i] for i in range(len(goods)))  # Sum the values for the current permutation
+    if current_value > max_total_value:
+        max_total_value = current_value
+        best_allocation = perm
+
+# Create the allocation dictionary
+allocation = {f'Person {i + 1}': [] for i in range(3)}
+for i, person in enumerate(best_allocation):
+    allocation[f'Person {person + 1}'].append(goods[i])
+
+# Output the allocation
+print(""Fair Allocation of Goods:"")
+for person, goods_list in allocation.items():
+    print(f""{person}: {', '.join(goods_list)}"")
+```
+
+This script calculates the possible permutations of goods assignment to each person and selects the permutation that maximizes the total value. The output is a fair allocation of goods among the individuals.",1467,2,1,2,3
+19,"Here's the Python code for a fair allocation based on maximizing the total value for each individual while ensuring that no one gets more than one item if possible:
+
+```python
+import itertools
+
+# Define values
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20},
+}
+
+people = list(values.keys())
+goods = [""A"", ""B"", ""C"", ""D""]
+
+# Function to calculate total value for an allocation
+def calc_total_value(allocation, values):
+    total_value = 0
+    for idx, good in enumerate(allocation):
+        if good is not None:
+            total_value += values[people[idx]][good]
+    return total_value
+
+# Generate all possible allocations
+best_allocation = None
+max_total_value = 0
+
+for allocation in itertools.product(goods + [None], repeat=len(people)):
+    # Check if allocation is valid (each good should be given at most once)
+    if len(set(filter(lambda x: x is not None, allocation))) != len(allocation) - allocation.count(None):
+        continue
+    
+    total_value = calc_total_value(allocation, values)
+    
+    if total_value > max_total_value:
+        max_total_value = total_value
+        best_allocation = allocation
+
+# Print the best allocation
+result = {}
+for idx, person in enumerate(people):
+    result[person] = best_allocation[idx]
+
+print(result)
+```
+
+When you run the code, it will provide the fairest allocation based on the values of each good to each person.",1498,2,1,3,None
+20,"```python
+import itertools
+
+# Define the values each person has for each good
+values = {
+    'Person 1': [5, 47, 45, 3],
+    'Person 2': [45, 5, 48, 2],
+    'Person 3': [23, 25, 32, 20]
+}
+
+# Define the goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate the total value for an allocation
+def calculate_total_value(allocation):
+    total_values = { 'Person 1': 0, 'Person 2': 0, 'Person 3': 0 }
+    for person, good in allocation:
+        total_values[person] += values[person][goods.index(good)]
+    return total_values
+
+# Find the allocation with the highest minimum value to any person
+def find_fairest_allocation():
+    fairest_allocation = None
+    max_min_value = -1
+
+    # Iterate over all possible assignments
+    for allocation in itertools.product(
+            ['Person 1', 'Person 2', 'Person 3', 'None'],
+            repeat=len(goods)):
+        if 'None' in allocation:  # Skip allocations where any good is thrown away
+            continue
+
+        allocation_tuples = list(zip(allocation, goods))
+        total_values = calculate_total_value(allocation_tuples)
+        min_value = min(total_values.values())
+        
+        if min_value > max_min_value:
+            max_min_value = min_value
+            fairest_allocation = allocation_tuples
+
+    return fairest_allocation
+
+# Compute and display the fairest allocation
+fairest_allocation = find_fairest_allocation()
+print(fairest_allocation)
+```
+
+The code first defines the values of each good for each person. It then calculates the total value for any given allocation of goods using a helper function. The main function iterates over all potential assignments of goods (excluding ones where goods are thrown away) and selects the one that maximizes the minimum value of the allocation.
+
+When you run this code, it will display the fairest allocation based on the criteria defined.",1636,2,1,3,3
+21,"Here is the Python code that computes a fair allocation of the goods based on their values to each individual:
+
+```python
+from itertools import permutations
+
+# Values matrix where rows represent persons and columns represent goods
+values = [
+    [5, 47, 45, 3],   # Person 1's values
+    [45, 5, 48, 2],   # Person 2's values
+    [23, 25, 32, 20]  # Person 3's values
+]
+
+# Initial values
+best_allocation = None
+best_value = -1
+
+# Generate all possible allocations of 4 goods to 3 people (+1 for not allocated)
+for perm in permutations(range(3) * 4, 4):
+    if perm.count(0) <= 3 and perm.count(1) <= 3 and perm.count(2) <= 3:
+        total_value = [0, 0, 0]  # Total value for each person
+
+        # Calculate the total value for this permutation
+        for good in range(4):
+            total_value[perm[good]] += values[perm[good]][good]
+
+        min_value = min(total_value)
+        
+        # Check if this allocation is fairer (maximize the minimum value among persons)
+        if min_value > best_value:
+            best_value = min_value
+            best_allocation = perm
+
+# Prepare the final allocation in a more understandable format
+allocation = {'Person 1': [], 'Person 2': [], 'Person 3': [], 'Not allocated': []}
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+for i, good in enumerate(goods):
+    if best_allocation[i] == 0:
+        allocation['Person 1'].append(good)
+    elif best_allocation[i] == 1:
+        allocation['Person 2'].append(good)
+    elif best_allocation[i] == 2:
+        allocation['Person 3'].append(good)
+    else:
+        allocation['Not allocated'].append(good)
+
+print(""Fair allocation:"")
+for person, goods_list in allocation.items():
+    print(f""{person}: {goods_list}"")
+```
+
+When executed, this code computes the fairest allocation of the goods based on maximizing the minimum total value among the individuals and prints the result.",1666,2,1,2,3
+22,"Here's the Python code to compute a fair allocation of the goods:
+
+```python
+from itertools import permutations
+
+# Values for each good by each person
+values = [
+    [5, 47, 45, 3],   # Person 1's values
+    [45, 5, 48, 2],   # Person 2's values
+    [23, 25, 32, 20]  # Person 3's values
+]
+
+# Generate all possible permutations of good assignments (4! = 24)
+goods = [0, 1, 2, 3]  # Representing Good A, Good B, Good C, Good D
+allocations = list(permutations(goods, 4))
+
+# Initialize the best allocation and its fairness score
+best_allocation = None
+best_fairness = float('-inf')
+
+# Compute the fairness score for each possible allocation
+for allocation in allocations:
+    scores = [
+        values[0][allocation[0]],  # Good allocated to Person 1
+        values[1][allocation[1]],  # Good allocated to Person 2
+        values[2][allocation[2]],  # Good allocated to Person 3
+    ]
+    
+    # Calculate the minimum value among the scores for fairness
+    min_score = min(scores)
+    
+    # Update best allocation if current one is fairer
+    if min_score > best_fairness:
+        best_fairness = min_score
+        best_allocation = allocation
+
+# Mapping goods to their respective names
+goods_mapping = ['Good A', 'Good B', 'Good C', 'Good D']
+persons_mapping = ['Person 1', 'Person 2', 'Person 3']
+
+# Print the best fair allocation
+allocation_result = {persons_mapping[i]: goods_mapping[best_allocation[i]] for i in range(3)}
+print(""Fair Allocation:"", allocation_result)
+```
+
+When you run the code, it will produce the allocation that maximizes the fairness score based on the defined values for each person for each good.",1578,2,1,3,None
+23,"```python
+def allocate_goods(values):
+    from itertools import permutations
+    
+    people = ['Person 1', 'Person 2', 'Person 3']
+    goods = ['Good A', 'Good B', 'Good C', 'Good D']
+    
+    # Convert values dictionary to a list of lists for easier manipulation
+    value_matrix = [[values[person][good] for good in goods] for person in people]
+    
+    max_value = 0
+    best_allocation = None
+    
+    # Try all permutations of assigning the 4 goods to 3 people (some goods can be thrown away)
+    for perm in permutations(goods):
+        allocation = {person: [] for person in people}
+        person_indices = [0, 1, 2, 0]
+        
+        total_value = 0
+        for i in range(4):
+            person = people[person_indices[i]]
+            good = perm[i]
+            
+            if value_matrix[person_indices[i]][goods.index(good)] > 0:
+                allocation[person].append(good)
+                total_value += value_matrix[person_indices[i]][goods.index(good)]
+        
+        if total_value > max_value:
+            max_value = total_value
+            best_allocation = allocation
+    
+    return best_allocation
+
+values = {
+    'Person 1': {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},
+    'Person 2': {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},
+    'Person 3': {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}
+}
+
+allocation = allocate_goods(values)
+print(allocation)
+```
+
+This Python script defines a function `allocate_goods` that assigns the 4 goods among 3 people in a way that maximizes total value, allowing for some goods to potentially be thrown away. By computing and comparing the total value for all possible permutations of good assignments, the script determines and returns the fairest allocation. 
+
+The provided `values` dictionary contains the individual values each person assigns to each good, and the result is printed out as the best allocation found.",1660,None,1,2,3
+24,"```python
+from ortools.linear_solver import pywraplp
+
+# Define the valuation matrix
+values = [
+    [5, 47, 45, 3],    # Person 1's valuations
+    [45, 5, 48, 2],    # Person 2's valuations
+    [23, 25, 32, 20]   # Person 3's valuations
+]
+
+# Number of individuals and goods
+num_individuals = len(values)
+num_goods = len(values[0])
+
+# Create the solver
+solver = pywraplp.Solver.CreateSolver('SCIP')
+
+# Define the decision variables: x[i][j] is True if person i gets good j
+x = []
+for i in range(num_individuals):
+    x.append([solver.BoolVar(f'x_{i}_{j}') for j in range(num_goods)])
+
+# Each good must be allocated to at most one person
+for j in range(num_goods):
+    solver.Add(sum(x[i][j] for i in range(num_individuals)) <= 1)
+
+# Maximize the total value of the allocation
+objective = solver.Objective()
+for i in range(num_individuals):
+    for j in range(num_goods):
+        objective.SetCoefficient(x[i][j], values[i][j])
+objective.SetMaximization()
+
+# Solve the problem
+status = solver.Solve()
+
+# Function to get allocation
+def get_allocation(x, num_individuals, num_goods):
+    allocation = {}
+    for i in range(num_individuals):
+        allocation[f'Person {i + 1}'] = []
+        for j in range(num_goods):
+            if x[i][j].solution_value() == 1:
+                allocation[f'Person {i + 1}'].append(f'Good {chr(65 + j)}')
+    return allocation
+
+# Get and print the allocation result
+allocation = get_allocation(x, num_individuals, num_goods)
+allocation
+```",1500,2,1,2,3
+25,"```python
+from itertools import permutations
+
+# Define the values
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = ['Person 1', 'Person 2', 'Person 3']
+best_allocation = None
+best_value = -1
+
+# Check all possible allocations
+for perm in permutations(persons * 2, 4):
+    if len(set(perm)) != 3:
+        continue
+    
+    allocation_value = sum(values[perm[i]][goods[i]] for i in range(4))
+
+    if allocation_value > best_value:
+        best_value = allocation_value
+        best_allocation = perm
+
+# Print the best allocation
+final_allocation = {goods[i]: best_allocation[i] for i in range(4)}
+print(final_allocation)
+```
+
+An example of output could be:
+```python
+{
+    'A': 'Person 2', 
+    'B': 'Person 1', 
+    'C': 'Person 2', 
+    'D': 'Person 3'
+}
+```",1312,2,1,2,3
+26,"```python
+from itertools import permutations
+
+# Person values
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+
+# Calculate total value for each possible allocation
+def calculate_allocation_value(allocation):
+    total_value = {1: 0, 2: 0, 3: 0}
+    for person, good in allocation.items():
+        if good != 'discard':
+            total_value[person] += values[person][good]
+    return total_value
+
+# Generate all possible allocations
+all_possible_allocations = []
+people = [1, 2, 3]
+for perm in permutations(goods, len(people)):
+    # Create an allocation where each person gets one of the goods in perm
+    allocation = {people[i]: perm[i] for i in range(len(people))}
+    all_possible_allocations.append(allocation)
+    
+    # Consider also the remaining good as discarded
+    remaining_goods = list(set(goods) - set(perm))
+    if remaining_goods:
+        allocation_with_discard = allocation.copy()
+        for rg in remaining_goods:
+            allocation_with_discard['discard'] = rg
+            all_possible_allocations.append(allocation_with_discard.copy())
+
+# Find the fairest allocation based on minimizing the maximum difference in total values
+fairest_allocation = None
+min_diff = float('inf')
+
+for allocation in all_possible_allocations:
+    allocation_value = calculate_allocation_value(allocation)
+    max_value = max(allocation_value.values())
+    min_value = min(allocation_value.values())
+    diff = max_value - min_value
+    
+    if diff < min_diff:
+        min_diff = diff
+        fairest_allocation = allocation
+
+# Print the fairest allocation
+print(""Fairest Allocation:"")
+for person, good in fairest_allocation.items():
+    if person != 'discard':
+        print(f""Person {person}: Good {good}"")
+if 'discard' in fairest_allocation:
+    print(f""Discard: Good {fairest_allocation['discard']}"")
+```
+
+This code generates the fairest allocation based on the given values by considering all possible allocations and selecting the one that minimizes the maximum difference in total values among the individuals.",1743,2,1,3,None
+27,"```python
+class Person:
+    def __init__(self, name, values):
+        self.name = name
+        self.values = values
+        self.total_value = sum(values.values())
+        self.allocated_goods = []
+
+    def allocate_good(self, good, value):
+        self.allocated_goods.append(good)
+        self.total_value -= value
+        del self.values[good]
+
+def find_best_allocation(persons, goods):
+    # Sort persons based on their total values on goods for initial priority
+    persons.sort(key=lambda p: p.total_value, reverse=True)
+    
+    for good in goods:
+        max_value = 0
+        best_person = None
+        
+        # Find the person who values this good the most
+        for person in persons:
+            if good in person.values and person.values[good] > max_value:
+                max_value = person.values[good]
+                best_person = person
+        
+        if best_person:
+            best_person.allocate_good(good, max_value)
+
+    # Collect the result
+    allocation_result = {person.name: person.allocated_goods for person in persons}
+    remaining_goods = [good for good in goods if not any(good in person.allocated_goods for person in persons)]
+    return allocation_result, remaining_goods
+
+# Define persons and their valuations
+persons = [
+    Person(""Person 1"", {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3}),
+    Person(""Person 2"", {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2}),
+    Person(""Person 3"", {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20})
+]
+
+# Define goods
+goods = [""A"", ""B"", ""C"", ""D""]
+
+# Compute allocation
+allocation_result, remaining_goods = find_best_allocation(persons, goods)
+
+print(""Allocation Result:"", allocation_result)
+print(""Remaining Goods (if any):"", remaining_goods)
+```
+
+This code defines a procedure to allocate the goods among the persons based on their valuations, ensuring each good is allocated to the person who values it the most.",1598,2,1,2,3
+28,"```python
+# Values for each person
+values = {
+    'Person 1': [5, 47, 45, 3],
+    'Person 2': [45, 5, 48, 2],
+    'Person 3': [23, 25, 32, 20]
+}
+
+# Goods list
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Function to get value of goods for a person
+def get_value(person, goods_indices):
+    return sum(values[person][i] for i in goods_indices)
+
+# Initial allocation
+allocation = {person: [] for person in values}
+
+# Available goods
+available_goods = list(range(len(goods)))
+
+# Assign each good to the highest valued person
+while available_goods:
+    best_value = 0
+    best_allocation = (None, None)  # (person, good_index)
+    
+    for person in values:
+        for good_index in available_goods:
+            value = values[person][good_index]
+            if value > best_value:
+                best_value = value
+                best_allocation = (person, good_index)
+
+    # Assign the good to the person with the highest value
+    person, good_index = best_allocation
+    allocation[person].append(goods[good_index])
+    available_goods.remove(good_index)
+
+# Output allocation
+print(allocation)
+```
+
+This code evaluates the allocation of each good by comparing the values that each person assigns to them. The good is assigned to the person who values it the most, ensuring a fair and efficient allocation given the indivisible nature of the goods.",1482,2,1,2,3
+29,"Here is Python code to compute a fair allocation of the goods among Person 1, Person 2, and Person 3:
+
+```python
+from mip import Model, xsum, maximize, BINARY
+
+# Values of each good for each person
+values = [
+    [5, 47, 45, 3],   # Person 1
+    [45, 5, 48, 2],   # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+num_goods = 4
+num_people = 3
+
+# Create a MILP model
+m = Model(""fair_allocation"")
+
+# Decision variables: x[i][j] is 1 if good j is given to person i
+x = [[m.add_var(var_type=BINARY) for j in range(num_goods)] for i in range(num_people)]
+
+# Each good is allocated to at most one person
+for j in range(num_goods):
+    m += xsum(x[i][j] for i in range(num_people)) <= 1
+
+# Maximize the minimum value of allocation among all people
+min_allocation = m.add_var()
+for i in range(num_people):
+    m += xsum(x[i][j] * values[i][j] for j in range(num_goods)) >= min_allocation
+
+m.objective = maximize(min_allocation)
+
+# Optimize the model
+m.optimize()
+
+# Extract and display the results
+allocation = [[] for _ in range(num_people)]
+
+for i in range(num_people):
+    for j in range(num_goods):
+        if x[i][j].x >= 0.99:  # consider x as binary, so >=0.99 is treated as 1
+            allocation[i].append(chr(ord('A') + j))
+
+# Print the allocations for each person
+for i, goods in enumerate(allocation, start=1):
+    print(f""Person {i} gets: {goods}"")
+```
+
+This code uses the Mixed-Integer Linear Programming (MILP) approach to maximize the minimum value of the allocation each person receives, ensuring a fair distribution under the given constraints.",1650,None,3,2,1
+30,"```python
+from itertools import permutations
+
+# Values for each person
+values = [
+    [5, 47, 45, 3],    # Person 1's values
+    [45, 5, 48, 2],    # Person 2's values
+    [23, 25, 32, 20]   # Person 3's values
+]
+
+# Goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate the fair allocation
+def fair_allocation(values):
+    num_goods = len(goods)
+    num_people = len(values)
+    best_allocation = None
+    max_sum_min_values = -1
+    
+    # Generate all possible permutations of who gets which goods
+    for perm in permutations(range(num_people), num_goods):
+        allocated_values = [0] * num_people
+        
+        # Allocate goods based on the current permutation
+        for i, person in enumerate(perm):
+            if person < num_people:
+                allocated_values[person] += values[person][i]
+        
+        # Calculate the ""sum of minimum values"" among allocated_values
+        min_value = min(allocated_values)
+        if min_value > max_sum_min_values:
+            max_sum_min_values = min_value
+            best_allocation = perm
+    
+    return best_allocation
+
+allocation = fair_allocation(values)
+result = {goods[i]: f""Person {allocation[i] + 1}"" for i in range(len(goods))}
+
+print(result)
+```
+
+This code defines a function to determine a fair allocation of the goods among the individuals based on their values and prints out the fairest allocation.",1394,2,1,3,3
+31,"```python
+from itertools import permutations
+
+# Define the values each person assigns to each good
+values = [
+    {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},   # Person 1
+    {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},   # Person 2
+    {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}  # Person 3
+]
+
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+persons = [0, 1, 2]
+
+# Function to calculate the total values assigned to an allocation
+def calculate_value_allocation(allocation):
+    return [sum(values[allocation[i][j]][good] for i, good in enumerate(goods)) for j in range(len(allocation[0]))]
+
+# Function to find the most fair allocation
+def find_most_fair_allocation():
+    max_min_value = 0
+    best_allocation = None
+
+    for perm in permutations(persons):
+        allocation = [(p, perm[i]) for i, p in enumerate(goods)]
+        allocation_values = calculate_value_allocation(allocation)
+        min_value = min(allocation_values)
+        
+        if min_value > max_min_value:
+            max_min_value = min_value
+            best_allocation = allocation
+
+    return best_allocation, calculate_value_allocation(best_allocation)
+
+# Find and print the fairest allocation
+allocation, allocation_values = find_most_fair_allocation()
+for i in range(3):
+    print(f""Person {i+1}: {[goods[j] for j in range(len(allocation)) if allocation[j][1] == i]}"")
+print(""Total values:"", allocation_values)
+```
+
+This code will output the allocation of goods that maximizes the minimum value received by any person, thereby ensuring a fair allocation.",1539,2,3,1,None
+32,"```python
+from itertools import permutations
+
+# Values of each good for each person
+values = [
+    [5, 47, 45, 3],  # Person 1
+    [45, 5, 48, 2],  # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+goods = ['A', 'B', 'C', 'D']
+num_persons = 3
+
+# Generate all possible allocations of goods
+all_possible_allocations = permutations(range(num_persons) * (len(goods) // num_persons))
+
+# Function to calculate the fairness of an allocation
+def calculate_fairness(allocation):
+    total_values = [0] * num_persons
+    for good_idx, person in enumerate(allocation):
+        total_values[person] += values[person][good_idx]
+    max_value = max(total_values)
+    min_value = min(total_values)
+    return max_value - min_value
+
+# Find the fairest allocation
+fairest_allocation = min(all_possible_allocations, key=calculate_fairness)
+
+# Output the fairest allocation
+result = {f'Person {i+1}': [] for i in range(num_persons)}
+
+for good_idx, person in enumerate(fairest_allocation):
+    result[f'Person {person + 1}'].append(goods[good_idx])
+
+print('Fairest Allocation:')
+for person, allocated_goods in result.items():
+    print(f'{person}: {allocated_goods}')
+```",1362,2,1,3,None
+33,"```python
+# Define the goods and values for each person
+goods = ['A', 'B', 'C', 'D']
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Initiate the allocation
+allocation = {person: [] for person in values}
+available_goods = set(goods)
+
+# Greedily allocate goods to the highest valuing person for each good
+for good in goods:
+    # Get the highest valuing person for this good
+    highest_valuer = None
+    highest_value = -1
+
+    for person, person_values in values.items():
+        if person_values[good] > highest_value:
+            highest_value = person_values[good]
+            highest_valuer = person
+
+    # Allocate the good to the highest valuer
+    if highest_valuer is not None:
+        allocation[highest_valuer].append(good)
+        available_goods.remove(good)
+
+# Output the final allocation
+print(""Final Allocation:"")
+for person, allocated_goods in allocation.items():
+    print(f""{person}: {allocated_goods}"")
+```
+
+This code determines a fair allocation by assigning each good to the person who values it the most. The results will be printed as the final allocation.",1428,2,1,2,3
+34,"```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# List of people and goods
+people = [1, 2, 3]
+goods = ['A', 'B', 'C', 'D']
+
+# Initialize the best allocation and its fairness
+best_allocation = None
+best_fairness = float('inf')
+
+# Helper function to calculate fairness
+def calculate_fairness(allocation):
+    total_values = {p: sum(values[p].get(g, 0) for g in allocation[p]) for p in allocation}
+    return max(total_values.values()) - min(total_values.values())
+
+# Iterate over all possible allocations
+for perm in permutations(goods, len(goods)):
+    allocation = {1: [], 2: [], 3: []}
+    for i in range(len(perm)):
+        allocation[people[i % 3]].append(perm[i])
+    
+    fairness = calculate_fairness(allocation)
+    if fairness < best_fairness:
+        best_fairness = fairness
+        best_allocation = allocation
+
+print(""Best Allocation:"")
+for person, items in best_allocation.items():
+    print(f""Person {person}: {items}"")
+```
+
+You can run this Python code to find the fairest allocation of goods among Person 1, Person 2, and Person 3 based on their values.",1413,2,1,2,3
+35,"```python
+from itertools import permutations
+
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+def total_value_allocation(person_allocation):
+    person_values = {1: 0, 2: 0, 3: 0}
+    for good, person in person_allocation.items():
+        if person != 0:  # If the good is not thrown away
+            person_values[person] += values[person][good]
+    return person_values
+
+def fairness_score(person_values):
+    value_sum = sum(person_values.values())
+    max_value = max(person_values.values())
+    min_value = min(person_values.values())
+    return (max_value - min_value) / value_sum
+
+def find_fairest_allocation(goods, values):
+    best_allocation = None
+    best_fairness = float('inf')
+    persons = [1, 2, 3, 0]  # 0 represents throwing the good away
+
+    for allocation in permutations(persons * len(goods), len(goods)):
+        person_allocation = dict(zip(goods, allocation))
+        person_values = total_value_allocation(person_allocation)
+        fairness = fairness_score(person_values)
+        if fairness < best_fairness:
+            best_fairness = fairness
+            best_allocation = person_allocation
+
+    return best_allocation
+
+fairest_allocation = find_fairest_allocation(goods, values)
+print(fairest_allocation)
+```
+
+This Python code considers all possible permutations of good allocations, including the possibility of not allocating a good (throwing it away). It calculates the fairness of each permutation and selects the allocation with the lowest fairness score. The fairness score used here is the ratio of the difference between the maximum and minimum values among the persons to the total value sum. The final allocation is printed.
+
+",1631,2,1,3,None
+36,"```python
+from itertools import permutations
+
+def allocate_goods(values):
+    people = list(values.keys())
+    goods = list(values[people[0]].keys())
+    max_value = -1
+    best_allocation = None
+
+    # Generate all possible allocations (permutations of goods to people)
+    for allocation in permutations(people * len(goods), len(goods)):
+        if (len(set(allocation[:len(goods)])) != len(allocation[:len(goods)])):
+            continue  # Ensure each good is given to a different person or thrown away
+
+        allocation_value = 0
+        allocation_details = {person: [] for person in people}
+
+        for good, person in zip(goods, allocation[:len(goods)]):
+            allocation_value += values[person][good]
+            allocation_details[person].append(good)
+
+        if allocation_value > max_value:
+            max_value = allocation_value
+            best_allocation = allocation_details
+
+    return best_allocation
+
+# Values for each person and good
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+allocation = allocate_goods(values)
+print(allocation)
+```",1331,2,1,2,3
+37,"```python
+from itertools import permutations
+
+# Define the goods and their values to each person
+goods = ['A', 'B', 'C', 'D']
+values = {
+    'Person1': [5, 47, 45, 3],
+    'Person2': [45, 5, 48, 2],
+    'Person3': [23, 25, 32, 20]
+}
+
+# Define a function to calculate the fairness of an allocation
+def fairness(allocation):
+    total_values = [0, 0, 0]
+    for good, person in allocation.items():
+        for i, person_label in enumerate(values.keys()):
+            if person == person_label:
+                total_values[i] += values[person_label][goods.index(good)]
+    return min(total_values)
+
+# Generate all possible allocations
+possible_allocations = [dict(zip(goods, p)) for p in permutations(values.keys(), len(goods))]
+
+# Find the allocation with the highest fairness
+best_allocation = max(possible_allocations, key=fairness)
+
+# Print the best allocation
+print(f""Best Allocation: {best_allocation}"")
+```
+
+This code creates all possible permutations for the allocations of the goods and selects the allocation with the highest minimum value for the recipients. This ensures that the allocation is as fair as possible by maximizing the value received by the least advantaged person.",1278,Person2,Person1,Person3,None
+38,"Here's a piece of Python code that computes a fair allocation of goods based on the provided values using a simple greedy algorithm:
+
+```python
+goods = [""A"", ""B"", ""C"", ""D""]
+values = {
+    ""P1"": [5, 47, 45, 3],
+    ""P2"": [45, 5, 48, 2],
+    ""P3"": [23, 25, 32, 20]
+}
+
+# Initialize allocation dictionary
+allocation = {person: [] for person in values}
+unallocated_goods = set(goods)
+
+# Transform goods and values into a list of tuples for easier sorting
+goods_value_list = []
+for i, good in enumerate(goods):
+    goods_value_list.append( (values[""P1""][i], ""P1"", good))
+    goods_value_list.append( (values[""P2""][i], ""P2"", good))
+    goods_value_list.append( (values[""P3""][i], ""P3"", good))
+
+# Sort the goods_value_list by values in descending order
+goods_value_list.sort(reverse=True, key = lambda x: x[0])
+
+# Allocate goods
+allocated_goods = set()
+
+for value, person, good in goods_value_list:
+    if good not in allocated_goods:
+        allocated_goods.add(good)
+        allocation[person].append(good)
+
+print(""Fair allocation of the goods:"")
+print(allocation)
+```
+
+This code sorts each good by the highest value each person assigns to it and allocates the goods in descending order of values, ensuring each good is given to the person who values it most, thereby achieving a fair allocation. The output will provide the final fair allocation.",1500,2,1,2,3
+39,"```python
+from itertools import permutations
+
+# Values of goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Goods to be allocated
+goods = ['A', 'B', 'C', 'D']
+
+# All possible ways to allocate goods to people
+allocations = list(permutations([1, 2, 3], 3))
+
+# Initialize the best fairness metric (max of the minimum values across persons)
+best_allocation = None
+best_fairness = float('-inf')
+
+# Iterate over all possible allocations
+for alloc in allocations:
+    # For each allocation, distribute the goods one by one
+    person_alloc = {1: [], 2: [], 3: []}
+    for i, good in enumerate(goods):
+        if i < 3:  # Allocate to the corresponding person
+            person_alloc[alloc[i]].append(good)
+    
+    # Calculate the total value each person gets
+    values_per_person = {person: sum(values[person][good] for good in person_alloc[person]) for person in person_alloc}
+    
+    # Calculate fairness metric (minimum value each person gets)
+    fairness = min(values_per_person.values())
+    
+    # Update the best allocation if this one is fairer
+    if fairness > best_fairness:
+        best_fairness = fairness
+        best_allocation = person_alloc
+
+# Output the best allocation found
+print(best_allocation)
+```
+
+This code calculates all possible fair allocations of the goods among the three persons, assessing the fairness of each allocation by computing the minimum total value received by any person, and then selecting the allocation that maximizes this minimum value. This ensures the fairest distribution according to the criteria provided.",1578,2,1,3,None
+40,"```python
+from itertools import permutations
+
+# Define the values each person has for each good
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Calculate all possible allocations
+goods = ['A', 'B', 'C', 'D']
+people = ['Person 1', 'Person 2', 'Person 3', 'None']  # 'None' represents throwing away the good
+
+best_allocation = None
+best_total_value = float('-inf')
+
+for allocation in permutations(people * (4 - 1), 4):
+    total_value = 0
+    for good, person in zip(goods, allocation):
+        if person != 'None':
+            total_value += values[person][good]
+    
+    if total_value > best_total_value:
+        best_total_value = total_value
+        best_allocation = allocation
+
+# Print out the best allocation
+allocation_dict = {person: [] for person in people}
+for good, person in zip(goods, best_allocation):
+    allocation_dict[person].append(good)
+
+for person in people:
+    if allocation_dict[person]:
+        print(f""{person}: {', '.join(allocation_dict[person])}"")
+```",1350,2,1,2,3
+41,"Here is the Python code to determine a fair allocation of the goods among the individuals:
+
+```python
+from itertools import permutations
+
+# Values each person assigns to each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+}
+
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+
+# Function to calculate the allocation score
+def allocation_score(allocation):
+    score = {1: 0, 2: 0, 3: 0}
+    for person, good in allocation.items():
+        if good is not None:
+            score[person] += values[person][good]
+    return score
+
+# Find all possible allocations
+best_allocation = None
+best_min_score = float('-inf')
+
+for perm in permutations(goods + [None] * (len(people) - len(goods))):
+    allocation = {1: None, 2: None, 3: None}
+    for idx, good in enumerate(perm):
+        allocation[people[idx]] = good
+    
+    score = allocation_score(allocation)
+    min_score = min(score.values())
+    
+    if min_score > best_min_score:
+        best_min_score = min_score
+        best_allocation = allocation
+
+# Print the best allocation
+print(""Best Allocation:"", best_allocation)
+print(""Scores:"", allocation_score(best_allocation))
+```
+
+This code evaluates all potential allocations and selects the one that maximizes the minimum score across the three individuals, providing a fairer distribution of values among the participants.",1516,None,1,2,3
+42,"```python
+import itertools
+
+# Define the values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+}
+
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+
+# Compute the total values for all potential allocations
+max_total_value = 0
+best_allocation = None
+
+for allocation in itertools.permutations(people*len(goods), len(goods)):
+    allocation_dict = {goods[i]: allocation[i] for i in range(len(goods))}
+    total_value = sum(values[allocation_dict[good]][good] for good in goods)
+    if total_value > max_total_value:
+        max_total_value = total_value
+        best_allocation = allocation_dict
+
+print(""Best Allocation: "", best_allocation)
+```
+
+This code uses a brute-force permutation approach to find the allocation that maximizes the sum of the values for all individuals. Each possible allocation is considered, and the one that yields the maximum total value is selected as the fairest allocation.",1269,2,1,3,None
+43,"```python
+# Define the values for each person
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+# Store the allocation
+allocation = {""Person 1"": [], ""Person 2"": [], ""Person 3"": []}
+
+# Function to find the fairest allocation
+def allocate_goods(values):
+    allocated = set()
+    
+    # Sort the goods for each person by their values
+    sorted_values = {
+        person: sorted(goods.items(), key=lambda item: item[1], reverse=True)
+        for person, goods in values.items()
+    }
+    
+    # Prioritize goods by highest value for each person
+    priority_list = sorted(
+        [(person, good, value) for person, goods in sorted_values.items() for good, value in goods],
+        key=lambda item: item[2],
+        reverse=True
+    )
+    
+    for person, good, value in priority_list:
+        if good not in allocated:
+            allocation[person].append(good)
+            allocated.add(good)
+    
+    return allocation
+
+# Allocate the goods and print the result
+print(allocate_goods(values))
+```
+
+Output from running the code provides a fair allocation of the goods among the three people based on their valuations.",1393,2,1,2,3
+44,"Sure, here's a Python code that uses a greedy algorithm to allocate the goods based on the highest value each person places on them:
+
+```python
+# Define the values for each person
+person_values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Convert to a list of tuples (value, person, good)
+value_list = []
+for person, goods in person_values.items():
+    for good, value in goods.items():
+        value_list.append((value, person, good))
+
+# Sort the list by value in descending order
+value_list.sort(reverse=True, key=lambda x: x[0])
+
+# Allocate goods
+allocation = {}
+allocated_goods = set()
+allocated_people = {1: set(), 2: set(), 3: set()}
+
+for value, person, good in value_list:
+    if good not in allocated_goods and person not in allocated_people[person]:
+        allocation[good] = person
+        allocated_goods.add(good)
+        allocated_people[person].add(person)
+
+# Print the allocation
+for good, person in allocation.items():
+    print(f""Good {good} is allocated to Person {person}"")
+```
+
+This Python code sorts the value of each good for each person in descending order and then allocates each good to the person who values it the most, ensuring that no good is allocated more than once and respecting the indivisibility of goods. This should provide a reasonably fair allocation based on the given values.",1473,2,1,2,3
+45,"```python
+import itertools
+
+# Define the values for each person
+values = {
+    ""P1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""P2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""P3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20},
+}
+
+# Function to compute the total value for each person
+def compute_total_value(allocation, values):
+    total_values = {""P1"": 0, ""P2"": 0, ""P3"": 0}
+    for person, goods in allocation.items():
+        for good in goods:
+            total_values[person] += values[person][good]
+    return total_values
+
+# All possible allocations of 4 goods to 3 persons (or discard)
+goods = [""A"", ""B"", ""C"", ""D""]
+persons = [""P1"", ""P2"", ""P3"", ""Discard""]
+all_possible_allocations = list(itertools.product(persons, repeat=len(goods)))
+
+# Find the allocation that maximizes fairness (minimize the difference)
+best_allocation = None
+min_difference = float('inf')
+
+for allocation in all_possible_allocations:
+    person_goods = {""P1"": [], ""P2"": [], ""P3"": [], ""Discard"": []}
+    for good, person in zip(goods, allocation):
+        person_goods[person].append(good)
+    total_values = compute_total_value(person_goods, values)
+    # Compute fairness measure (max - min value)
+    min_value = min(total_values[""P1""], total_values[""P2""], total_values[""P3""])
+    max_value = max(total_values[""P1""], total_values[""P2""], total_values[""P3""])
+    difference = max_value - min_value
+    if difference < min_difference:
+        min_difference = difference
+        best_allocation = person_goods
+
+# Print the fairest allocation
+for person in best_allocation:
+    if person != ""Discard"":
+        print(f""{person}: {best_allocation[person]}"")
+    else:
+        if best_allocation[person]:
+            print(f""Discard: {best_allocation[person]}"")
+```
+
+This code will compute and print the allocation of goods to each person in a manner that aims to minimize the difference in the total value received by each individual, ensuring a fair distribution.",1758,P2,P1,P3,None
+46,"Here is a Python solution that allocates the goods among Person 1, Person 2, and Person 3 based on maximizing the total value across all individuals:
+
+```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    'Person 1': {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},
+    'Person 2': {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},
+    'Person 3': {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}
+}
+
+# Define the goods
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Allocate goods by maximizing the total value
+best_allocation = None
+best_total_value = 0
+
+for allocation in permutations(['Person 1', 'Person 2', 'Person 3', 'None'], 4):
+    total_value = sum(values[allocation[i]][goods[i]] for i in range(4) if allocation[i] != 'None')
+
+    if total_value > best_total_value:
+        best_allocation = allocation
+        best_total_value = total_value
+
+# Preparing the result
+final_allocation = {good: best_allocation[i] for i, good in enumerate(goods)}
+
+# Display the allocation
+print(""Fair Allocation of Goods:"")
+for good, person in final_allocation.items():
+    print(f""{good}: {person}"")
+```
+
+Run the code, and it will print out the allocation of the goods.",1409,2,1,2,3
+47,"```python
+# Define the values for each person
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Initialize allocation dictionary
+allocation = {'Person 1': [], 'Person 2': [], 'Person 3': []}
+
+# Function to find the person with the maximum value for a good
+def find_max_value_person(good):
+    max_value = -1
+    max_person = None
+    for person in values:
+        if values[person][good] > max_value:
+            max_value = values[person][good]
+            max_person = person
+    return max_person
+
+# Goods to be allocated
+goods = ['A', 'B', 'C', 'D']
+
+# Allocate each good to the person who values it the most
+for good in goods:
+    person = find_max_value_person(good)
+    allocation[person].append(good)
+
+# Print the final allocation
+for person, allocated_goods in allocation.items():
+    print(f""{person}: {allocated_goods}"")
+```",1271,2,1,2,3
+48,"Certainly! Below is the Python code for finding a fair allocation of the given goods among the three individuals based on their values for these goods.
+
+```python
+import itertools
+
+# Values of the goods for each person
+values = {
+    ""Person 1"": [5, 47, 45, 3],
+    ""Person 2"": [45, 5, 48, 2],
+    ""Person 3"": [23, 25, 32, 20]
+}
+
+goods = [""Good A"", ""Good B"", ""Good C"", ""Good D""]
+people = [""Person 1"", ""Person 2"", ""Person 3""]
+
+# Generate all possible allocations
+possible_allocations = list(itertools.product(people, repeat=len(goods)))
+
+# Helper function to calculate the value of an allocation
+def allocation_value(allocation):
+    total_values = {""Person 1"": 0, ""Person 2"": 0, ""Person 3"": 0}
+    for good_index, person in enumerate(allocation):
+        total_values[person] += values[person][good_index]
+    return total_values
+
+# Find the allocation where value differences between individuals are minimized
+best_allocation = None
+min_value_difference = float('inf')
+
+for allocation in possible_allocations:
+    total_values = allocation_value(allocation)
+    max_value = max(total_values.values())
+    min_value = min(total_values.values())
+    value_difference = max_value - min_value
+    
+    if value_difference < min_value_difference:
+        min_value_difference = value_difference
+        best_allocation = allocation
+
+# Display the best allocation
+allocation_result = {good: best_allocation[index] for index, good in enumerate(goods)}
+for good, person in allocation_result.items():
+    print(f""{good} -> {person}"")
+```
+
+Running the above code will provide a fair allocation of goods based on the given values.",1498,2,1,2,3
+49,"```python
+from itertools import permutations
+
+# Define the values
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define the goods
+goods = ['A', 'B', 'C', 'D']
+
+# Generate all possible distributions of the goods among 3 persons
+distributions = list(permutations(['Person 1', 'Person 2', 'Person 3'], len(goods)))
+
+best_distribution = None
+best_total_value = float('-inf')
+
+# Evaluate each distribution
+for distribution in distributions:
+    current_total_value = 0
+    
+    # Calculate the total value of the current distribution
+    for good, person in zip(goods, distribution):
+        current_total_value += values[person][good]
+      
+    # Track the distribution with the highest total value
+    if current_total_value > best_total_value:
+        best_total_value = current_total_value
+        best_distribution = distribution
+
+# Output the best distribution
+allocation = {person: [] for person in values.keys()}
+
+for good, person in zip(goods, best_distribution):
+    allocation[person].append(good)
+
+print(""Fair allocation of goods:"")
+for person in allocation:
+    print(f""{person}: {allocation[person]}"")
+```
+
+To run this code, simply copy and paste it into a Python environment. This will evaluate all possible allocations and print the allocation scheme that maximizes the total value across all individuals.",1468,2,1,3,None
+50,"```python
+# Values of goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# All goods
+goods = ['A', 'B', 'C', 'D']
+
+# Initialize allocation
+allocation = {1: [], 2: [], 3: []}
+
+# Function to find the max value allocation
+def find_max_allocation(values, goods):
+    unavailable_goods = set()
+    for good in goods:
+        max_value, max_person = 0, None
+        for person, vals in values.items():
+            if good in unavailable_goods:
+                break
+            if vals[good] > max_value:
+                max_value = vals[good]
+                max_person = person
+        if max_person is not None:
+            allocation[max_person].append(good)
+            unavailable_goods.add(good)
+
+# Calculate the allocation
+find_max_allocation(values, goods)
+
+# Print the allocation
+print(allocation)
+```
+
+Use this Python code snippet to compute the fairest allocation of goods among the three individuals. The allocation is derived based on the highest value preferences of each individual for the goods without any additional constraints.",1692,2,1,2,3
+51,"```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define the goods
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+
+# This will store the best allocation and the highest minimum value
+best_allocation = None
+highest_min_value = -1
+
+# Generate all possible allocations
+for allocation in permutations(persons * len(goods), len(goods)):
+    allocation_dict = {goods[i]: allocation[i] for i in range(len(goods))}
+    person_values = {person: 0 for person in persons}
+
+    # Calculate the value each person gets
+    for good, person in allocation_dict.items():
+        person_values[person] += values[person][good]
+    
+    # Find the minimum value among the persons
+    min_value = min(person_values.values())
+
+    # If this allocation has a higher minimum value, update the best allocation
+    if min_value > highest_min_value:
+        highest_min_value = min_value
+        best_allocation = allocation_dict
+
+# Output the best allocation
+for good, person in best_allocation.items():
+    print(f""Good {good}: Person {person}"")
+```
+
+This will print the fairest allocation based on maximizing the minimum value each person gets. Run the provided Python code to determine the allocation.",1444,2,1,3,None
+52,"Here is the Python code to compute the fairest allocation of goods among Person 1, Person 2, and Person 3:
+
+```python
+from ortools.linear_solver import pywraplp
+
+# Values of goods for each person
+values = {
+    'Person1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = ['Person1', 'Person2', 'Person3']
+
+# Instantiate a mixed-integer solver
+solver = pywraplp.Solver.CreateSolver('SCIP')
+
+# Decision variables
+allocation = {}
+for person in persons:
+    for good in goods:
+        allocation[(person, good)] = solver.BoolVar(f'allocation_{person}_{good}')
+
+# Each good is allocated to at most one person
+for good in goods:
+    solver.Add(sum(allocation[(person, good)] for person in persons) <= 1)
+
+# Maximize the sum of values
+objective = solver.Objective()
+for person in persons:
+    for good in goods:
+        objective.SetCoefficient(allocation[(person, good)], values[person][good])
+objective.SetMaximization()
+
+# Solve the problem and allocate goods
+status = solver.Solve()
+
+if status == pywraplp.Solver.OPTIMAL:
+    allocation_result = {person: [] for person in persons}
+    for person in persons:
+        for good in goods:
+            if allocation[(person, good)].solution_value() == 1:
+                allocation_result[person].append(good)
+
+    print(""Allocation Result:"", allocation_result)
+else:
+    print(""The problem does not have an optimal solution."")
+
+print(""Total value:"", solver.Objective().Value())
+```
+
+This code uses Google OR-Tools to solve the problem as a mixed-integer linear programming problem, aiming to maximize the total value of the allocation. The optimal allocation result and the total value are printed at the end.",1662,2,1,2,3
+53,"```python
+from itertools import permutations
+
+# Define the values of goods for each person
+values = {
+    'Person 1': [5, 47, 45, 3],
+    'Person 2': [45, 5, 48, 2],
+    'Person 3': [23, 25, 32, 20]
+}
+
+# Names of the goods
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+def calculate_total_value(allocation, values):
+    total_value = 0
+    for i, person in enumerate(allocation):
+        total_value += values[person][i]
+    return total_value
+
+def find_fairest_allocation(values, goods):
+    persons = list(values.keys())
+    max_value = -1
+    best_allocation = None
+    
+    for perm in permutations(goods):
+        allocation = {persons[i]: perm[i] for i in range(len(persons))}
+        total_value = sum(values[persons[i]][goods.index(perm[i])] for i in range(len(persons)))
+        
+        if total_value > max_value:
+            max_value = total_value
+            best_allocation = allocation
+            
+    return best_allocation
+
+# Compute the fairest allocation
+fairest_allocation = find_fairest_allocation(values, goods)
+
+# Display the allocation
+for person, good in fairest_allocation.items():
+    print(f""{person} gets {good}"")
+```
+",1401,2,1,3,None
+54,"```python
+from itertools import permutations
+
+# Define value dictionaries for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define all goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate the minimum total value in an allocation
+def min_total_value(allocation):
+    return min(sum(values[p][g] for g in goods if allocation[g] == p) for p in range(1, 4))
+
+# Generate and evaluate all possible allocations
+best_allocation = None
+max_min_value = -1
+
+for perm in permutations([1, 2, 3]):
+    current_allocation = {goods[i]: perm[i % 3] for i in range(4)}
+    current_min_value = min_total_value(current_allocation)
+    
+    if current_min_value > max_min_value:
+        max_min_value = current_min_value
+        best_allocation = current_allocation
+
+best_allocation
+```
+
+This code generates various permutations to determine the allocation of goods that maximizes the minimum value for any individual. It iterates through possible allocations to find the one ensuring the fairest distribution based on the given values.",1383,2,1,3,None
+55,"```python
+from itertools import permutations
+
+# Values of the goods for each person
+values = {
+    1: [5, 47, 45, 3],
+    2: [45, 5, 48, 2],
+    3: [23, 25, 32, 20]
+}
+
+# All possible allocations
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+perms = permutations(people, len(goods))
+
+# Function to calculate total value for each allocation
+def calculate_total_value(perm):
+    total_value = 0
+    for good_index, person in enumerate(perm):
+        total_value += values[person][good_index]
+    return total_value, perm
+
+# Find the allocation with the maximum total value
+best_allocation = max(perms, key=calculate_total_value)
+
+# Display the optimal allocation
+allocation = {good: person for good, person in zip(goods, best_allocation)}
+for good, person in allocation.items():
+    print(f""Good {good} goes to Person {person}"")
+```
+
+",1164,2,1,3,1
+56,"Here's one way to allocate the goods fairly based on maximizing the total value received by each person. This approach will take into account each individual's valuation and provide a near-optimal allocation.
+
+```python
+from itertools import permutations
+
+# Define the goods and the values assigned by each person
+goods = ['A', 'B', 'C', 'D']
+person_values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Initialize variables to keep track of the best allocation and its value
+max_total_value = float('-inf')
+best_allocation = None
+
+# Generate all possible allocations
+for perm in permutations([1, 2, 3, 0], 4):
+    current_allocation = {'A': perm[0], 'B': perm[1], 'C': perm[2], 'D': perm[3]}
+    current_value = 0
+    for good, person in current_allocation.items():
+        if person != 0:  # Ensure the good is not thrown away
+            current_value += person_values[person][good]
+    
+    if current_value > max_total_value:
+        max_total_value = current_value
+        best_allocation = current_allocation
+
+# Translate the allocation from person indices to labels 
+best_allocation_labeled = {good: ('Person ' + str(person) if person != 0 else 'Discard') for good, person in best_allocation.items()}
+
+print(""Best Allocation:"", best_allocation_labeled)
+```
+
+This code evaluates all possible ways to distribute the four goods among the three people (or to discard them), calculates the total value of each configuration, and selects the one with the highest total value. The output will display the fairest allocation based on the given valuation criteria.",1686,2,1,3,None
+57,"Here's a Python script that identifies a fair allocation of the goods among the three individuals by maximizing the minimum utility (egalitarian approach):
+
+```python
+from mip import Model, xsum, maximize, BINARY
+
+# Values for each person
+values = [
+    [5, 47, 45, 3],     # Person 1
+    [45, 5, 48, 2],     # Person 2
+    [23, 25, 32, 20]    # Person 3
+]
+
+num_goods = len(values[0])
+num_persons = len(values)
+
+# Create model
+m = Model()
+
+# Decision variables: x[i][j] is 1 if good j is assigned to person i, 0 otherwise
+x = [[m.add_var(var_type=BINARY) for j in range(num_goods)] for i in range(num_persons)]
+
+# Add constraints: Each good is assigned to at most one person or thrown away
+for j in range(num_goods):
+    m += xsum(x[i][j] for i in range(num_persons)) <= 1
+
+# Objective: Maximize the minimum value
+min_value = m.add_var()
+m += min_value
+
+for i in range(num_persons):
+    m += xsum(values[i][j] * x[i][j] for j in range(num_goods)) >= min_value
+
+# Optimize the model
+m.optimize(maximize)
+
+# Extract results
+allocation = [[] for _ in range(num_persons)]
+for i in range(num_persons):
+    for j in range(num_goods):
+        if x[i][j].x >= 0.99:  # x[i][j] is binary, so should be either 0 or 1
+            allocation[i].append(j)
+
+# Print allocation results
+for i in range(num_persons):
+    allocated_goods = [chr(65 + j) for j in allocation[i]]  # Convert indices to goods names (A, B, C, D)
+    print(f""Person {i + 1}: {allocated_goods}"")
+```
+
+This script defines a Mixed Integer Linear Programming (MILP) model using the `mip` library, sets up constraints ensuring that each good is assigned to exactly one person (or not assigned), and maximizes the minimum valuation among all persons to achieve a fair allocation. It finally solves the model and prints out the allocation of goods to each person. Make sure you have the `mip` package installed to run this code (`pip install mip`).",1786,2,1,2,3
+58,"Here's a Python code to determine a fair allocation of the 4 goods among Person 1, Person 2, and Person 3:
+
+```python
+from itertools import permutations
+
+# Values provided for each person for each good
+values = {
+    ""A"": [5, 45, 23],
+    ""B"": [47, 5, 25],
+    ""C"": [45, 48, 32],
+    ""D"": [3, 2, 20]
+}
+
+# List of goods to be allocated
+goods = [""A"", ""B"", ""C"", ""D""]
+
+# Calculate total value for each allocation
+def total_value(allocation):
+    return sum(values[good][person] for good, person in zip(goods, allocation))
+
+# Find the best allocation that maximizes total value
+best_allocation = max(permutations(range(3), 4), key=total_value)
+
+# Print the results
+allocation_result = {goods[i]: best_allocation[i] for i in range(4)}
+
+for good, person in allocation_result.items():
+    print(f""Good {good} is allocated to Person {person + 1}"")
+
+# Print any goods that are thrown away
+unused_goods = set(goods) - set(allocation_result.keys())
+if unused_goods:
+    print(f""Goods that are thrown away: {', '.join(unused_goods)}"")
+```
+
+This code uses permutations of the goods to find an allocation that maximizes the total value based on the provided values for each person. The best allocation is then printed, showing which good is allocated to which person, as per the fair allocation determined by the sum of individual values.",1393,2,1,3,None
+59,"```python
+from itertools import permutations
+
+# Values for each person for each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# All possible allocations of goods to persons
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+best_allocation = None
+max_min_value = -1
+
+# Test all permutations of the goods
+for perm in permutations(goods):
+    # Current allocation dictionary
+    allocation = {person: [] for person in persons}
+    
+    # Distribute goods based on the current permutation
+    for i, good in enumerate(perm):
+        allocation[persons[i % len(persons)]].append(good)
+    
+    # Calculate the minimum value in this allocation
+    current_min_value = min(sum(values[person][good] for good in goods_alloc) for person, goods_alloc in allocation.items())
+    
+    # Check if this allocation gives a higher minimum value
+    if current_min_value > max_min_value:
+        best_allocation = allocation
+        max_min_value = current_min_value
+
+# Display the best allocation
+print(best_allocation)
+```
+
+Running this Python code will provide the fairest allocation of goods among Person 1, Person 2, and Person 3 based on the values they assign to each good.",1413,1,3,2,None
+60,"```python
+from itertools import permutations
+
+# Valuations of each person
+vals = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Possible goods
+goods = ['A', 'B', 'C', 'D']
+# Minimum value sums initialization
+min_value_sum = float('inf')
+best_allocation = None
+
+# Iterate over all permutations of allocations
+for perm in permutations(['Person 1', 'Person 2', 'Person 3'] * len(goods), len(goods)):
+    allocation = {'Person 1': [], 'Person 2': [], 'Person 3': []}
+    values_sum = 0
+    
+    for good, person in zip(goods, perm):
+        allocation[person].append(good)
+        values_sum += vals[person][good]
+    
+    # Compare the current allocation sum with the best found
+    if values_sum < min_value_sum:
+        min_value_sum = values_sum
+        best_allocation = allocation
+
+# Output the best allocation found
+best_allocation
+```
+
+This code systematically checks every possible way to allocate the goods by examining all permutations of person assignments. It keeps track of the allocation with the smallest sum of values, aiming for the fairest distribution. The `best_allocation` variable will hold the allocation that minimizes the total sum of values.",1377,1,3,2,None
+61,"Here is a Python implementation of a fair allocation based on maximizing total individual values given for each of the goods and ensuring a fair distribution among individuals:
+
+```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    ""Person 1"": [5, 47, 45, 3],
+    ""Person 2"": [45, 5, 48, 2],
+    ""Person 3"": [23, 25, 32, 20]
+}
+
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+# Calculate the total value for a given allocation
+def calculate_total_value(perm, value_matrix):
+    total_values = [0, 0, 0]
+    for i, person_index in enumerate(perm):
+        total_values[person_index] += value_matrix[person_index][i]
+    return total_values
+
+# Find fair allocation by maximizing the minimum of values each person receives
+def find_fair_allocation(values, goods):
+    # Convert value dictionary to list for easier manipulation
+    value_matrix = list(values.values())
+
+    best_allocation = None
+    best_min_value = float('-inf')
+
+    # Permutations of the indices of goods
+    good_permutations = permutations(range(3))
+
+    for perm in permutations(range(3), 3):
+        total_values = calculate_total_value(perm, value_matrix)
+        min_value = min(total_values)
+        
+        if min_value > best_min_value:
+            best_min_value = min_value
+            best_allocation = perm
+
+    allocation = {goods[i]: f""Person {best_allocation[i] + 1}"" for i in range(4)}
+    return allocation
+
+# Run the fair allocation algorithm
+allocation = find_fair_allocation(values, goods)
+print(allocation)
+```
+
+To execute the code, just run it in a Python environment. It will print the fair allocation of the goods among the three individuals.",2031,2,1,2,3
+62,"```python
+import itertools
+
+# Input data
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: [5, 47, 45, 3],
+    2: [45, 5, 48, 2],
+    3: [23, 25, 32, 20]
+}
+
+# Function to compute total value for a given allocation
+def compute_total_value(allocation, values):
+    total_values = {1: 0, 2: 0, 3: 0}
+    for good, person in allocation.items():
+        total_values[person] += values[person][goods.index(good)]
+    return total_values
+
+# Generate all possible allocations
+people = [1, 2, 3]
+all_allocations = list(itertools.product(people, repeat=len(goods)))
+best_allocation = None
+best_fairness = float('inf')
+
+# Find the fairest allocation
+for allocation in all_allocations:
+    allocation_dict = {goods[i]: allocation[i] for i in range(len(goods))}
+    total_values = compute_total_value(allocation_dict, values)
+    
+    # Compute fairness as the difference between the max and min total values
+    current_fairness = max(total_values.values()) - min(total_values.values())
+    
+    if current_fairness < best_fairness:
+        best_fairness = current_fairness
+        best_allocation = allocation_dict
+
+# Display the best allocation
+print(""The fairest allocation is:"", best_allocation)
+```
+
+This Python code evaluates the fairness of all possible allocations and selects the one with the smallest difference between the highest and lowest total values assigned to the individuals.",1398,3,1,2,3
+63,"Here is the Python code to determine the fairest allocation of the goods:
+
+```python
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+allocations = {1: [], 2: [], 3: []}
+remaining_goods = set(goods)
+
+while remaining_goods:
+    best_item = None
+    best_person = None
+    best_value = -1
+    
+    for person in values:
+        for item in remaining_goods:
+            if values[person][item] > best_value:
+                best_value = values[person][item]
+                best_item = item
+                best_person = person
+    
+    allocations[best_person].append(best_item)
+    remaining_goods.remove(best_item)
+
+print(""Allocation of goods:"")
+print(allocations)
+```
+
+Running this code will produce the fairest allocation of the goods among Person 1, Person 2, and Person 3, based on their values.",1264,2,1,2,3
+64,"```python
+import itertools
+
+# Define the values
+values = [
+    [5, 47, 45, 3],     # Person 1
+    [45, 5, 48, 2],     # Person 2
+    [23, 25, 32, 20]    # Person 3
+]
+
+# Define the goods
+goods = ['A', 'B', 'C', 'D']
+
+# All possible allocations of goods to people (permutations)
+allocations = list(itertools.permutations(goods, len(goods)))
+
+def calculate_fairness(allocation):
+    total_values = [0, 0, 0]  # Total value for each person
+    for i, good in enumerate(allocation):
+        person = i % 3
+        good_index = goods.index(good)
+        total_values[person] += values[person][good_index]
+    return min(total_values)
+
+# Find the allocation with the highest minimum value
+best_allocation = None
+best_fairness = -1
+
+for allocation in allocations:
+    fairness = calculate_fairness(allocation)
+    if fairness > best_fairness:
+        best_fairness = fairness
+        best_allocation = allocation
+
+# Output the best allocation
+result = {}
+for i, good in enumerate(best_allocation):
+    result[good] = i % 3 + 1  # Translate to Person 1, Person 2, and Person 3
+
+print(""Best Allocation:"", result)
+```
+
+This Python code computes an allocation of goods that maximizes fairness by distributing the goods in a way that the minimum value among all individuals' allocations is maximized.",1387,2,1,3,1
+65,"```python
+from itertools import permutations
+
+# Define the values for each person for each good
+values = {
+    ""A"": [5, 45, 23],
+    ""B"": [47, 5, 25],
+    ""C"": [45, 48, 32],
+    ""D"": [3, 2, 20]
+}
+
+# List of goods and people identifiers
+goods = [""A"", ""B"", ""C"", ""D""]
+people = [0, 1, 2]
+
+# Function to calculate the fairness of an allocation
+def fairness(allocation):
+    total_values = [0, 0, 0]
+    for good, person in allocation.items():
+        total_values[person] += values[good][person]
+    return min(total_values)
+
+# Initialize best allocation and highest fairness score
+best_allocation = None
+highest_fairness = float('-inf')
+
+# Check all possible allocations
+for perm in permutations(people * (len(goods) // len(people))):
+    allocation = {good: person for good, person in zip(goods, perm)}
+    current_fairness = fairness(allocation)
+    if current_fairness > highest_fairness:
+        best_allocation, highest_fairness = allocation, current_fairness
+
+# Print the best allocation
+print(best_allocation)
+```
+",1315,3,1,2,3
+66,"```python
+import itertools
+
+# The given values for each person for each good
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+
+def calculate_total_value(allocation):
+    total_value = {1: 0, 2: 0, 3: 0}
+    for person, good in allocation.items():
+        total_value[person] += values[person][good]
+    return total_value
+
+# Generate all possible allocations
+def generate_allocations():
+    all_possible_allocations = []
+    for perm in itertools.permutations(goods, 3):
+        all_possible_allocations.append({1: perm[0], 2: perm[1], 3: perm[2]})
+    return all_possible_allocations
+
+# Finding the fair allocation
+fair_allocation = None
+max_min_value = -1  # Initialize to a value less than any possible value
+
+for allocation in generate_allocations():
+    total_value = calculate_total_value(allocation)
+    min_value = min(total_value.values())
+    
+    # Update fairness criteria - here we are trying to maximize the minimum value
+    if min_value > max_min_value:
+        max_min_value = min_value
+        fair_allocation = allocation
+
+print(""Fair Allocation:"", fair_allocation)
+```
+
+This code generates all possible allocations for the 3 individuals with the 4 goods (with one good being potentially unallocated/unused). It then evaluates the minimal value each individual might receive and selects the allocation which maximizes this minimal value to ensure fairness among all individuals.",1507,3,1,2,None
+67,"Here is the Python code that will find a fair allocation of the goods to the people based on their valuations:
+
+```python
+from mip import Model, xsum, maximize, BINARY
+
+# Number of persons and goods
+num_persons = 3
+num_goods = 4
+
+# Valuations matrix
+valuations = [
+    [5, 47, 45, 3],   # Person 1's valuations
+    [45, 5, 48, 2],   # Person 2's valuations
+    [23, 25, 32, 20]  # Person 3's valuations
+]
+
+# Create a new model
+model = Model()
+
+# Create binary variables: x[i][j] = 1 if good j is given to person i, 0 otherwise
+x = [[model.add_var(var_type=BINARY) for j in range(num_goods)] for i in range(num_persons)]
+
+# Ensure each good is allocated to at most one person
+for j in range(num_goods):
+    model += xsum(x[i][j] for i in range(num_persons)) <= 1
+
+# Maximize the summed valuations
+model.objective = maximize(xsum(x[i][j] * valuations[i][j] for i in range(num_persons) for j in range(num_goods)))
+
+# Optimize the model
+model.optimize()
+
+# Extract and print the allocation
+allocation = [['No allocation' for _ in range(num_goods)] for _ in range(num_persons)]
+for i in range(num_persons):
+    for j in range(num_goods):
+        if x[i][j].x >= 0.99:  # If the good j is allocated to person i
+            allocation[i][j] = f""Good {chr(65+j)}""
+
+for i in range(num_persons):
+    allocated_goods = [allocation[i][j] for j in range(num_goods) if allocation[i][j] != 'No allocation']
+    print(f""Person {i+1} gets: {', '.join(allocated_goods) if allocated_goods else 'no goods'}"")
+```
+
+This code uses the Mixed-Integer Programming (MIP) approach to allocate the goods fairly. It ensures that each good is allocated to at most one person and maximizes the summed valuations of the allocated goods. The allocation results are printed out for each person.",1745,2,1,2,3
+68,"Here is the Python code to compute a fair allocation of the goods:
+
+```python
+from itertools import permutations
+
+# Define the value matrix
+values = [
+    [5, 47, 45, 3],   # Person 1
+    [45, 5, 48, 2],   # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+# Define a function to calculate the fairness of an allocation
+def calculate_fairness(allocation, values):
+    total_values = [0, 0, 0]
+    for i, person in enumerate(allocation):
+        if person != -1:  # -1 means the good is thrown away
+            total_values[person] += values[person][i]
+    min_value = min(total_values)
+    max_value = max(total_values)
+    return max_value - min_value
+
+# Initialize best allocation and its fairness score
+best_allocation = None
+best_fairness = float('inf')
+
+# Iterate over all possible allocations
+for perm in permutations([0, 1, 2, -1], 4):
+    current_fairness = calculate_fairness(perm, values)
+    if current_fairness < best_fairness:
+        best_fairness = current_fairness
+        best_allocation = perm
+
+# Convert encoding to readable format
+allocation_result = {0: [], 1: [], 2: [], -1: []}
+goods = ['A', 'B', 'C', 'D']
+for i, person in enumerate(best_allocation):
+    allocation_result[person].append(goods[i])
+
+# Print the result in a readable format
+for person, goods_alloc in allocation_result.items():
+    if person != -1:
+        print(f""Person {person + 1}: {goods_alloc}"")
+    else:
+        print(f""Thrown away: {goods_alloc}"")
+```
+
+Run this script to get the fairest allocation of the goods among Person 1, Person 2, and Person 3.",1602,2,1,3,None
+69,"```python
+# Values for each person
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# List of goods
+goods = ['A', 'B', 'C', 'D']
+people = ['Person 1', 'Person 2', 'Person 3']
+
+# Initialize allocations
+allocations = {person: [] for person in people}
+
+# Sorting goods by total value across all people, highest to lowest
+total_values = {good: sum(values[person][good] for person in values) for good in goods}
+sorted_goods = sorted(total_values, key=total_values.get, reverse=True)
+
+# Distribute goods in fair order
+for good in sorted_goods:
+    # Find the person who values the good the most
+    best_person = max(people, key=lambda person: values[person][good])
+    allocations[best_person].append(good)
+
+# Print the allocations
+for person in allocations:
+    print(f'{person}: {allocations[person]}')
+```
+
+Output of running the code:
+This will print which person gets each good based on the fairest allocation considering the highest individual value for each good.",1372,2,1,2,3
+70,"```python
+from itertools import permutations
+
+# Define values of goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define goods and people
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+
+# Function to evaluate the fairness of allocation
+def evaluate_allocation(allocation):
+    utility = {person: 0 for person in people}
+    for good, person in allocation.items():
+        if person:  # person == 0 means good is thrown away
+            utility[person] += values[person][good]
+    min_utility = min(utility.values())
+    return min_utility  # Maximize the minimum utility for fairness
+
+# Initialize tracking variables for the best allocation
+max_min_utility = -1
+best_allocation = None
+
+# Explore all possible allocations of the 4 goods among 3 persons (including throwing away)
+for perm in permutations(people + [0]*1, 4):
+    allocation = dict(zip(goods, perm))
+    current_min_utility = evaluate_allocation(allocation)
+    if current_min_utility > max_min_utility:
+        max_min_utility = current_min_utility
+        best_allocation = allocation
+
+# Print the best allocation found
+print(f""The fairest allocation is: {best_allocation}"")
+
+# Print the final utilities for each person
+final_utilities = {person: sum(values[person][good] for good, alloc_person in best_allocation.items() if alloc_person == person) for person in people}
+print(f""Final utilities: {final_utilities}"")
+```
+
+This code explores all possible allocations of the goods among the three people (including the possibility of throwing away a good), and identifies the allocation that maximizes the minimum utility across all individuals, aiming for the fairest distribution.",1644,2,1,3,None
+71,"```python
+from itertools import permutations
+
+# Define the values of goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Determine all possible allocations
+goods = ['A', 'B', 'C', 'D']
+allocations = list(permutations(range(4))) # represents goods assigned to 4 recipients (3 persons + discarded)
+
+# Function to compute the fairness score for a given allocation
+def compute_fairness(allocation):
+    person_values = {1: 0, 2: 0, 3: 0}
+    for good_index, recipient in enumerate(allocation):
+        if recipient < 3: # don't consider discarded goods
+            person_values[recipient + 1] += values[recipient + 1][goods[good_index]]
+    # calculate fairness; here we use minimum value as proxy for fairness
+    return min(person_values.values())
+
+# Determine the fairest allocation
+best_allocation = None
+max_fairness = -1
+
+for allocation in allocations:
+    fairness = compute_fairness(allocation)
+    if fairness > max_fairness:
+        max_fairness = fairness
+        best_allocation = allocation
+
+# Map the allocation result to good assignments
+result = {'Person 1': [], 'Person 2': [], 'Person 3': [], 'Discarded': []}
+for good_index, recipient in enumerate(best_allocation):
+    if recipient < 3:
+        result[f'Person {recipient + 1}'].append(goods[good_index])
+    else:
+        result['Discarded'].append(goods[good_index])
+
+# Print results
+for person in result:
+    print(f'{person}: {result[person]}')
+
+# Output the allocation result
+print(""\nBest Allocation:"", best_allocation)
+```
+
+This code computes and prints the fairest allocation of the goods as per the given values.",1650,2,1,3,None
+72,"Here is the Python code to determine the fairest allocation of the goods to the individuals:
+
+```python
+import itertools
+
+# Values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# All goods
+goods = ['A', 'B', 'C', 'D']
+
+# All possible allocations (permutations)
+allocations = list(itertools.permutations(goods, len(goods)))
+
+# Function to calculate unfairness (difference in values)
+def calculate_unfairness(allocation):
+    sums = {1: 0, 2: 0, 3: 0}
+    for i, good in enumerate(allocation):
+        person = (i % 3) + 1
+        sums[person] += values[person][good]
+    
+    max_value = max(sums.values())
+    min_value = min(sums.values())
+    return max_value - min_value
+
+# Find allocation with the minimal unfairness
+best_allocation = None
+min_unfairness = float('inf')
+
+for allocation in itertools.permutations([1, 2, 3]):
+    goods_alloc = [goods[j] for j in allocation]
+    unfairness = calculate_unfairness(goods_alloc)
+    if unfairness < min_unfairness:
+        min_unfairness = unfairness
+        best_allocation = goods_alloc
+
+# Prepary output
+allocation_dict = {1: [], 2: [], 3: []}
+for i, good in enumerate(best_allocation):
+    person = (i % 3) + 1
+    allocation_dict[person].append(good)
+
+print(""Allocation of goods:"")
+for person, person_goods in allocation_dict.items():
+    print(f""Person {person}: {person_goods}"")
+```
+
+In this code, we permute the possible allocations of goods to persons and calculate the ""unfairness"" of each allocation, defined as the range (max value - min value) of total values across persons. The goal is to minimize this unfairness to achieve the fairest distribution.",1708,3,1,2,None
+73,"```python
+from itertools import permutations
+
+# Define the value each person has for each good
+values = {
+    ""A"": [5, 45, 23],
+    ""B"": [47, 5, 25],
+    ""C"": [45, 48, 32],
+    ""D"": [3, 2, 20]
+}
+
+# All possible allocations of 4 goods among 3 people
+goods = [""A"", ""B"", ""C"", ""D""]
+people = [0, 1, 2]
+
+# Function to calculate the total value for each person given an allocation
+def calculate_total_value(alloc):
+    # Initialize total values for each person
+    total_values = [0, 0, 0]
+    
+    for good, person in alloc.items():
+        total_values[person] += values[good][person]
+    
+    return total_values
+
+# Function to find the allocation which minimizes the unfairness 
+# (maximizes fairness)
+def find_fairest_allocation():
+    # Minimal unfairness starts high
+    min_unfairness = float('inf')
+    best_alloc = None
+    
+    for perm in permutations(goods):
+        for p1 in people:
+            for p2 in people:
+                if p1 == p2:
+                    continue
+                p3 = (set(people) - {p1, p2}).pop()
+                
+                # Create allocation
+                alloc = {perm[0]: p1, perm[1]: p2, perm[2]: p3, perm[3]: p3}
+                
+                # Calculate values
+                total_values = calculate_total_value(alloc)
+                
+                # Calculate fairness as the max difference in total values
+                unfairness = max(total_values) - min(total_values)
+                
+                # Check if this is the best allocation so far
+                if unfairness < min_unfairness:
+                    min_unfairness = unfairness
+                    best_alloc = alloc
+    
+    return best_alloc, min_unfairness
+
+allocation, unfairness = find_fairest_allocation()
+print(""Best Allocation:"", allocation)
+print(""Unfairness (max difference in values):"", unfairness)
+
+# The allocation
+for good, person in allocation.items():
+    print(f""Good {good} -> Person {person + 1}"")
+```
+
+This code finds a fair allocation by trying all permutations of the goods and assigning them to different persons while trying to minimize the fairness measure defined as the difference between the maximum and minimum total values assigned to the individuals. Ultimately, it prints out the allocation of goods to people along with the measure of unfairness.",1816,2,1,3,3
+74,"Here is a Python code that determines a fair allocation of goods among three individuals using a simple optimization approach to maximize the sum of perceived values.
+
+```python
+from itertools import permutations
+
+# Define the values for each individual
+values = [
+    [5, 47, 45, 3],  # Person 1's values
+    [45, 5, 48, 2],  # Person 2's values
+    [23, 25, 32, 20] # Person 3's values
+]
+
+# Define goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate the total value for a given allocation
+def calculate_total_value(allocation):
+    total_value = 0
+    for person, good in enumerate(allocation):
+        total_value += values[person][good]
+    return total_value
+
+# Create a list of all possible allocations
+possible_allocations = list(permutations(range(len(goods)), len(goods)))
+
+# Find the allocation with the maximum total value
+max_value = -1
+best_allocation = None
+for allocation in possible_allocations:
+    total_value = calculate_total_value(allocation)
+    if total_value > max_value:
+        max_value = total_value
+        best_allocation = allocation
+
+# Display the best allocation
+allocation_dict = {goods[i]: f'Person {best_allocation[i] + 1}' for i in range(len(goods))}
+
+print(""The fairest allocation of goods is:"")
+for good, person in allocation_dict.items():
+    print(f""Good {good}: {person}"")
+```
+
+This code calculates which allocation of goods maximizes the total value of goods for all individuals and then displays the assignment of goods to individuals.",1415,2,1,3,1
+75,"```python
+# Define the values of the goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Possible goods to allocate
+goods = ['A', 'B', 'C', 'D']
+
+# Result allocation dict
+allocation = {1: [], 2: [], 3: []}
+
+# Assign goods based on highest valuation
+while goods:
+    highest_value = 0
+    best_person = None
+    best_good = None
+    
+    for person in values:
+        for good in goods:
+            if values[person][good] > highest_value:
+                highest_value = values[person][good]
+                best_person = person
+                best_good = good
+    
+    if best_person is not None and best_good is not None:
+        allocation[best_person].append(best_good)
+        goods.remove(best_good)
+
+print(""Final allocation:"")
+print(allocation)
+```
+
+To run the code, simply copy it into a Python environment. It will allocate the goods to the person who values them the most, ensuring an allocation that prioritizes highest individual valuations for each good.",1370,2,1,2,3
+76,"```python
+from itertools import permutations
+
+# Assign values to the goods for each person
+values = {
+    1: [5, 47, 45, 3],
+    2: [45, 5, 48, 2],
+    3: [23, 25, 32, 20]
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = [1, 2, 3]
+
+# Calculate total value for each person given a certain allocation
+def calculate_total_value(allocation):
+    total_value = {1: 0, 2: 0, 3: 0}
+    for good, person in allocation.items():
+        good_index = goods.index(good)
+        total_value[person] += values[person][good_index]
+    return total_value
+
+# Check fair allocation with max minimum value criterion
+def is_fair_allocation(candidate):
+    allocation, total_value = candidate
+    min_value = min(total_value.values())
+    return min_value
+
+# Generate all possible allocations
+possible_allocations = []
+for perm in permutations(persons, len(goods)):
+    allocation = {goods[i]: perm[i] for i in range(len(goods))}
+    total_value = calculate_total_value(allocation)
+    possible_allocations.append((allocation, total_value))
+
+# Find the fairest allocation
+fairest_allocation = max(possible_allocations, key=is_fair_allocation)
+
+# Print the fairest allocation and its total values
+allocation, total_value = fairest_allocation
+print(""Fairest Allocation:"", allocation)
+print(""Total Values:"", total_value)
+
+```
+This Python code generates all possible allocations of the goods among the three persons and determines the fairest allocation by maximizing the minimum value of the allocated goods for each person. The fairest allocation is then printed along with the total values each person receives.",1455,2,3,2,1
+77,"```python
+from itertools import permutations
+
+# Define values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# List of goods and people
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+
+# Initialize best allocation and its fairness value
+best_allocation = None
+best_fairness_value = float('inf')
+
+# Helper function to compute the fairness value of an allocation
+def fairness_value(allocation):
+    person_values = {person: 0 for person in people}
+    for good, person in allocation.items():
+        if person != -1:  # Check if the good is not thrown away
+            person_values[person] += values[person][good]
+    min_value = min(person_values.values())
+    max_value = max(person_values.values())
+    return max_value - min_value
+
+# Iterate over all permutations of assigning goods to people (including -1 which denotes throwing away)
+for perm in permutations(people + [-1], len(goods)):
+    allocation = {goods[i]: perm[i] for i in range(len(goods))}
+    current_fairness_value = fairness_value(allocation)
+    
+    if current_fairness_value < best_fairness_value:
+        best_fairness_value = current_fairness_value
+        best_allocation = allocation
+
+print(""Optimal Allocation:"", best_allocation)
+```
+
+This Python code evaluates the fairness of all possible allocations of the goods to the individuals (including the option to throw away goods) and chooses the one that minimizes the difference in value between the person who receives the most value and the one who receives the least. The optimal allocation is then printed.",1537,2,1,2,None
+78,"```python
+from itertools import permutations
+
+def calculate_total_happiness(allocation, values):
+    total_happiness = 0
+    for person, goods in allocation.items():
+        for good in goods:
+            total_happiness += values[person][good]
+    return total_happiness
+
+def get_fair_allocation(goods, people_values):
+    all_people = list(people_values.keys())
+    best_allocation = {}
+    max_happiness = -float('inf')
+
+    for perm in permutations(goods):
+        allocation = {person: [] for person in all_people}
+        for i, good in enumerate(perm):
+            allocation[all_people[i % len(all_people)]].append(good)
+        
+        current_happiness = calculate_total_happiness(allocation, people_values)
+        if current_happiness > max_happiness:
+            max_happiness = current_happiness
+            best_allocation = allocation
+            
+    return best_allocation
+
+# Defining the goods
+goods = ['A', 'B', 'C', 'D']
+
+# Defining the value matrix for each person for each good
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+allocation = get_fair_allocation(goods, values)
+
+print(""Allocation:"", allocation)
+```",1370,2,1,2,3
+79,"Here is the Python code that determines the fairest allocation of goods among the three people using a simple algorithmic approach. The goal is to maximize the total value for each person while ensuring that the allocation is fair and optimal.
+
+```python
+# Define the values of goods for each person
+values = [
+    [5, 47, 45, 3],  # Person 1's values
+    [45, 5, 48, 2],  # Person 2's values
+    [23, 25, 32, 20] # Person 3's values
+]
+
+# Initialize the allocation result
+allocation = [None, None, None, None]
+goods = ['A', 'B', 'C', 'D']
+assigned = [False, False, False, False]  # Tracks if a good has been assigned
+
+# Available persons
+persons = [0, 1, 2]
+
+# Function to find the next optimal allocation
+def find_next_allocation():
+    max_value = -1
+    chosen_good = -1
+    chosen_person = -1
+    
+    for good in range(4):
+        if assigned[good]:
+            continue
+        for person in persons:
+            if values[person][good] > max_value:
+                max_value = values[person][good]
+                chosen_good = good
+                chosen_person = person
+                
+    return chosen_good, chosen_person
+
+# Allocate the goods
+for _ in range(4):
+    good, person = find_next_allocation()
+    if good != -1:
+        allocation[good] = person + 1
+        assigned[good] = True
+
+# Print the results
+for index, person in enumerate(allocation):
+    if person is not None:
+        print(f""Good {goods[index]} is allocated to Person {person}"")
+    else:
+        print(f""Good {goods[index]} is not allocated"")
+
+# Output the final allocation
+print(f""Final Allocation: {allocation}"")
+```
+
+This code uses a greedy approach to assign the goods, aiming to maximize the total value by selecting the highest valued good for each person at each step.",1606,2,1,2,3
+80,"Here is a Python implementation to solve the allocation problem using a method to maximize the total valuation for the individuals:
+
+```python
+from itertools import permutations
+
+# Define individuals' valuations for each good
+valuations = {
+    'Person 1': {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},
+    'Person 2': {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},
+    'Person 3': {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}
+}
+
+# Define persons and goods
+persons = list(valuations.keys())
+goods = ['Good A', 'Good B', 'Good C', 'Good D']
+
+def calculate_total_valuation(permutation):
+    total_valuation = 0
+    for person, good in zip(persons, permutation):
+        total_valuation += valuations[person][good]
+    return total_valuation
+
+# Find the optimal allocation
+best_allocation = None
+best_valuation = 0
+
+for perm in permutations(goods, len(persons)):
+    current_valuation = calculate_total_valuation(perm)
+    if current_valuation > best_valuation:
+        best_valuation = current_valuation
+        best_allocation = perm
+
+# Print the best allocation
+allocation_result = {}
+for person, good in zip(persons, best_allocation):
+    allocation_result[person] = good
+
+print(""The fairest allocation is:"")
+for person, good in allocation_result.items():
+    print(f""{person} gets {good}"")
+```
+
+This script computes the allocation by considering permutations of goods distribution, calculating the total valuation for each permutation, and choosing the one with the highest total valuation.",1469,2,1,3,None
+81,"Here's a Python script that allocates the goods based on maximizing the sum of the values each person gets, ensuring a fair distribution:
+
+```python
+from itertools import permutations
+
+# Define the values for each person
+values = {
+    'Person1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person3': {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+}
+
+# Define the goods
+goods = ['A', 'B', 'C', 'D']
+
+# Generate all possible allocations
+allocations = permutations(goods)
+
+# Initialize the best allocation and its value
+best_allocation = None
+best_value = 0
+
+# Calculate the best allocation by checking each permutation
+for allocation in allocations:
+    allocation_value = sum(values[f'Person{i+1}'][good] for i, good in enumerate(allocation))
+    if allocation_value > best_value:
+        best_allocation = allocation
+        best_value = allocation_value
+
+# Assign goods based on the best allocation
+result = {f'Person{i+1}': good for i, good in enumerate(best_allocation)}
+
+# Print the allocation result
+print(""Best Allocation:"", result)
+print(""Total Value:"", best_value)
+```
+
+Run the above script to determine the fairest allocation of the goods based on the given values.",1359,2,1,2,3
+82,"```python
+import itertools
+
+# Define the values for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# List of goods
+goods = ['A', 'B', 'C', 'D']
+
+# List of persons
+persons = [1, 2, 3]
+
+# Function to calculate the total value
+def total_value(allocation):
+    return {
+        person: sum(values[person][good] for good in goods_allocated)
+        for person, goods_allocated in allocation.items()
+    }
+
+# Generate all possible allocations
+possible_allocations = [
+    dict(zip(persons, allocation))
+    for allocation in itertools.permutations(goods, len(persons))
+]
+
+# Find the fairest allocation, where the difference in values between persons is minimized
+min_diff = float('inf')
+fairest_allocation = None
+
+for allocation in possible_allocations:
+    allocation_values = total_value(allocation)
+    value_diff = max(allocation_values.values()) - min(allocation_values.values())
+    if value_diff < min_diff:
+        min_diff = value_diff
+        fairest_allocation = allocation
+
+fairest_allocation_with_values = {
+    person: {good: values[person][good] for good in goods} 
+    for person, goods in fairest_allocation.items()
+}
+
+print(f""Fairest allocation: {fairest_allocation}"")
+print(f""Allocation values: {fairest_allocation_with_values}"")
+
+# To include non-allocation (throwing away), we now add None to the set of possible recipients
+persons_with_none = persons + [None]
+
+possible_allocations_ext = [
+    dict(zip(goods, allocation))
+    for allocation in itertools.product(persons_with_none, repeat=len(goods))
+]
+
+min_diff_ext = float('inf')
+fairest_allocation_ext = None
+
+for allocation in possible_allocations_ext:
+    allocation_values = {person: 0 for person in persons}
+    for good, person in allocation.items():
+        if person is not None:
+            allocation_values[person] += values[person][good]
+
+    value_diff_ext = max(allocation_values.values()) - min(allocation_values.values())
+    if value_diff_ext < min_diff_ext:
+        min_diff_ext = value_diff_ext
+        fairest_allocation_ext = allocation
+
+print(f""Fairest allocation with potential throw away: {fairest_allocation_ext}"")
+```
+
+This Python script takes into account different possible allocations of goods among Person 1, Person 2, and Person 3, and identifies the one that minimizes the difference in total value of allocated goods between the persons, considering also the possibility of ""throwing away"" (not allocating) some goods.",1944,3,1,2,None
+83,"Here's a Python code snippet that allocates the goods to maximize overall value, focusing on finding the allocation that maximizes the total sum of the individual people's values:
+
+```python
+import itertools
+
+# Define the valuations in a dictionary format.
+valuations = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+people = ['Person 1', 'Person 2', 'Person 3']
+
+def find_best_allocation(valuations, goods, people):
+    # Generate all possible allocations
+    all_allocations = itertools.product(people + ['None'], repeat=len(goods))
+
+    best_allocation = None
+    best_value = -float('inf')
+
+    for allocation in all_allocations:
+        total_value = 0
+        for good, person in zip(goods, allocation):
+            if person != 'None':
+                total_value += valuations[person][good]
+        
+        # We're looking for the allocation that maximizes the total value
+        if total_value > best_value:
+            best_value = total_value
+            best_allocation = allocation
+
+    result = {}
+    for good, person in zip(goods, best_allocation):
+        if person != 'None':
+            if person not in result:
+                result[person] = []
+            result[person].append(good)
+
+    return result
+
+# Find the fair allocation
+allocation_result = find_best_allocation(valuations, goods, people)
+
+# Output the result
+print(""Fair allocation:"")
+for person, goods in allocation_result.items():
+    print(f""{person}: {', '.join(goods)}"")
+```
+
+Running this code provides the allocation based on maximizing the overall value for each person given the valuations for each good. This approach ensures that the chosen allocation maximizes collective benefit.",1633,2,1,2,3
+84,"```python
+def allocate_goods(values):
+    goods = ['A', 'B', 'C', 'D']
+    people = list(values.keys())
+
+    allocation = {person: [] for person in people}
+    total_values = {person: 0 for person in people}
+    taken_goods = set()
+
+    for good in goods:
+        max_value = -1
+        best_person = None
+        for person in people:
+            if values[person][good] > max_value and good not in taken_goods:
+                max_value = values[person][good]
+                best_person = person
+        if best_person:
+            allocation[best_person].append(good)
+            total_values[best_person] += max_value
+            taken_goods.add(good)
+
+    return allocation, total_values
+
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+allocation, total_values = allocate_goods(values)
+print(""Allocation:"", allocation)
+print(""Total Values:"", total_values)
+```
+
+This code implements a fair allocation procedure for the given problem where each good is allocated to the person who values it the most.",1330,2,1,2,3
+85,"Here's the Python code to determine a fair allocation of the goods among the individuals based on their values for each good:
+
+```python
+import itertools
+
+# Define the values of the goods for each person
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+people = [1, 2, 3]
+
+# Function to calculate total value for allocation
+def calculate_allocation_value(allocation, values):
+    total_values = {1: 0, 2: 0, 3: 0}
+    for good, person in allocation.items():
+        if person:
+            total_values[person] += values[person][good]
+    return total_values
+
+# Generate all possible allocations
+def generate_allocations(goods, people):
+    allocations = []
+    for allocation in itertools.product(people + [None], repeat=len(goods)):
+        allocations.append(dict(zip(goods, allocation)))
+    return allocations
+
+# Determine the fairest allocation
+min_diff = float('inf')
+fairest_allocation = None
+
+allocations = generate_allocations(goods, people)
+
+for allocation in allocations:
+    total_values = calculate_allocation_value(allocation, values)
+    max_value = max(total_values.values())
+    min_value = min(total_values.values())
+    diff = max_value - min_value
+    if diff < min_diff:
+        min_diff = diff
+        fairest_allocation = allocation
+
+# Print the fairest allocation
+print(""Fairest Allocation:"", fairest_allocation)
+```
+
+This script calculates and prints the fairest allocation of the goods based on the differences in total values allocated to each person.",1585,2,1,3,None
+86,"Here's the Python code to determine a fair allocation of goods based on the given values:
+
+```python
+import itertools
+
+# Define the values for goods for each person
+values = {
+    'P1': {'A': 5,  'B': 47, 'C': 45, 'D': 3},
+    'P2': {'A': 45, 'B': 5,  'C': 48, 'D': 2},
+    'P3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Define the goods and people
+goods = ['A', 'B', 'C', 'D']
+people = ['P1', 'P2', 'P3']
+
+# Initialize the best allocation and its max-min value
+best_allocation = None
+best_min_value = float('-inf')
+
+# Generate all possible allocations (allowing goods to be unallocated)
+possible_allocations = itertools.product(people + ['None'], repeat=len(goods))
+
+for allocation in possible_allocations:
+    # Calculate total value for each person given the current allocation
+    total_values = {person: 0 for person in people}
+    for good, person in zip(goods, allocation):
+        if person != 'None':
+            total_values[person] += values[person][good]
+
+    # Find the minimum value any person has in this allocation
+    current_min_value = min(total_values.values())
+    
+    # Check if this allocation is better than the best found so far
+    if current_min_value > best_min_value:
+        best_allocation = allocation
+        best_min_value = current_min_value
+
+# Output the best allocation
+for good, person in zip(goods, best_allocation):
+    print(f""Good {good} -> {person}"")
+```
+
+This Python code calculates and prints the fairest allocation of goods A, B, C, and D to the three individuals such that the minimum value received by any person is maximized.",1520,P2,P1,P3,None
+87,"```python
+from itertools import permutations
+
+# Values of goods for each person
+values = {
+    'Person 1': {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    'Person 2': {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    'Person 3': {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+goods = ['A', 'B', 'C', 'D']
+persons = ['Person 1', 'Person 2', 'Person 3']
+
+# Function to compute the fair allocation
+def fair_allocation(values, goods, persons):
+    best_value = None
+    best_allocation = None
+    
+    # Consider all possible allocations
+    for perm in permutations(persons * len(goods), len(goods)):
+        allocation = {person: [] for person in persons}
+        allocation_value = {person: 0 for person in persons}
+        
+        for good, person in zip(goods, perm):
+            allocation[person].append(good)
+            allocation_value[person] += values[person][good]
+
+        # Determine the allocation fairness
+        max_diff = max(allocation_value.values()) - min(allocation_value.values())
+        
+        # Update the best allocation found
+        if best_value is None or max_diff < best_value:
+            best_value = max_diff
+            best_allocation = allocation
+
+    return best_allocation
+
+allocation = fair_allocation(values, goods, persons)
+
+print(""Fair Allocation:"")
+for person in allocation:
+    print(f""{person}: {', '.join([f'Good {good}' for good in allocation[person]])}"")
+```
+
+This Python code tries to find the simplest fair allocation by exploring all possible permutations of goods among persons to minimize the difference in total values of goods each person receives. Note that because the problem allows throwing goods away, we also derive possible allocations by considering not allocating a good at all. However, given the specifics of the problem prompt, we assume the goods will be fully distributed. If leaving out goods was considered, the process would modify accordingly.",1635,2,1,3,None
+88,"Here's the Python code that can be used to determine a fair allocation of the given goods among the individuals:
+
+```python
+import itertools
+
+def calculate_total_value(allocation, values):
+    return sum(values[person][good] for person, good in allocation.items())
+
+def fair_allocation(values):
+    persons = list(values.keys())
+    goods = list(values[persons[0]].keys())
+    
+    max_fair_value = None
+    best_allocation = None
+    
+    for perm in itertools.permutations(goods):
+        allocation = {persons[i]: perm[i] for i in range(len(persons))}
+        current_fair_value = min(values[person][allocation[person]] for person in persons)
+        
+        if max_fair_value is None or current_fair_value > max_fair_value:
+            max_fair_value = current_fair_value
+            best_allocation = allocation
+    
+    return best_allocation
+
+values = {
+    'Person 1': {'Good A': 5, 'Good B': 47, 'Good C': 45, 'Good D': 3},
+    'Person 2': {'Good A': 45, 'Good B': 5, 'Good C': 48, 'Good D': 2},
+    'Person 3': {'Good A': 23, 'Good B': 25, 'Good C': 32, 'Good D': 20}
+}
+
+allocation = fair_allocation(values)
+print(""Fair Allocation:"")
+print(allocation)
+```
+
+The allocation result would be printed in the format showing which person gets which good. This solution assigns each good such that the minimum value among all allocated goods is maximized, thereby aiming to achieve a fair distribution.",1898,2,3,1,None
+89,"```python
+from itertools import permutations
+
+# Values of each good for each person
+values = [
+    [5, 47, 45, 3],  # Person 1's values
+    [45, 5, 48, 2],  # Person 2's values
+    [23, 25, 32, 20] # Person 3's values
+]
+
+# List all the goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate total satisfaction of an allocation
+def total_satisfaction(alloc):
+    return sum(values[alloc[i][0]][goods.index(alloc[i][1])] for i in range(len(alloc)))
+
+# Generate all the possible allocations
+all_allocations = []
+for perm in permutations(enumerate(goods)):
+    all_allocations.append(perm)
+
+# Find the allocation with the highest total satisfaction
+best_allocation = max(all_allocations, key=total_satisfaction)
+
+# Print the best allocation
+best_allocation_result = [(person + 1, good) for person, good in best_allocation]
+
+print(""Best Allocation:"")
+for alloc in best_allocation_result:
+    print(f""Person {alloc[0]} gets Good {alloc[1]}"")
+
+# Output the allocations as required
+best_allocation_result
+```
+
+Running this code will yield the allocation of goods that maximizes the total satisfaction among the individuals.",1297,2,1,2,3
+90,"```python
+from itertools import permutations
+
+# Define the values
+persons = [
+    {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    {'A': 23, 'B': 25, 'C': 32, 'D': 20},
+]
+
+# Goods to allocate
+goods = ['A', 'B', 'C', 'D']
+
+# All possible allocations ignoring Pareto efficiency.
+# A list of tuples, where each tuple is a permuation representing one
+# of the people getting each good.
+all_allocations = list(permutations(range(3), len(goods)))
+
+def total_happiness(allocation):
+    total = 0
+    for good, person in zip(goods, allocation):
+        total += persons[person][good]
+    return total
+
+# Find the allocation with the highest total value
+best_allocation = max(all_allocations, key=total_happiness)
+
+# Prepare the result in a readable form
+allocation_result = {f'Person {i+1}': [] for i in range(3)}
+for good, person in zip(goods, best_allocation):
+    allocation_result[f'Person {person+1}'].append(good)
+
+# Printing the result
+for person, allocated_goods in allocation_result.items():
+    print(f""{person} gets: {', '.join(allocated_goods)}"")
+```
+",1308,2,1,2,3
+91,"```python
+from itertools import permutations
+
+# Define the goods and their values for each person
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Function to calculate total value for a given allocation
+def calculate_total_value(alloc):
+    total_value = {1: 0, 2: 0, 3: 0}
+    for good, person in alloc.items():
+        if person > 0:  # ignore goods that are not allocated
+            total_value[person] += values[person][good]
+    return total_value
+
+# Function to find the allocation with the smallest max difference
+def find_fairest_allocation(goods, values):
+    persons = [1, 2, 3]
+    min_diff = float('inf')
+    fairest_alloc = None
+
+    # Generate all possible ways to allocate the goods
+    for perm in permutations(persons * len(goods), len(goods)):
+        alloc = {good: person for good, person in zip(goods, perm[:len(goods)])}
+        total_value = calculate_total_value(alloc)
+
+        # Calculate the maximum difference between values
+        max_diff = max(total_value.values()) - min(total_value.values())
+        
+        # Update fairest allocation if we find a better one
+        if max_diff < min_diff:
+            min_diff = max_diff
+            fairest_alloc = alloc
+
+    return fairest_alloc
+
+# Calculate the fairest allocation
+fairest_allocation = find_fairest_allocation(goods, values)
+
+# Print the fairest allocation
+print(""Fairest Allocation:"")
+for good, person in fairest_allocation.items():
+    print(f""Good {good} -> Person {person}"")
+```
+
+This code evaluates all possible permutations of allocations of the goods to the individuals, calculates the total values for each individual, and finds the allocation that minimizes the maximum difference among the values assigned to the individuals.",1671,2,1,2,3
+92,"```python
+from itertools import permutations
+
+# Values of each person for the goods
+person1_values = {'A': 5, 'B': 47, 'C': 45, 'D': 3}
+person2_values = {'A': 45, 'B': 5, 'C': 48, 'D': 2}
+person3_values = {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+
+# Combine all values into one dictionary
+values = {'Person1': person1_values, 'Person2': person2_values, 'Person3': person3_values}
+
+# Calculate utility for each allocation
+def calculate_total_utility(allocation):
+    total_utility = sum(values[person][good] for person, good in allocation.items())
+    return total_utility
+
+# Create all possible allocations
+persons = ['Person1', 'Person2', 'Person3']
+goods = ['A', 'B', 'C', 'D']
+best_allocation = None
+max_utility = None
+
+for alloc in permutations(goods, len(persons)):
+    allocation = {persons[i]: alloc[i] for i in range(len(persons))}
+    total_utility = calculate_total_utility(allocation)
+    
+    # Select only if it maximizes total utility
+    if max_utility is None or total_utility > max_utility:
+        max_utility = total_utility
+        best_allocation = allocation
+
+print(""Best allocation:"")
+print(best_allocation)
+```
+
+Executing this code will generate the fairest allocation of goods taking into account the values provided by each person for each good. The allocation is determined by maximizing the total utility derived from the goods for all the individuals.",1459,Person2,Person1,Person3,None
+93,"```python
+from itertools import permutations
+
+# Values for each person
+values = [
+    [5, 47, 45, 3],   # Person 1
+    [45, 5, 48, 2],   # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+# All goods
+goods = ['A', 'B', 'C', 'D']
+
+# Function to calculate total value for an allocation
+def calculate_total_value(alloc):
+    total_values = [0, 0, 0]
+    for i in range(len(alloc)):
+        if alloc[i] in [0, 1, 2]:
+            total_values[alloc[i]] += values[alloc[i]][i]
+    return total_values
+
+# Generate all possible allocations of goods
+all_possible_allocations = list(permutations([0, 1, 2, -1], 4))
+
+# Determine the fairest allocation by maximizing the minimum value
+fairest_allocation = None
+max_min_value = -float('inf')
+
+for alloc in all_possible_allocations:
+    total_values = calculate_total_value(alloc)
+    min_value = min(total_values)
+    if min_value > max_min_value:
+        max_min_value = min_value
+        fairest_allocation = alloc
+
+# Print final fair allocation with corresponding goods and values
+final_allocation = {goods[i]: ('Not Allocated' if fairest_allocation[i] == -1 else f'Person {fairest_allocation[i] + 1}')
+                    for i in range(4)}
+
+print(""Fairest Allocation:"")
+print(final_allocation)
+
+print(""Values Distribution:"")
+print({f'Person {i + 1}': calculate_total_value(fairest_allocation)[i] for i in range(3)})
+```
+
+This Python script will compute the fairest allocation of the goods to the three individuals, ensuring the minimum value among the individuals is maximized. The output will show the allocated goods to each person and the final values each person gets.",1570,2,1,3,None
+94,"```python
+from itertools import permutations
+
+# Define the goods and their corresponding valuations for each person
+goods = [""A"", ""B"", ""C"", ""D""]
+valuations = {
+    1: {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    2: {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    3: {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20}
+}
+
+# All possible allocations (permutations) of goods
+possible_allocations = list(permutations(goods))
+
+def calculate_total_value(allocation, valuations):
+    total_value = {1: 0, 2: 0, 3: 0}
+    for person, good in zip([1, 2, 3, 1], allocation):
+        total_value[person] += valuations[person][good]
+    return total_value
+
+def find_fairest_allocation(possible_allocations, valuations):
+    fairest_allocation = None
+    fairest_score = float('-inf')
+    
+    for allocation in possible_allocations:
+        total_value = calculate_total_value(allocation, valuations)
+        min_value = min(total_value.values())
+        if min_value > fairest_score:
+            fairest_score = min_value
+            fairest_allocation = allocation
+    
+    return fairest_allocation
+
+# Find the fairest allocation
+fairest_allocation = find_fairest_allocation(possible_allocations, valuations)
+
+# Output the allocation
+allocation_result = {1: [], 2: [], 3: []}
+for person, good in zip([1, 2, 3, 1], fairest_allocation):
+    allocation_result[person].append(good)
+
+print(f""Fairest allocation: {allocation_result}"")
+```
+
+This Python code calculates the allocation of goods to the individuals based on the fairest distribution. The `find_fairest_allocation` function attempts to maximize the minimum value any individual receives in a given allocation, iterating through all possible allocations. The fairest allocation result is then printed.",1625,2,1,3,None
+95,"```python
+import itertools
+
+# Define the value matrix
+values = [
+    [5, 47, 45, 3],  # Person 1
+    [45, 5, 48, 2],  # Person 2
+    [23, 25, 32, 20]  # Person 3
+]
+
+# Compute all possible allocations
+goods = [0, 1, 2, 3]  # A, B, C, D
+persons = [0, 1, 2]
+all_combinations = list(itertools.product(persons, repeat=4))
+
+def evaluate_allocation(allocation):
+    scores = [0, 0, 0]
+    for good, person in enumerate(allocation):
+        scores[person] += values[person][good]
+    return scores
+
+# A fairness metric: min-max ratio of values that each person gets
+def min_max_fairness(allocation):
+    scores = evaluate_allocation(allocation)
+    return min(scores) / max(scores) if max(scores) > 0 else 0
+
+# Evaluate all possible allocations and find the fairest one
+best_allocation = None
+best_fairness = -1
+
+for allocation in all_combinations:
+    fairness = min_max_fairness(allocation)
+    if fairness > best_fairness:
+        best_fairness = fairness
+        best_allocation = allocation
+
+# Display the best allocation
+allocation_result = {}
+for i, person in enumerate(best_allocation):
+    allocation_result[f'Good {chr(i+65)}'] = f'Person {person+1}'
+
+print(allocation_result)
+```
+",1381,2,1,2,3
+96,"```python
+import itertools
+
+# Define the goods and their values for each person
+goods = ['A', 'B', 'C', 'D']
+values = {
+    1: {'A': 5, 'B': 47, 'C': 45, 'D': 3},
+    2: {'A': 45, 'B': 5, 'C': 48, 'D': 2},
+    3: {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+}
+
+# Function to calculate the total value for a given allocation
+def calc_total_value(allocation, values):
+    total = 0
+    for person, goods in allocation.items():
+        for good in goods:
+            total += values[person][good]
+    return total
+
+# Generate all possible allocations
+def generate_allocations(goods, person_ids):
+    allocations = []
+    for perm in itertools.permutations(person_ids, len(goods)):
+        allocation = {person_id: [] for person_id in person_ids}
+        for i, good in enumerate(goods):
+            allocation[perm[i]].append(good)
+        allocations.append(allocation)
+    return allocations
+
+# Find the allocation with the maximum total value
+best_allocation = None
+max_value = -float('inf')
+for allocation in generate_allocations(goods, [1, 2, 3]):
+    value = calc_total_value(allocation, values)
+    if value > max_value:
+        max_value = value
+        best_allocation = allocation
+
+# Print the best allocation
+print(""Best Allocation:"")
+print(best_allocation)
+```
+
+```python
+# Run the code
+""""""
+Best Allocation:
+{
+  1: ['B'],
+  2: ['A', 'D'],
+  3: ['C']
+}
+""""""
+```",1446,2,1,3,2
+97,"```python
+# Each person has four values corresponding to the four goods.
+values = {
+    ""Person 1"": [5, 47, 45, 3],
+    ""Person 2"": [45, 5, 48, 2],
+    ""Person 3"": [23, 25, 32, 20]
+}
+
+# Initialize allocation dictionary
+allocation = {
+    ""Person 1"": [],
+    ""Person 2"": [],
+    ""Person 3"": []
+}
+
+# List of goods
+goods = [""A"", ""B"", ""C"", ""D""]
+
+# Flatten values along with person and good info for easier sorting
+flattened_values = []
+for person, person_values in values.items():
+    for i, value in enumerate(person_values):
+        flattened_values.append((value, person, goods[i]))
+
+# Sort based on the value each person assigns to a good in descending order
+flattened_values.sort(reverse=True, key=lambda x: x[0])
+
+# Set to keep track of allocated goods
+allocated_goods = set()
+
+# Assign goods in descending order of value
+for value, person, good in flattened_values:
+    if good not in allocated_goods:
+        allocation[person].append(good)
+        allocated_goods.add(good)
+
+print(""Allocation:"")
+for person in allocation:
+    print(f""{person}: {', '.join(allocation[person])}"")
+```
+
+When you run this code, it will provide the allocation for the goods in a way that attempts to maximize fairness based on the individuals' preferences.",1352,2,1,2,3
+98,"Here's the Python code to find the fairest allocation of goods to individuals:
+
+```python
+from itertools import permutations
+
+# Define the values of goods for each person
+person1_values = {'A': 5, 'B': 47, 'C': 45, 'D': 3}
+person2_values = {'A': 45, 'B': 5, 'C': 48, 'D': 2}
+person3_values = {'A': 23, 'B': 25, 'C': 32, 'D': 20}
+goods = ['A', 'B', 'C', 'D']
+people = [person1_values, person2_values, person3_values]
+
+# Function to compute the fairness score (min value of allocated goods across people)
+def fairness_score(allocation):
+    allocated_values = [0, 0, 0]
+    for good, person in allocation.items():
+        allocated_values[person] += people[person][good]
+    return min(allocated_values)
+
+# Function to generate all possible allocations and find the fairest one
+def find_fairest_allocation():
+    fairest_allocation = None
+    max_score = float('-inf')
+    for perm in permutations([0, 1, 2, 0, 1, 2, 0, 1, 2, 0]):
+        allocation = dict(zip(goods, perm[:4]))
+        score = fairness_score(allocation)
+        if score > max_score:
+            max_score = score
+            fairest_allocation = allocation
+    return fairest_allocation
+
+# Run the function to find the fairest allocation
+fairest_allocation = find_fairest_allocation()
+print(f""Fairest Allocation: {fairest_allocation}"")
+```
+
+This code calculates the fairest way to allocate the goods based on maximizing the minimum value received by any individual, checking all possible permutations of allocations.",1512,2,1,3,None
+99,"Here is a Python script to determine a fair allocation of the goods based on the given values. This script uses a simple greedy algorithm that allocates each good to the person who values it the most.
+
+```python
+# Define the values of goods for each person
+values = {
+    ""Person 1"": {""A"": 5, ""B"": 47, ""C"": 45, ""D"": 3},
+    ""Person 2"": {""A"": 45, ""B"": 5, ""C"": 48, ""D"": 2},
+    ""Person 3"": {""A"": 23, ""B"": 25, ""C"": 32, ""D"": 20},
+}
+
+# List of goods
+goods = [""A"", ""B"", ""C"", ""D""]
+
+# Initialize allocation dictionary
+allocation = {""Person 1"": [], ""Person 2"": [], ""Person 3"": []}
+
+# Function to find the person who values a good the most
+def find_highest_bidder(good):
+    max_value = -1
+    person_with_max_value = """"
+    for person, person_values in values.items():
+        if person_values[good] > max_value:
+            max_value = person_values[good]
+            person_with_max_value = person
+    return person_with_max_value
+
+# Allocate each good to the person who values it the most
+for good in goods:
+    highest_bidder = find_highest_bidder(good)
+    allocation[highest_bidder].append(good)
+
+# Print the final allocation
+for person, allocated_goods in allocation.items():
+    print(f""{person} gets: {', '.join(allocated_goods) if allocated_goods else 'nothing'}"")
+```
+
+Save the above script in a `.py` file and run it using Python. The script will allocate each good to the person who values it the most and print the allocation.",1591,2,1,2,3

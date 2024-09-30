@@ -1,0 +1,895 @@
+,Text,Good A,Good B,Good C
+0,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+In this case, Person 1 values Good A more than Person 2, and the same is true for Person 2 and Good B. Therefore, for Goods A and B, it is efficient to allocate them to the people that value them the most. Because Good C is not valued by any of the people, it makes sense to discard it.",1,2,None
+1,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+**Justification:**
+
+I have allocated Good A to Person 1 and Good B to Person 2 because they value these goods the most, respectively. However, I have decided not to allocate Good C to either person because its value to both individuals is relatively low (5). By discarding Good C, we can ensure a more equitable distribution of the goods that are considered more valuable.",1,2,None
+2,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+This allocation is considered fair because it provides the highest total value to both individuals. Person 1 receives Good A which they value at 49, and Good C which they value at 5, for a total of 54. Person 2 receives Good B which they value at 48. Discarding Good C ensures that the total value of the allocated goods is maximized.",1,2,None
+3,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Discard""
+}
+Since both individuals value Good B more than Good A and Good C has the same value for both, the allocation of Good B to Person 1 and Good A to Person 2 is fair. The discarding of Good C is also fair, as it has the same value for both individuals and discarding it prevents any potential conflicts or dissatisfaction.",1,2,Discard
+4,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+Justification: 
+
+For both Person 1 and Person 2, Good A and Good B are their most preferred goods. So far, the allocation is straightforward. The remaining issue is Good C. Since Person 1 values it only 5, compared to Person 2's 48 for Good B, the fairest option is to discard Good C.",1,2,None
+5,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+ **Justification:** With this allocation, the total value of the goods for Person 1 is 95 and for Person 2 is 95. Since the value obtained by each person is the same, this allocation is considered fair. Discarding Good C maximises the total value of the goods for both the persons as both Person 1 and Person 2 have a very low value for Good C.",2,1,None
+6,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: This allocation is fair because it distributes the goods to the individuals who value them the most. Person 1 values Good A the most, so it is allocated to them. Person 2 values Good B the most, so it is allocated to them. Neither individual values Good C very much, so it is discarded. This allocation gives both individuals their most preferred good and ensures that no good is wasted.",1,2,None
+7,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+Justification:
+In this solution, Person 1 receives Good A and Person 2 receives Good B. Good C is discarded. We discard Good C because both Person 1 and Person 2 value it at only 5, while they value Goods A and B significantly higher. By discarding Good C, we avoid a situation where one person receives a good that they do not value very highly, while the other person does not receive a good that they value more. This allocation ensures that both Person 1 and Person 2 receive goods that they value more highly, and it does not waste any of the goods.",2,1,None
+8,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+```
+
+The total value of the allocation for Person 1 is 49, and for Person 2 is 48. This is the most equitable allocation, as it gives both parties an approximately equal amount of value.Discarding Good C is necessary to achieve this equitable allocation while avoiding over-allocation (i.e., giving more goods to one person than there are goods to allocate).",1,2,None
+9,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+Justification:
+The total value of the goods to Person 1 is 49 + 46 + 5 = 100.
+The total value of the goods to Person 2 is 47 + 48 + 5 = 100.
+The allocation proposed above gives each person goods with a total value of 100, which is fair since both persons value the goods equally.
+Discarding Good C is also fair since both persons value it equally and it is the only way to ensure that both persons receive goods of equal value.",1,2,None
+10,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The discarded Good C is worth the same to both individuals. Therefore, discarding it maximizes the total value of the allocated goods. Of the remaining goods, Person 1 values Good A more than Person 2, and Person 2 values Good B more than Person 1. Therefore, allocating Good A to Person 1 and Good B to Person 2 maximizes the total value of the allocated goods.",2,1,None
+11,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+Justification: Here is my reasoning for why I believe this allocation is fair:
+
+1. **Person 2 values Good A more than Person 1.**
+- Person 2 values Good A at 47 while Person 1 values it at 49, so it makes sense to give Good A to Person 2.
+
+2. **Person 1 values Good B more than Person 2.**
+- Person 1 values Good B at 46 while Person 2 values it at 48, so it makes sense to give Good B to Person 1.
+
+3. **Both Person 1 and Person 2 value Good C the same.**
+- Both persons value Good C at 5, so it makes sense to discard Good C rather than give it to either person.
+
+Overall, this allocation ensures that the goods are distributed in a way that maximizes the total value for both Person 1 and Person 2.",2,1,None
+12,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+Here is my reasoning for the allocation:
+The total value of the goods for Person 1 is 49 + 46 + 5 = 100. The total value of the goods for Person 2 is 47 + 48 + 5 = 100. Therefore, an equal split of the value of the goods would be 100/2 = 50.
+Person 1 values Good A the most at 49. Person 2 values Good B the most at 48. So it makes sense to allocate Good A to Person 1 and Good B to Person 2.
+This leaves Good C. Both Person 1 and Person 2 value Good C the least at 5. Since the value is so low for both of them, I have decided to discard Good C, rather than allocate it to either person.",1,2,None
+13,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+```
+
+The total value of the goods for Person 1 is 100 (49 + 46 + 5), and for Person 2 is 100 (47 + 48 + 5). 
+Discarding Good C and allocating Good A to Person 1 and Good B to Person 2 results in an equal split of the total value. This allocation is fair because it gives both individuals an equal share of the value of the goods.",1,2,None
+14,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: This allocation gives Person 1 their highest valued good and Person 2 their second-highest valued good. Discarding Good C is necessary to achieve this allocation and is considered fair because both Person 1 and Person 2 value Good C equally.",2,1,None
+15,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+The proposed allocation is fair because it gives the most valued good, Good A, to the person who values it the most, Person 1, in this case. Similarly, Good B is allocated to Person 2, who values it the most. As both Person 1 and Person 2 value Good C the same, it is discarded as the extra utility gained from allocating it to either person would be the same.",1,2,None
+16,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+As C is the least preferred good for both people, it seems more fair to throw it out than to allocate it to either of the two people. For goods A and B, Person 1 and Person 2 have different preferences. Person 1 values A more than B, while Person 2 values B more than A. Therefore, allocating A to Person 1, and B to Person 2 seems fair.",2,1,None
+17,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+This allocation is the fairest because it maximizes the total value of the goods for the two people. Person 1 gets Good A, which is worth 49 to them, and Person 2 gets Good B, which is worth 48 to them. Good C, which is worth only 5 to both people, is discarded. This allocation gives a total value of 97, which is the highest possible total value for any allocation.",1,2,None
+18,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+I have allocated Good A to Person 1 and Good B to Person 2 because they value these goods the most, respectively. Good C is discarded because neither person values it very highly.
+
+The total value of the allocation to Person 1 is 49, and the total value of the allocation to Person 2 is 48. It is not possible to allocate the goods in a way that gives both people an equal value, but this allocation is as close as possible to an equal split.",1,2,None
+19,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+**Justification:** This allocation gives the highest total value to both Person 1 and Person 2 combined. Person 1 gets Good A, which is their most valuable good, and has a value of 49 for them. Person 2 gets Good B, which is their most valuable good, and has a value of 48 for them. Neither person values Good C very highly, so it is discarded.",1,2,None
+20,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+The allocation is fair because it maximizes the total value of the goods allocated to the individuals. Person 1 receives the good they value the most (Good A), and Person 2 receives the good they value the most (Good B). Good C is discarded because neither person values it very highly.
+
+The total value of the goods allocated to Person 1 is 49 (Good A) + 0 (Good B) + 0 (Good C) = 49. The total value of the goods allocated to Person 2 is 0 (Good A) + 48 (Good B) + 0 (Good C) = 48. The total value of the goods allocated to both persons is 49 + 48 = 97.
+
+This allocation is also simple and easy to implement. There is no need to cut up any of the goods or to create complicated rules about who gets what.",1,2,None
+21,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: This allocation is fair because both Person 1 and Person 2 get one good that they value the most. Good C is discarded because it is the least valued good by both individuals.",1,2,None
+22,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+**Justification:**
+
+The allocation suggested above maximizes the total value of the goods allocated, which is 49 + 48 = 97. It is also fair because both Person 1 and Person 2 receive a good that they value highly. Good C is discarded because neither person values it very highly.",1,2,None
+23,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+```
+
+**Justification:**
+
+This allocation maximizes the total value for the goods to the individuals:
+
+* Person 1 values Good A the highest (49) and Good C the lowest (5), so it is fair to give them Good A.
+* Person 2 values Good B the highest (48) and Good A slightly lower (47), so it is fair to give them Good B.
+* Good C is valued equally by both individuals (5), and discarding it results in the highest overall value.",2,1,Discarded
+24,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+
+Justification: The allocation that I have chosen is to give Good A to Person 1, Good B to Person 2, and Good C to Person 1. The reason for my choice is to attempt to give each good to the person who values it the most. Person 1 values Good A the most at 49, and Good C equally at 5, but Good C is also equally valued by Person 2, so I give Good A to Person 1, and Good C to Person 1 as well. Person 2 values Good B most at 48, and Person 1 values it at 46, so this gives Good B to Person 2. The allocation does satisfy individual rationality as each person values the goods given to them more than the goods discarded.",2,1,None
+25,"```json
+{
+  ""Good A"": ""Person 1"",
+  ""Good B"": ""Person 2"",
+  ""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+This allocation provides the highest total value to both people. Person 1 receives Good A, which they value more than any other good. Person 2 receives Good B, which they value more than any other good.
+
+Discarding Good C is justified because both people value it the least. Giving Good C to either person would provide less value than discarding it.",2,1,None
+26,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The allocation I have selected is the one that maximizes the total value of the goods allocated to the individuals: Person 1 gets Good A, which has a value of 49 for them, and Person 2 gets Good B, which has a value of 48 for them. Good C is discarded since neither person values it as more than 5, which is less than the value of discarding it (by discarding it, we save the effort of allocating it).",1,2,None
+27,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+This allocation is fair because it tries to maximize the total value derived from the goods by the two people. Since good C is valued at only 5 by both people, discarding it gives both people a higher total value for goods A and B. The total value for Person 1 is 49+46 = 95 and the total value for Person 2 is 47+48 = 95.",1,2,None
+28,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+The total value of the goods to be allocated is 105. By allocating Good A to Person 1 and Good B to Person 2, we achieve a total value of 95 (49 + 46), which is the highest possible total value that can be achieved without discarding any of the goods. 
+
+The remaining good, Good C, has a value of only 5, and allocating it to either person would result in a lower total value. Therefore, it is most fair to discard Good C.",1,2,None
+29,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+This allocation is considered fair because it maximizes the total value of the goods for both individuals. Person 1 values Good A the most among the three goods, and Person 2 values Good B the most. Therefore, it is fair to allocate Good A to Person 1 and Good B to Person 2. Good C has the same value for both individuals, but it has a lower value compared to Good A and Good B. Therefore, it is considered fair to discard Good C in order to maximize the total value of the allocated goods.",2,1,None
+30,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+In this allocation, Person 1 receives Good A, which is their most valued good, and Person 2 receives Good B, which is their most valued good. Good C is discarded because it is the least valued good for both Person 1 and Person 2. This allocation results in the highest total value for the two persons, which is 95 (49 + 46).",2,1,None
+31,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+```
+The justification for this allocation is as follows:
+- If we were to give Good A to Person 2, and Good B to Person 1, then the total value of the allocation would be 95, which is the same as the total value of the allocation where Person 1 gets Good A and Person 2 gets Good B.
+- However, in the allocation where Person 1 gets Good A and Person 2 gets Good B, Person 1 gets a higher value for the good that they receive (49 vs. 47).
+- Therefore, the allocation where Person 1 gets Good A and Person 2 gets Good B is fairer than the allocation where Person 2 gets Good A and Person 1 gets Good B.
+- Since both Person 1 and Person 2 value Good C the same (5), it is fair to discard Good C and not give it to either person.",2,1,Discard
+32,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+
+The allocation above is the fairest in my opinion because it gives both individuals the highest-valued good for them while discarding the lowest-valued good for both individuals. For both individuals, the value of the good that they receive is higher than the value of the other good that they do not receive. Additionally, discarding the lowest-valued good means that the total value of the goods that are allocated is maximized.",1,2,None
+33,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+**Justification:** The allocation of Good A to Person 1 and Good B to Person 2 is the only allocation that does not result in any good being discarded. In this allocation, Person 1 receives a total value of 95 (49 for Good A and 46 for Good B), and Person 2 receives a total value of 95 (47 for Good A and 48 for Good B). The discarded good, Good C, has a value of only 5, making it the least valuable of the three goods. Therefore, allocating Goods A and B to Person 1 and Person 2, respectively, and discarding Good C, results in the fairest outcome.",1,2,None
+34,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+
+Justification: Person 1 values Good A the most out of both individuals and also values Good C more than Person 2. Therefore, it is fair to allocate Good A to Person 1 to maximize their utility. On the other hand, Person 2 has a higher value for Good B than Person 1 and so Good B can be fairly allocated to Person 2. As a result, Good C should be given to Person 1 so that they receive a total value of 100 (49 + 5 + 46).",1,2,Discarded
+35,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+
+This allocation is fair because it gives each person their most preferred good and discards the good that is of least value to both people.",1,2,None
+36,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""Discard""
+}
+
+**Justification:**
+
+This allocation is fair because it gives Good A to the person who values it more (Person 2, who values it at 47) and Good B to the person who values it more (Person 1, who values it at 46). Good C is discarded because both people value it at only 5, which is less than the value of the other goods.",1,2,Discard
+37,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification:
+The difference between Person 1's and Person 2's values for Good A is 2, while, for Good B, the difference is -2. Therefore, allocating Good A to Person 1 and Good B to Person 2 results in a smaller difference in their valuations. Good C is discarded because both Person 1 and Person 2 value it equally, and discarding it results in the smallest loss of value.",1,2,None
+38,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+For this allocation, the total value to Person 1 is 49 + 0 + 0 = 49, while the total value to Person 2 is 47 + 48 + 0 = 95. This is the fairest allocation because it gives the most total value to the person who values the goods the most. Person 2 values Good B the most, so they get Good B. Person 1 values Good A the most, so they get Good A. Neither person values Good C very much, so it is discarded.",1,2,None
+39,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+
+The proposed allocation is fair because it results in the maximum sum of values for both individuals.
+
+Person 1's value for Good A is 49, for Good B is 46, and for Good C is 5. So, Person 1's total value is 49 + 46 + 5 = 100.
+
+Person 2's value for Good A is 47, for Good B is 48, and for Good C is 5. So, Person 2's total value is 47 + 48 + 5 = 100.
+
+If we allocate the goods as proposed, Person 1 gets Good A and Good C, which gives them total value of 49 + 5 = 54. Person 2 gets Good B, which gives them a total value of 48.
+
+This allocation results in a total value of 54 + 48 = 102, which is the maximum possible total value for both individuals.",1,2,1
+40,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification**:
+
+One way to approach this problem is to consider the difference between the value of each good to each person. For Person 1, the difference between their value for Good A and Good B is 3 (49 - 46), while the difference between their value for Good B and Good C is 41 (46 - 5). For Person 2, the difference between their value for Good A and Good B is 1 (47 - 48), while the difference between their value for Good B and Good C is 43 (48 - 5).
+
+Based on these differences, it seems that Person 1 values Good B more than Good A, while Person 2 values Good B more than Good C. Therefore, a fair allocation would be to give Good B to Person 2.
+
+Since Good B has been allocated, we now need to decide how to allocate Good A and Good C. Since Person 1 values Good A more than Good C, and Good B has already been allocated to Person 2, it seems fair to give Good A to Person 1. This leaves Good C unallocated, which is also fair since both Person 1 and Person 2 value Good C the same.
+
+Therefore, the fairest allocation is to give Good A to Person 1, Good B to Person 2, and discard Good C.",2,1,None
+41,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+**Justification**:
+This allocation is considered fair because it maximises the total value of the goods for the two people. Person 1 values Good A the most, so it is allocated to them. Person 2 values Good B the most, so it is allocated to them. Good C is discarded because neither person values it very highly.",2,1,None
+42,"```json
+{
+  ""Good A"": ""Person 2"",
+  ""Good B"": ""Person 1"",
+  ""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+This allocation is fair because:
+
+* It gives each person their most preferred good (Good A to Person 2 and Good B to Person 1).
+* It ensures that neither person receives their least preferred good (Good C).
+* The total value of the goods allocated to each person is nearly equal (Person 1 receives goods worth 95 units, while Person 2 receives goods worth 97 units).",1,2,None
+43,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: I have allocated Good A to Person 1 and Good B to Person 2 because they value these goods the most, respectively. I have decided to discard Good C because both individuals value it the least, and throwing it away results in a fairer allocation of the available goods.",1,2,None
+44,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+```
+
+**Justification:**
+
+The total value of the goods for Person 1 is 49 + 46 + 5 = 100, while that for Person 2 is 47 + 48 + 5 = 100. Thus, both persons value the goods equally. However, Person 1 values Good A (49) slightly more than Good B (46), while Person 2 values Good B (48) slightly more than Good A (47). In this case, it is fair to allocate Good A to Person 1 and Good B to Person 2. Since both persons value Good C equally and only 5, it is reasonable to discard it to maximize the total utility of the allocation.",2,1,Discard
+45,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+This allocation is fair because it gives both Person 1 and Person 2 a good that they value more than the other person. Person 1 gets Good A, which they value at 49, and Person 2 gets Good B, which they value at 48. Neither person would be better off if they were to receive the good that the other person received. Discarding Good C is also fair because neither person values it very highly. Person 1 values it at only 5, and Person 2 values it at only 5.",2,1,None
+46,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+In this allocation, Person 1 receives the good they value the most, and Person 2 receives the good they value the most. Since both of them value Good C at the same and it is not any of their most preferred goods, it is discarded. This allocation seems fair since it maximizes the total value obtained by both people, which is 49 + 48 = 97.",1,2,None
+47,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+```
+Justification:
+We want to maximize the total value of the allocation. Person 1 values Good A the most, and Person 2 values Good B the most. Therefore, it is fair to allocate Good A to Person 1 and Good B to Person 2. Good C has the same value for both individuals, and discarding it does not affect the total value of the allocation.",1,2,None
+48,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+Person 1 gets Good A because they value it the most. Person 2 gets Good B because they value it the most, and discarding Good C is the most efficient outcome because it is valued equally by both parties.",1,2,None
+49,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+Justification:
+
+Person 1 values Good A more than Person 2 (49 > 47) and the value of Good A to Person 1 is much higher than the value of Good C to either Person 1 or 2 (49 >> 5). Therefore, it is fair to allocate Good A to Person 1. 
+Person 2 values Good B more than Person 1 (48 > 46) and the value of Good B to Person 2 is much higher than the value of Good C to either Person 1 or 2 (48 >> 5). Therefore, it is fair to allocate Good B to Person 2. 
+The value of Good C is the same for both Person 1 and Person 2 (5 = 5). However, Good C has the lowest value of all 3 goods for both Person 1 and Person 2 (5 < 46, 5 < 49, 5 < 48). Therefore, it is fair to discard Good C.",1,2,None
+50,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+This allocation is considered fair because it attempts to maximize the total value for both individuals.
+The total value of the allocation for Person 1 is 46 (Good B) and for Person 2 is 47 (Good A) which is the maximum value possible from all feasible allocations.
+Discarding Good C is the only way of reaching this maximum value.",1,2,None
+51,"{
+""Good A"": ""Person 1""
+""Good B"": ""Person 2""
+""Good C"": ""None""
+}
+Justification:
+I have assigned Good A to Person 1 and Good B to Person 2 because they value these goods the most, respectively. Since both individuals value Good C the same and it is the good with the lowest value for both, I have decided to discard it. This allocation ensures that both individuals receive a good that they value highly, resulting in a relatively fair distribution.",1,2,None
+52,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discard""
+}
+Justification: By giving Good A to Person 1 and Good B to Person 2, we maximize the total value of the goods allocated. Good C has a low value for both individuals, so it is discarded to avoid wasting resources. This allocation results in a total value of 95 (49 + 46), which is the highest possible value that can be achieved using these goods.",1,2,None
+53,"```json
+{
+  ""Good A"": ""Person 1"",
+  ""Good B"": ""Person 2"",
+  ""Good C"": ""Discarded""
+}
+```
+
+**Justification:**
+
+This allocation maximizes the total utility of the goods for both individuals.
+
+* Person 1 values Good A the most (49) and the value of Good B (46) is higher than Person 2's value for Good B (48).
+* Person 2 values Good B the most (48) and the value of Good A (47) is higher than Person 1's value for Good A (49).
+* Both individuals value Good C the least (5), so it is discarded to maximize the total utility of the goods allocated.",1,2,None
+54,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+````
+Justification:
+
+This allocation is fair because it maximizes the total value of the goods to the individuals (Person 1 gets 100 value and Person 2 gets 95 value). It also ensures that both individuals receive at least one good. Additionally, it is efficient because all goods are allocated to individuals and none are discarded.",1,2,None
+55,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+
+This allocation is fair because it maximizes the total social welfare, which is the sum of the values that each person receives from the goods. Person 1 gets the good that they value the most (Good B), and Person 2 gets the good that they value the most (Good A). By discarding Good C, we are able to achieve a higher total value than if we were to allocate it to either Person 1 or Person 2.",1,2,None
+56,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification:
+The allocation gives Person 1 their most preferred good, Good A, and Person 2 their most preferred good, Good B, and discards the least preferred good, Good C.",1,2,None
+57,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+This allocation is fair because it gives Person 1 the goods they value the most (A), and gives Person 2 the goods they value the most (B). Good C is discarded because neither person values it very much.",1,2,None
+58,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The proposed allocation is the fairest because it maximizes the total value of the goods allocated to the two individuals. Person 1's total value of the allocated goods is 49 + 0 = 49, and Person 2's total value of the allocated goods is 47 + 48 = 95. Therefore, the total value of the allocated goods is 49 + 95 = 144.
+
+An alternative allocation, where Good C is allocated to Person 1, would result in a lower total value of the allocated goods. Person 1's total value of the allocated goods would be 49 + 5 = 54, and Person 2's total value of the allocated goods would be 47 + 48 = 95. Therefore, the total value of the allocated goods would be 54 + 95 = 149.
+
+Disregarding Good C results in the highest total value, hence this is the fairest allocation.",1,2,None
+59,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+
+**Justification:**
+The total value of the goods for Person 1 is 49 + 46 + 5 = 100. The total value of the goods for Person 2 is 47 + 48 + 5 = 100. Therefore, both persons get an equal total value of 100. This allocation is also efficient as no other allocation can increase the total value of the goods for both persons.",1,2,None
+60,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+**Justification**: This allocation is considered fair due to the following reasons:
+
+* **Person 1's total value for the allocated goods (49 + 0 + 0 = 49) is equal to Person 2's total value (47 + 48 + 0 = 49).** This ensures an equal distribution of value between the two individuals.
+* **Person 1 receives the good they value the most (Good A), while Person 2 receives the good they value the most (Good B).** This prioritizes the preferences of both individuals.
+* **Good C is discarded because both individuals have a relatively low value for it (5 for both).** This allocation maximizes the total value gained by both individuals while minimizing waste.",2,1,None
+61,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+**Justification**: This allocation maximizes the total value of the goods allocated to the individuals. Person 1 values Good A the most, and Person 2 values Good B the most. Therefore, it is fair to allocate Good A to Person 1 and Good B to Person 2. Good C is discarded because neither person values it very much, and allocating it to either person would not significantly increase the total value of the allocation.",1,2,None
+62,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None"",
+}
+```
+This allocation is considered fair because it is envy-free. Envy-freeness means that neither Person 1 nor Person 2 would prefer the other person's bundle of goods to their own.
+
+To see why this allocation is envy-free, consider the following:
+
+* Person 1 values Good A more than Person 2, so they would not prefer Person 2's bundle of goods (Good B and Good C) to their own bundle (Good A).
+* Person 2 values Good B more than Person 1, so they would not prefer Person 1's bundle of goods (Good A) to their own bundle (Good B and Good C).
+* Neither Person 1 nor Person 2 values Good C more than they value discarding it, so neither of them would prefer to have Good C in their bundle.
+
+Therefore, this allocation is envy-free, and it is a fair allocation of the goods.",1,2,None
+63,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification**: This allocation is fair because it gives both Person 1 and Person 2 the good that they value the most. Person 1 values Good A the most (49), and Person 2 values Good B the most (48). By allocating Good A to Person 1 and Good B to Person 2, we are maximizing the total value that both individuals receive from the allocation. Good C is discarded since its value to both the individuals is only 5.",1,2,None
+64,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+```
+Here is my justification:
+
+In order to determine a fair allocation, we can use the concept of the **Nash bargaining solution**. The Nash bargaining solution is a method for finding a fair agreement in a negotiation. It is based on the following three axioms:
+
+1. **Pareto efficiency:** The agreement should not make any of the parties worse off.
+2. **Independence of irrelevant alternatives:** The agreement should not depend on the addition or removal of irrelevant alternatives.
+3. **Symmetry:** The agreement should be symmetric with respect to the parties.
+
+In this case, since the goods are indivisible, the Nash bargaining solution is to allocate the goods in a way that maximizes the product of the values of the goods for each person. This is because the product of the values is a measure of the total value that the two people get from the allocation.
+
+In this case, the product of the values for Person 1 is 49 * 5 * 46 = 112,860. The product of the values for Person 2 is 47 * 5 * 48 = 112,800. Therefore, the allocation that maximizes the product of the values is to give Good A to Person 1, Good B to Person 2, and Good C to Person 1.",1,2,1
+65,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+In this allocation, both Person 1 and Person 2 receive their first choice of goods. To decide who receives Good C, we consider each person's second choice. Person 1 values Good C at 5, while Person 2 also values Good C at 5. We can break this tie by considering each person's third choice. Person 1 values Good B at 46, while Person 2 values Good A at 48. Since Person 2 values Good A more than Person 1 values Good B, it is fair to allocate Good A to Person 2. This leaves Good C unallocated, which is reflected in the allocation above.",2,1,None
+66,"```json
+{
+  ""Good A"": ""Person 1"",
+  ""Good B"": ""Person 2"",
+  ""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+This allocation is fair because it gives each person their most preferred good, while discarding Good C, which both value the least. Person 1 prefers Good A and Person 2 prefers Good B. Discarding Good C is fair because both value it equally low.",1,2,None
+67,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The allocation I have selected is one where Person 1 gets Good A, Person 2 gets Good B, and Good C is discarded. The total value of goods for Person 1 is 49, and the total value of goods for Person 2 is 48, which is the closest we can get to an equal split of the value of the goods (without discarding any goods).",1,2,None
+68,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+```
+
+_**Justification**: This allocation is fair because it gives Person 1 the good they value most (Good A), and Person 2 the good they value most (Good B). Good C is discarded since neither person values it highly. Both Person 1 and Person 2 receive a total value of 49 from this allocation._",1,2,None
+69,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Person 1's total value for the allocated goods is 49 + 0 + 0 = 49.
+Person 2's total value for the allocated goods is 0 + 48 + 0 = 48.
+None of the allocations with a higher value for one person can be considered fair, as they would result in a lower value for the other person. Since Good C has the same value for both persons, it is discarded to avoid introducing an unnecessary asymmetry.",1,2,None
+70,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+
+The allocation is fair according to the Nash bargaining solution as it maximises the product of individual utilities. The Nash bargaining solution is a widely accepted solution concept in game theory for reaching an agreement when multiple parties with different preferences have to reach a consensus. In this case, the Nash bargaining solution would be to allocate Good A to Person 2, Good B to Person 1, and discard Good C, as this would give the largest product of utilities for the two individuals. The utility for Person 1 would be 46 and the utility for Person 2 would be 47. The product of utilities would be 46 * 47 = 2162.",1,2,None
+71,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+Justification: This allocation gives Person 1 a total value of 95 (46 from Good B, 49 from Good A), and Person 2 receives a total of 95 (47 from Good A, 48 from Good B), resulting in an equal distribution of value. Discarding Good C is necessary to achieve this equal distribution, as including it would result in Person 1 having a higher total value than Person 2.",1,2,None
+72,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: This allocation is fair because it gives both Person 1 and Person 2 the good that they value the most. Person 1 gets Good A, which they value at 49, and Person 2 gets Good B, which they value at 48. Good C is discarded because neither person values it very highly (only 5).",1,2,None
+73,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+```
+**Justification**:
+I have allocated Good A to Person 1 because their value for Good A is higher than Person 2's value. Similarly, I have allocated Good B to Person 2 because their value for Good B is higher than Person 1's value. This ensures that both Person 1 and Person 2 receive the goods that they value the most.
+I have allocated Good C to Person 1 because their value for Good C is higher than Person 2's value, even though the value is very low for both of them. This allocation ensures that Person 1 receives the goods that they value the most, while Person 2 still receives the good that they value the second most.",1,2,None
+74,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+
+Since Person 1 places a higher value on Good A relative to Person 2, while Person 2 places a higher value on Good B relative to Person 1, I propose allocating Good A to Person 1 and Good B to Person 2. Allocating Good C to either person would not be fair, since their values for it are equal, so it is discarded instead.",1,2,None
+75,"{
+  ""Good A"": ""Person 1"",
+  ""Good B"": ""Person 2"",
+  ""Good C"": ""None""
+}
+
+**Justification:**
+This allocation aims to maximize the total value obtained from the goods. As Person 1 values Good A the most, and Person 2 values Good B the most, it is fair to allocate these goods to them. Since both individuals value Good C the same, and it is the least valued good, discarding it does not lead to a significant loss in total value. This allocation ensures that both individuals receive a good that they value highly.",1,2,None
+76,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+My reasoning is that Person 1 values Good A more than Person 2 does and Person 2 values Good B more than Person 1 does. Thus, it is fair to allocate Good A to Person A and Good B to Person 2. Neither Person 1 nor Person 2 values Good C highly, so it is fair to discard it.",2,1,None
+77,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+Justification: In this allocation, Person 1 receives Good A, which has the highest value for them (49). Person 2 receives Good B, which has the highest value for them (48). This leaves Good C, which has a relatively low value for both individuals (5). Given that the goods are indivisible, discarding Good C is the most efficient way to ensure that both individuals receive the goods they value the most.",1,2,None
+78,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+**Justification:** This allocation is considered fair because it maximizes the total value of the goods for the two individuals. Pearson 1 values Good A the most (49), so allocating Good A to Person 1 maximizes their satisfaction. Similarly, Pearson 2 values Good B the most (48), so allocating Good B to Person 2 maximizes their satisfaction. By discarding Good C, we avoid creating a situation where one person receives a good that they value less than the other person does. As a result, this allocation strives to be as equitable and efficient as possible given the indivisibility of the goods.",1,2,None
+79,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification**:
+
+This is a fair allocation because it gives the goods to the people who value them the most.
+
+Person 1 values Good A more than Person 2, and Person 2 values Good B more than Person 1. So it makes sense to give Good A to Person 1 and Good B to Person 2.
+
+Good C is not as valuable to either person, so it is fair to discard it.",1,2,None
+80,"```json
+{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+```
+This allocation is fair because it maximizes the total value of the goods for both individuals. Person 1 gets Good B, which they value at 46, and Person 2 gets Good A, which they value at 47. Good C is discarded because neither person values it very highly.",1,1,2
+81,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+The allocation is fair because:
+- Person 1 values Good A more than Person 2, thus the allocation of Good A to Person 1 is efficient.
+- Person 2 values Good B more than Person 1, thus the allocation of Good B to Person 2 is efficient.
+- Both Person 1 and Person 2 have a value of 5 for Good C, thus discarding Good C is a fair decision to both parties.",1,2,None
+82,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Person 1""
+}
+```
+
+The proposed allocation gives a total value of 100 for Person 1 and a total value of 95 for Person 2. 
+
+In this case, it is not possible to achieve an allocation that gives both individuals an equal total value since the sum of all the values the goods have for each individual is not equal. However, the proposed solution minimizes the difference in the total value each individual receives.",2,1,1
+83,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+This would mean Person 1 receives a total value of 49 + 0 + 0 = 49 and Person 2 receives a total value of 0 + 48 + 0 = 48.
+Discarding Good C is necessary to ensure that Person 1 receives a higher total value than Person 2, as their individual values for Goods A and B are very close. This allocation is fair as it gives the highest total value to the person who values the goods the most.",1,2,None
+84,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+This allocation is fair because it gives Person 1 their most valuable item, Good A, and Person 2 their most valuable item, Good B. Good C is discarded because it is the least valuable to both people.",1,2,None
+85,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+This allocation maximizes the total utility or value of the goods for both Person 1 and Person 2.
+
+* Person 1's utility is 49 (Good A) + 0 (Good B) + 0 (Good C) = 49.
+* Person 2's utility is 0 (Good A) + 48 (Good B) + 0 (Good C) = 48.
+
+Discarding Good C is optimal because both Person 1 and Person 2 value it the least. Allocating Good A to Person 1 and Good B to Person 2 maximizes their respective utilities, resulting in a fair allocation of the goods.",1,2,None
+86,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+This allocation is fair because it gives each person the good that they value the most. Person 1 values Good A the most, and Person 2 values Good B the most. Discarding Good C is fair because neither person values it very highly.",1,2,None
+87,"```json
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+```
+
+Justification: This allocation is fair because it gives both Person 1 and Person 2 the goods that they value the most. Person 1 gets Good A, which they value at 49, and Person 2 gets Good B, which they value at 48. Good C is discarded because neither person values it very highly (they both value it at 5).",1,2,None
+88,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification:
+This allocation is fair because it maximizes the total value of the goods for the two people. Person 1 values Good A the most, and Person 2 values Good B the most. Therefore, it is fair to give Good A to Person 1 and Good B to Person 2. Since neither person values Good C very much, it is fair to discard it.",1,2,None
+89,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+The allocation is done as follows:
+
+Person 1 receives Good A as their highest value is for Good A.
+Person 2 receives Good B as their highest value is for Good B.
+Good C is discarded as both individuals have the same value for it (5) and it is indivisible.",2,1,None
+90,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+I allocated Good A to Person 1 because they value it the most out of the two individuals. I allocated Good B to Person 2 because they value it the most out of the two individuals. I discarded Good C because both individuals value it the least out of the three goods, and therefore allocating it to either individual would result in a lower total value than discarding it.",1,2,None
+91,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""Discarded""
+}
+This allocation maximizes the total value derived from the goods, which is 95 (49 + 46). Discarding Good C is necessary to achieve this result, as including it would result in a lower total value of 90 (49 + 46 + 5).",1,2,None
+92,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+Justification: This allocation gives Person 1 their most valued item, and Person 2 their most valued item. Since both persons value Good C very little, it is discarded to ensure fairness among the two individuals.",1,2,None
+93,"```
+{
+  ""Good A"": ""Person 1"",
+  ""Good B"": ""Person 2"",
+  ""Good C"": ""None""
+}
+```
+
+This allocation is fair because it maximizes the total value of the goods for both individuals. Person 1 values Good A more than Person 2, and Person 2 values Good B more than Person 1. By giving Good A to Person 1 and Good B to Person 2, each person receives the good that they value more. Good C is discarded because neither person values it very highly.",1,2,None
+94,"```
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+This allocation ensures that the total value of the goods received by both individuals is the same. Person 1 will receive goods with a total value of 49 + 46 = 95 and Person 2 will receive goods with a total value of 47 + 48 = 95. Discarding Good C is necessary to achieve this equal distribution without violating the indivisibility constraint.",1,2,None
+95,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The allocation above gives Person 1 a total value of 95 (49+46), and Person 2 a total value of 95 (47+48). This is the only allocation that gives both people an equal total value. Additionally, it is the only allocation that gives both people their most preferred good.",1,2,None
+96,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+The proposed allocation maximizes the total value of the goods assigned to the individuals. By giving Good A to Person 1 and Good B to Person 2, we ensure that each of them gets their most preferred good. This also implies that discarding Good C is more efficient than giving it to either Person 1 or Person 2.",2,1,None
+97,"```JSON
+{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+```
+
+**Justification:**
+
+In this allocation, Person 1 receives Good A, which they value at 49, and Person 2 receives Good B, which they value at 48. 
+
+Good C is discarded because neither person values it very highly (only 5 for both of them).
+
+This allocation is fair because it gives both individuals a good that they value more than the other. It also does not discard any goods that are valued highly by either individual.",2,1,None
+98,"{
+""Good A"": ""Person 1"",
+""Good B"": ""Person 2"",
+""Good C"": ""None""
+}
+
+Both Person 1 and Person 2 values Good B more than Good A. Therefore, the allocation of Good B to Person 2 seems to be fair. Since Person 1 values Good A more than Good C, it seems fair to allocate Good A to Person 1. Since both persons value Good C the same, and it is the least valued good for them, the fairest thing to do is to discard it.",1,2,None
+99,"{
+""Good A"": ""Person 2"",
+""Good B"": ""Person 1"",
+""Good C"": ""None""
+}
+
+For this allocation, the total value for Person 1 is 46, and the total value for Person 2 is 49. Therefore, the difference in value between the two people is only 3, which would make it the fairest allocation possible.",2,1,None
