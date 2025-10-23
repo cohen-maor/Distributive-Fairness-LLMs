@@ -5,10 +5,15 @@ import json
 from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import replicate
 import os
 import statistics
 from scipy.stats import chisquare, mannwhitneyu, fisher_exact
+import copy
+from itertools import product
+from collections import defaultdict
+import pickle as pkl
 
 
 from llamaapi import LlamaAPI
@@ -26,11 +31,12 @@ from autogen import AssistantAgent, OpenAIWrapper, UserProxyAgent, gather_usage_
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class LLM():
-    def __init__(self, auth_file = '../Auth_keys/gemini_auth_key.txt', family='gemini', model='gemini-1.0-pro-latest') -> None:
+    def __init__(self, auth_file = '../Auth_keys/gemini_auth_key.txt', family='gemini', model='gemini-1.0-pro-latest', temp=1) -> None:
         self.auth_file = auth_file
         self.family = family
         self.model = model
         self.tokens = 0
+        self.temp = temp
         if self.family == 'gemini':
             self.init_gemini()
         if self.family == 'mixtral':
@@ -97,7 +103,14 @@ class LLM():
                 safety_settings={
                     HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
                     HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                }
+                },
+                generation_config=genai.types.GenerationConfig(
+                    # Only one candidate for now.
+                    # candidate_count=1,
+                    # stop_sequences=["x"],
+                    # max_output_tokens=20,
+                    temperature=self.temp,
+                ),
             )
             response = response.text
         elif self.family == "mixtral":
@@ -114,6 +127,7 @@ class LLM():
                     }
                 ],
                 model=self.model,
+                temperature=self.temp
             )
             response = response.choices[0].message.content
 
@@ -121,7 +135,11 @@ class LLM():
             messages = [
                 {"role": "user", "content": queryText},
             ]
-            response = self.llm.create(messages=messages, model=self.model)
+            response = self.llm.create(
+                messages=messages, 
+                model=self.model, 
+                temperature=self.temp
+            )
             self.tokens += response.usage.total_tokens
             response = response.choices[0].message.content
 
@@ -129,6 +147,7 @@ class LLM():
             response = self.llm.messages.create(
                     model=self.model,
                     max_tokens=1500,
+                    temperature=self.temp,
                     messages=[
                         {"role": "user", "content": queryText}
                 ]
@@ -624,9 +643,9 @@ Allocation-5: Person 1 gets Goods A and B, and Person 2 gets Good C.\n\n"
             text += "\n\
 Allocation-1: Person 1 gets Good A, and Person 2 gets Good B and 5 units of money, and Person 3 gets Good C.\n\
 Allocation-2: Person 1 gets Good A, and Person 2 gets Good B, and Person 3 gets Good C and 5 units of money.\n\
-Allocation-3: Person 1 gets Good A and 5 units of money, and Person 2 gets Good B, and Person 3 gets Good C.\n\
-Allocation-4: Person 1 gets Good C, and Person 2 gets Good B, and Person 3 gets Good A and 5 units of money.\n\
-Allocation-5: Person 1 gets 5 units of money, Person 2 gets Good B, and Person 3 gets Goods A and C.\n\n"
+Allocation-3: Person 1 gets Good C and 5 units of money, and Person 2 gets Good B, and Person 3 gets Good A.\n\
+Allocation-4: Person 1 gets 5 units of money, Person 2 gets Good B, and Person 3 gets Goods A and C.\n\
+Allocation-5: Person 1 gets Good A and 1 unit of money, and Person 2 gets Good B and 3 units of money, and Person 3 gets Good C and 1 unit of money.\n\n"
             
         elif self.question == 5:
             text += "\n\
@@ -894,7 +913,12 @@ Allocation-4 (6.9% responses): Person 1 gets Good C, Person 2 gets Good A, and P
             self.prompt1 = f"Consider a problem where goods need to be allocated among different individuals. Imagine that the individuals involved, i.e. {self.person_list}, approach you and ask you to determine a fair allocation of {self.goods_list}. The goods to be allocated are indivisible, \
 that is, you have to give the good as a whole to one person or you can decide to not alocate it at all, i.e., you throw it away.{indivisible}\n{self.valuation_text}Your task {instruction_text}\n{self.restriction_text}{self.template_text}{self.justification_text}"
         else:
-            self.prompt1 = f"Consider a problem where goods need to be allocated among different individuals. Your task is to allocate {self.goods_list}, among the individuals involved, i.e. {self.person_list}. Pick an allocation you consider to be fair and that you think is acceptable to the \
+            if self.instruction == 'sig':
+                self.prompt1 = f"Consider a problem where goods need to be allocated among different individuals. Your task is to allocate {self.goods_list}, among the individuals involved, i.e. {self.person_list}. Pick an allocation you consider to be fair and that you think is acceptable to the \
+other participants. The goods to be allocated are indivisible, that is, you have to give the good as a whole to one person or you can decide to not alocate it at all, i.e., you throw it away.{indivisible}\n{self.valuation_text}\
+Your task is to determine the allocation {instruction_text}\n{self.restriction_text}{self.template_text}{self.justification_text}"
+            else:
+                self.prompt1 = f"Consider a problem where goods need to be allocated among different individuals. Your task is to allocate {self.goods_list}, among the individuals involved, i.e. {self.person_list}. Pick an allocation you consider to be fair and that you think is acceptable to the \
 other participants (assume that your proposal can only be realized if all participants agree). The goods to be allocated are indivisible, that is, you have to give the good as a whole to one person or you can decide to not alocate it at all, i.e., you throw it away.{indivisible}\n{self.valuation_text}\
 Your task is to determine the allocation {instruction_text}\n{self.restriction_text}{self.template_text}{self.justification_text}"
         
@@ -965,6 +989,38 @@ that is, you have to give the good as a whole to one person or you can decide to
 
         return self.prompt2
     
+    def generate_correction_prompt(self, previous_response):
+        if self.instruction == 'EQp':
+            self.promptc = "The allocation that you provided does not minimize the inequality between the individuals involved. Please return an allocation that does minimize the difference between the payoffs received by individuals."
+        elif self.instruction == 'EFp':
+            self.promptc = "The allocation that you provided does not minimize the envy between the individuals involved. Please return an allocation that does minimize the envy between individuals."
+        elif self.instruction == 'RMMp':
+            self.promptc = "The allocation that you provided does not maximize the payoff received by the worst-off individual. Please return an allocation that does maximize the payoff of the worst-off individual."
+            
+        if self.llm_type != "gemini":
+            self.promptc = f"Previously, I asked you the following quesion:\n\"{self.prompt1}\"\nAnd this was your response\n\"{previous_response}\"\n" + self.promptc
+
+        return self.promptc
+    
+    def generate_prompt2_correction(self, prompt1_response):
+        plurality = 'each' if self.restriction == 'rank' else 'the'
+        self.prompt2c = f"Please present {plurality} allocation you have selected in in the following JSON format:\n"
+        self.prompt2c += "{\n"
+        for j in range(self.num_goods):
+            self.prompt2c += f'\"{self.good_names[j]}\": \"<person to whom {self.good_names[j]} is allocated, \"None\" if {self.good_names[j]} is discarded>\",\n'
+        if 'money' in self.valuations:
+            for i in list(self.valuations['valuation'].keys()):
+                self.prompt2c += f'\"{self.person_names[i]} money\": \"<money allocated to {self.person_names[i]}, 0 if no money was allocated to {self.person_names[i]}>\",\n'
+        self.prompt2c += "}\n"
+
+        last_comma = self.prompt2c.rfind(',')
+        self.prompt2c = self.prompt2c[:last_comma] + self.prompt2c[last_comma+1:]
+            
+        if self.llm_type != "gemini":
+            self.prompt2c = f"Previously, I asked you the following quesion:\n\"{self.prompt1}\"\nAnd this was your response\n\"{prompt1_response}\"\n" + self.prompt2c
+
+        return self.prompt2c
+    
 
 class OutputAnalyzer():
     def __init__(self, model_paths = ['gemini/gemini-1.5-pro-latest'], index = ['G-1.5-L']) -> None:
@@ -1021,10 +1077,10 @@ class OutputAnalyzer():
                     'order': {
                         "1st": [70.4],
                         "2nd": [23.2],
-                        "3rd": [0],
-                        "4th": [0],
+                        "3rd": [2],
+                        "4th": [2],
                         "5th": [0],
-                        "Other": [6.4]
+                        "Other": [2.4]
                     },
                     'options': {
                         "1st": [],
@@ -1057,8 +1113,8 @@ class OutputAnalyzer():
                         "2nd": [26.2],
                         "3rd": [12.7],
                         "4th": [9],
-                        "5th": [7.9],
-                        "Other": [18]
+                        "5th": [0.75],
+                        "Other": [25.15]
                     },
                     'options': {
                         "1st": [],
@@ -1089,11 +1145,11 @@ class OutputAnalyzer():
                 'q3': {
                     'order': {
                         '1st': [27.8],
-                        '2nd': [12.5],
-                        '3rd': [9.7],
-                        '4th': [7.9],
-                        '5th': [6],
-                        'Other': [36.1]
+                        '2nd': [16.67],
+                        '3rd': [12.5],
+                        '4th': [6.95],
+                        '5th': [4.16],
+                        'Other': [31.92]
                     },
                     'options': {
                         "1st": [],
@@ -1139,10 +1195,10 @@ class OutputAnalyzer():
                     'order': {
                         '1st': [64.4],
                         '2nd': [15.5],
-                        "3rd": [4.49],
-                        "4th": [3.37],
-                        "5th": [2.25],
-                        'Other': [9.99]
+                        "3rd": [9],
+                        "4th": [0.75],
+                        "5th": [0],
+                        'Other': [10.35]
                     },
                     'relevant': ["1st","2nd","USW","4th","5th","Other"],
                     'notions': {
@@ -1186,11 +1242,11 @@ class OutputAnalyzer():
                 'q5': {
                     'order': {
                         '1st': [50],
-                        '2nd': [12.5],
+                        '2nd': [18],
                         '3rd': [9.3],
-                        '4th': [6.9],
-                        '5th': [4.17],
-                        'Other': [17.13]
+                        '4th': [1.4],
+                        '5th': [0.75],
+                        'Other': [20.55]
                     },
                     'options': {
                         "1st": [],
@@ -1237,8 +1293,8 @@ class OutputAnalyzer():
                         '2nd': [28.1],
                         '3rd': [18.4],
                         '4th': [7.9],
-                        '5th': [2.62],
-                        'Other': [10.38]
+                        '5th': [3.37],
+                        'Other': [9.63]
                     },
                     'options': {
                         "1st": [],
@@ -1262,7 +1318,8 @@ class OutputAnalyzer():
                         '48,60,52': [],
                         '48,40,52': [],
                         '48,20,97': [],
-                        '52,40,52': []
+                        '52,40,52': [],
+                        'Others': []
                     }
                 },
                 'q61': {
@@ -1286,11 +1343,11 @@ class OutputAnalyzer():
                 'q7': {
                     'order': {
                         '1st': [55],
-                        '2nd': [12.7],
-                        '3rd': [16.8],
-                        '4th': [15],
+                        '2nd': [15.35],
+                        '3rd': [12.7],
+                        '4th': [5.24],
                         "5th": [0],
-                        "Other": [0.5]
+                        "Other": [11.71]
                     },
                     'relevant': ["1st","2nd","3rd","4th","Other"],
                     'notions': {
@@ -1304,12 +1361,12 @@ class OutputAnalyzer():
                 },
                 'q8': {
                     'order': {
-                        "1st": [32.2],
-                        "2nd": [22.5],
-                        "3rd": [16.9],
-                        "4th": [9.4],
-                        "5th": [7.5],
-                        "Other": [11.5]
+                        "1st": [28],
+                        "2nd": [26.2],
+                        "3rd": [18],
+                        "4th": [7.5],
+                        "5th": [3],
+                        "Other": [17.3]
                     },
                     'relevant': ["1st","2nd","3rd","4th","5th","Other"],
                     'notions': {
@@ -1360,15 +1417,17 @@ class OutputAnalyzer():
                         '23,97,4': [],
                         '40,1,49': [],
                         '57,2,4': [],
+                        'Others': []
                     }
                 },
                 'q10': {
                     'order': {
-                        'Best+EQ': [45.7],
-                        'Best+EF': [8.6],
-                        'Best+Other': [19.9],
-                        '2nd': [11.6],
-                        'Other': [14.2]
+                        '1st': [61.04],
+                        '2nd': [18.7],
+                        '3rd': [4.11],
+                        '4th': [3.37],
+                        '5th': [0.37],
+                        'Other': [12.41]
                     },
                     'relevant': ["Best+EQ","Best+EF","Best+Other","2nd","Other"],
                     'notions': {
@@ -1984,17 +2043,188 @@ class OutputAnalyzer():
                 },
             }
 
+    def distribute_balls(self, n, m):
+        """
+        Enumerate ways to distribute n identical balls into m distinct bins.
+        """
+
+        if n == 0:
+            return [[]]
+
+        if m == 1:
+            return [[n]]
+
+        result = []
+        for i in range(n + 1):
+            for subresult in self.distribute_balls(n - i, m - 1):
+                result.append([i] + subresult)
+
+        return result
+    
+    def enumerate_distributions(self, m, n):
+        """
+        Enumerates all ways to distribute m distinct balls into n distinct buckets.
+
+        Args:
+            m (int): Number of distinct balls.
+            n (int): Number of distinct buckets.
+
+        Returns:
+            List of tuples: Each tuple represents a distribution where each
+            bucket contains a list of the balls assigned to it.
+        """
+        # Balls are labeled 1 through m
+        balls = range(0, m)
+        
+        # Generate all possible assignments of balls to buckets
+        # Each ball can be assigned to one of the n buckets
+        assignments = product(range(n), repeat=m)
+        
+        distributions = []
+        for assignment in assignments:
+            # Create buckets
+            buckets = [[] for _ in range(n)]
+            for ball, bucket in zip(balls, assignment):
+                buckets[bucket].append(ball)
+            distributions.append(tuple(buckets))
+        
+        return distributions
+    
+    def get_po_percentage(self, question=2):
+        pg = PromptGenerator(question=question,valuation_type='word')
+        pg.set_valuations()
+
+        valuation = pg.valuations['valuation']
+        if -1 in valuation:
+            valuation[0] = valuation[-1]
+        money = pg.valuations.get('money', 0)
+        m = len(valuation[0])  # Number of balls
+        n = len(valuation)  # Number of buckets
+        if money: 
+            money_splits = self.distribute_balls(money, n)
+            for i, split in enumerate(money_splits):
+                for j in range(n-len(split)):
+                    split.append(0)
+                money_splits[i] = split
+            # print(money_splits)
+                
+        if -1 in valuation: n -= 1
+        distributions = self.enumerate_distributions(m, n)
+
+        payoffs_list = []
+        # Print results
+        for distribution in distributions:
+            # print(distribution)
+            payoffs = [0]*n
+            for a, agent in enumerate(distribution):
+                for item in agent:
+                    payoffs[a] += valuation[a][item]
+            if money:
+                for split in money_splits:
+                    combined = copy.deepcopy(payoffs)
+                    for a in range(len(combined)):
+                        combined[a] += split[a]
+                    # print(combined)
+                    payoffs_list.append(combined)
+            else:
+                payoffs_list.append(payoffs)
+            # print('----------------------')
+
+        return payoffs_list
+    
     def get_comparison(self, question = 1, variation = "word", model_paths_custom = None, humans=True):
         self.initialize_metrics_dict(humans)    
 
         pg_temp = PromptGenerator(question) 
         pg_temp.set_valuations()   
         valuation_dict = pg_temp.valuations['valuation']
+        n = len(valuation_dict)
+        if -1 in valuation_dict:
+            valuation_dict[0] = valuation_dict[-1]
+        money = pg_temp.valuations.get('money', 0)
+        payoffs_list = self.get_po_percentage(question)
 
-        print(model_paths_custom)
         if not model_paths_custom: model_paths_custom = self.model_paths
         for model_path in model_paths_custom:
             data = self.get_data(model_path[0], question, model_path[1])
+            # print(model_path, len(data.values))
+            goods = [(i+1)*-1 for i in range(len(valuation_dict[0]))][::-1]
+            num_po = 0
+            ef_po_both = [0,0,0]
+            for i, values in enumerate(data.values):
+                distribution = defaultdict(list)
+                alloc = [0]*(n)
+                if money:
+                    split = [round(float(values[-3]),2), round(float(values[-2]),2), round(float(values[-1]),2)]
+                    values = values[:-3]
+                    alloc[0] += split[0]
+                    alloc[1] += split[1]
+                    alloc[2] += split[2]
+                    if sum(alloc) > money:
+                        continue
+                for g, good in enumerate(goods):
+                    try:
+                        if values[good] in ['You', 'Me', 'Myself']:
+                            rec = 1
+                        else:
+                            rec = int(values[good])
+                    except:
+                        continue
+                    if rec:
+                        # print(rec, g, alloc, valuation_dict, alloc)
+                        alloc[rec-1] += valuation_dict[rec-1][g]
+                        distribution[rec-1].append(g)
+
+                # print(values, distribution)
+
+                isEF = True
+                envy_matrix = {}
+                for a in range(n):
+                    envy_matrix[a] = {}
+                    for b in range(n):
+                        envy_matrix[a][b] = 0
+                        other = distribution[b]
+                        for item in other:
+                            envy_matrix[a][b] += valuation_dict[a][item]
+                        if money: envy_matrix[a][b] += split[b]
+                    # print(envy_matrix)
+                    for b in range(n):
+                        if envy_matrix[a][b] > envy_matrix[a][a]:
+                            # print(distribution, a, b)
+                            isEF = False
+                            break
+
+                isPO = True
+                for payoff in payoffs_list:
+                    if sum(int(alloc[k] != payoff[k]) for k in range(len(payoff))) == 0:
+                        continue
+                    else:
+                        dominated = True  
+                    for k in range(len(payoff)):
+                        if alloc[k] > payoff[k]:
+                            # print(alloc, payoff)
+                            dominated = False
+                            break
+                    if dominated:
+                        isPO = False
+                        break
+                if isPO:
+                    num_po += 1
+
+                # print(envy_matrix)
+                        
+                if isEF and isPO:
+                    ef_po_both[2] += 1
+                    # print('Both', alloc)
+                elif isEF:
+                    ef_po_both[0] += 1
+                    # print('EF only', alloc)
+                elif isPO: 
+                    ef_po_both[1] += 1
+                    # print('PO only', alloc)
+
+            # print(question, model_path, num_po)
+
             if question == 1:
                 a_b = data[
                     (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '0')
@@ -2008,14 +2238,11 @@ class OutputAnalyzer():
                 b_a = data[
                     (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '0')
                 ].shape[0]
-                bc_a = data[
-                    (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1')
-                ].shape[0]
-                other = 100 - a_b - a_bc 
+                other = 100 - a_b - a_bc - ac_b - b_a
                 self.metrics[f'q{question}']['order']['1st'].append(a_b) 
                 self.metrics[f'q{question}']['order']['2nd'].append(a_bc)
-                self.metrics[f'q{question}']['order']['3rd'].append(0)
-                self.metrics[f'q{question}']['order']['4th'].append(0)
+                self.metrics[f'q{question}']['order']['3rd'].append(ac_b)
+                self.metrics[f'q{question}']['order']['4th'].append(b_a)
                 self.metrics[f'q{question}']['order']['5th'].append(0)
                 self.metrics[f'q{question}']['order']['Other'].append(other)
                 others = 100 - a_b - a_bc - ac_b 
@@ -2026,7 +2253,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['allocations']['Others'].append(others) 
                 # self.metrics[f'q{question}']['allocations']['A,B|C'].append(ab_c) 
                 self.metrics[f'q{question}']['alloc_labels'] = ['EF\nIA', 'USW', 'USW\nRMM', 'Others'] 
-                self.metrics[f'q{question}']['labels'] = ['EF\nIA', 'USW\nRMM', '', '', '', '']
+                self.metrics[f'q{question}']['labels'] = ['EQ\nEF', 'RMM\nUSW', 'USW', 'EQ', '', '']
                 self.metrics[f'q{question}']['payoffs']= {
                     'Type-0': '(46,47)',
                     'Type-1': '(49,48)',
@@ -2034,28 +2261,7 @@ class OutputAnalyzer():
                     'Type-3': '(49,53)',
                     'Others': ''
                 }
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '0') |
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '0'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '0') 
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '1') |
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '1') |
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '1')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2')
-                    ].shape[0])
-                
+                 
             elif question == 11:
                 a_b = data[
                     (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '0')
@@ -2291,7 +2497,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['options']['5th'].append(ab_c)
                 self.metrics[f'q{question}']['options']['Other'].append(oth)
 
-                self.metrics[f'q{question}']['option_labels'] = ['EQ', 'EF', 'RMM', 'USW', 'NA', 'Oth.'] 
+                self.metrics[f'q{question}']['option_labels'] = [r'EQ$^*$', 'EF', 'RMM', 'USW', 'NA', 'Oth.'] 
 
             elif question == 2:
                 best = data[
@@ -2306,9 +2512,7 @@ class OutputAnalyzer():
                 fourth = data[
                     (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3')
                 ].shape[0]
-                fifth = data[
-                    (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Good D'] == '0')
-                ].shape[0]
+                fifth = num_po - second - third - fourth
                 other = 100 - best - second - third - fourth - fifth
                 self.metrics[f'q{question}']['order']['1st'].append(best) 
                 self.metrics[f'q{question}']['order']['2nd'].append(second)
@@ -2337,28 +2541,14 @@ class OutputAnalyzer():
                     #     pos = len(self.metrics[f'q{question}']['allocations'][key])-1
                     #     self.metrics[f'q{question}']['allocations'][payoff_string] = [0]*pos + [1]
                     #     self.metrics[f'q{question}']['alloc_labels'].append('-')
-                self.metrics[f'q{question}']['labels'] = ['IA\nRMM', 'EF\nPO', 'RMM\nPO', 'USW', '', '']
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        ((data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') |
-                        (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') |
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Good D'] == '3'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Good D'] == '3')
-                    ].shape[0])
-                
+                self.metrics[f'q{question}']['labels'] = [r'EQ$^*$'+'\nRMM', 'EF\nPO', 'RMM\nPO', 'USW', 'PO', '']
+
+
+                fifth = data[
+                    (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Good D'] == '0')
+                ].shape[0]
+
+                other = 100 - best - second - third - fourth - fifth
                 
                 self.metrics[f'q{question}']['options']['1st'].append(best) 
                 self.metrics[f'q{question}']['options']['2nd'].append(second)
@@ -2367,7 +2557,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['options']['5th'].append(fifth)   
                 self.metrics[f'q{question}']['options']['Other'].append(other)      
 
-                self.metrics[f'q{question}']['option_labels'] = ['EQ\nRMM', 'EF\nPO', 'RMM\nPO', 'USW', 'NA', 'Oth.']  
+                self.metrics[f'q{question}']['option_labels'] = [r'EQ$^*$'+'\nRMM', 'EF\nPO', 'RMM\nPO', 'USW', 'NA', 'Oth.']  
 
                 best = data[
                     (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '0')
@@ -2448,16 +2638,28 @@ class OutputAnalyzer():
                 best = data[
                     (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '3')
                 ].shape[0]
-                second = data[
+                # second = data[
+                #     ((data['Good A'] == '1') & (data['Good B'] == '0') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '0') |
+                #      (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '0') & (data['Good E'] == '0') |
+                #      (data['Good A'] == '0') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '0') & (data['Good E'] == '1') |
+                #      (data['Good A'] == '1') & (data['Good B'] == '0') & (data['Good C'] == '3') & (data['Good D'] == '0') & (data['Good E'] == '2') |
+                #      (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '0') & (data['Good D'] == '0') & (data['Good E'] == '3') |
+                #      (data['Good A'] == '0') & (data['Good B'] == '3') & (data['Good C'] == '0') & (data['Good D'] == '2') & (data['Good E'] == '1'))
+                # ].shape[0]
+                second_ = data[
+                    (data['Good A'] == '0') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '1') & (data['Good E'] == '0')   
+                ].shape[0]
+                second = ef_po_both[0] - second_
+                third = data[
                     (data['Good A'] == '1') & (data['Good B'] == '3') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '2')
                 ].shape[0]
-                third = data[
-                    (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2') & (data['Good D'] == '3') & (data['Good E'] == '3')
+                fifth = data[
+                    ((data['Good A'] == '0') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Good D'] == '1') & (data['Good E'] == '2') | 
+                    (data['Good A'] == '0') & (data['Good B'] == '2') & (data['Good C'] == '0') & (data['Good D'] == '1') & (data['Good E'] == '3') | 
+                    (data['Good A'] == '0') & (data['Good B'] == '3') & (data['Good C'] == '0') & (data['Good D'] == '1') & (data['Good E'] == '2') | 
+                    (data['Good A'] == '0') & (data['Good B'] == '0') & (data['Good C'] == '3') & (data['Good D'] == '1') & (data['Good E'] == '2'))
                 ].shape[0]
                 fourth = data[
-                    (data['Good A'] == '1') & (data['Good B'] == '0') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '0')
-                ].shape[0]
-                fifth = data[
                     ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '1') |
                     (data['Good A'] == '1') & (data['Good B'] == '3') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '1') )
                 ].shape[0]
@@ -2469,7 +2671,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['order']['5th'].append(fifth)
                 usw = fifth
                 self.metrics[f'q{question}']['order']['Other'].append(other)
-                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nPO', 'RMM\nPO', '', '', 'USW', '']
+                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nPO', 'EF', 'RMM\nPO', 'USW', 'EQ', '']
                 for key in self.metrics[f'q{question}']['allocations']:
                     self.metrics[f'q{question}']['allocations'][key].append(0)
                 for idx in range(len(data)):
@@ -2487,23 +2689,7 @@ class OutputAnalyzer():
                     if payoff_string in self.metrics[f'q{question}']['allocations']:
                         self.metrics[f'q{question}']['allocations'][payoff_string][-1] += 1
                 self.metrics[f'q{question}']['alloc_labels'] = ['EF,RMM\nPO', 'RMM\nPO', 'EF', 'USW', 'USW', '-', '-']
-                self.metrics[f'q{question}']['notions']['IA'].append(0)
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '3') 
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(usw)
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '3') |
-                        (data['Good A'] == '1') & (data['Good B'] == '3') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '2') ) | 
-                    (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '1') |
-                    (data['Good A'] == '1') & (data['Good B'] == '3') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '1') 
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '3') |
-                        (data['Good A'] == '1') & (data['Good B'] == '3') & (data['Good C'] == '3') & (data['Good D'] == '2') & (data['Good E'] == '2') )
-                    ].shape[0])
-
+                
             elif question == 31:
                 print(valuation_dict)
                 for key in self.metrics[f'q{question}']['allocations']:
@@ -2555,23 +2741,21 @@ class OutputAnalyzer():
                     (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '0')
                 ].shape[0]
                 third = data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '3')
+                        ((data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '3') |
+                         (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '1') |
+                         (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '2') )
                     ].shape[0]
-                fourth = data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '1')
-                    ].shape[0]
-                fifth = data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '2')
-                    ].shape[0]
-                other = 100 - best - second - third - fourth - fifth
+                fourth = num_po - third
+                fifth = 0
+                other = 100 - best - second - third - fourth
                 self.metrics[f'q{question}']['order']['1st'].append(best) 
                 self.metrics[f'q{question}']['order']['2nd'].append(second)
                 self.metrics[f'q{question}']['order']['3rd'].append(third)
                 self.metrics[f'q{question}']['order']['4th'].append(fourth)
-                self.metrics[f'q{question}']['order']['5th'].append(fifth)
+                self.metrics[f'q{question}']['order']['5th'].append(0)
                 self.metrics[f'q{question}']['order']['Other'].append(other)
                 usw = third + fourth + fifth
-                self.metrics[f'q{question}']['labels'] = ['EF\nRMM', 'IA', 'USW\nRMM', 'USW\nRMM', 'USW\nRMM', '']
+                self.metrics[f'q{question}']['labels'] = ['EF\nRMM', r'EQ$^*$', 'RMM\nUSW', 'PO', '', '']
                 self.metrics[f'q{question}']['alloc_labels'] = ['EF\nRMM', 'IA', 'USW\nRMM', 'USW', 'USW\nRMM', '-', '-', '-']
                 for key in self.metrics[f'q{question}']['allocations']:
                     self.metrics[f'q{question}']['allocations'][key].append(0)
@@ -2592,19 +2776,7 @@ class OutputAnalyzer():
                     #     pos = len(self.metrics[f'q{question}']['allocations'][key])-1
                     #     self.metrics[f'q{question}']['allocations'][payoff_string] = [0]*pos + [1]
                     #     self.metrics[f'q{question}']['alloc_labels'].append('-')
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') 
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(usw)
-                self.metrics[f'q{question}']['notions']['PO'].append(usw)
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') 
-                    ].shape[0])
-
+                
             elif question in [41,42]:
                 self.metrics[f'q{question}']['alloc_labels'] = ['EF+RMM', 'IA', 'USW', 'USW', 'USW\n+RMM', '-']
                 for key in self.metrics[f'q{question}']['allocations']:
@@ -2653,6 +2825,31 @@ class OutputAnalyzer():
                 best = data[
                     (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2')
                 ].shape[0]
+                third = data[
+                    (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') & (data['Good E'] == '1') & (data['Good F'] == '2')
+                ].shape[0]
+                # third = data[
+                #     ((data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '2') & (data['Good E'] == '3') & (data['Good F'] == '1') |
+                #     (data['Good A'] == '2') & (data['Good B'] == '0') & (data['Good C'] == '1') & (data['Good D'] == '0') & (data['Good E'] == '3') & (data['Good F'] == '0') |
+                #     (data['Good A'] == '3') & (data['Good B'] == '3') & (data['Good C'] == '2') & (data['Good D'] == '2') & (data['Good E'] == '1') & (data['Good F'] == '1') |
+                #     (data['Good A'] == '0') & (data['Good B'] == '1') & (data['Good C'] == '0') & (data['Good D'] == '3') & (data['Good E'] == '0') & (data['Good F'] == '2'))
+                # ].shape[0]
+                second = ef_po_both[0]
+                fourth = ef_po_both[1]
+                fifth = ef_po_both[2] - best
+                other = 100 - best - second - third - fourth - fifth
+                self.metrics[f'q{question}']['order']['1st'].append(best) 
+                self.metrics[f'q{question}']['order']['2nd'].append(second)
+                self.metrics[f'q{question}']['order']['3rd'].append(third) 
+                self.metrics[f'q{question}']['order']['4th'].append(fourth)
+                self.metrics[f'q{question}']['order']['5th'].append(fifth)
+                self.metrics[f'q{question}']['order']['Other'].append(other)
+                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nUSW', 'EF', r'EQ$^*$', 'PO', 'EF\nPO', '']
+                for key in self.metrics[f'q{question}']['allocations']:
+                    self.metrics[f'q{question}']['allocations'][key].append(0)
+                self.metrics[f'q{question}']['alloc_labels'] = ['EF,RMM\nUSW', 'EF (RR)', 'EF (SRR)', '-', '-', '-', '-', '-', '-', '-', '-']
+                
+                
                 second = data[
                     (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') & (data['Good E'] == '1') & (data['Good F'] == '2')
                 ].shape[0]
@@ -2662,28 +2859,13 @@ class OutputAnalyzer():
                 fourth = data[
                     (data['Good A'] == '2') & (data['Good B'] == '0') & (data['Good C'] == '1') & (data['Good D'] == '0') & (data['Good E'] == '3') & (data['Good F'] == '0')
                 ].shape[0]
-                fifth = data[
-                    (data['Good A'] == '2') & (data['Good B'] == '2') & (data['Good C'] == '1') & (data['Good D'] == '1') & (data['Good E'] == '3') & (data['Good F'] == '3')
-                ].shape[0]
-                other = 100 - best - second - third - fourth - fifth
-                self.metrics[f'q{question}']['order']['1st'].append(best) 
-                self.metrics[f'q{question}']['order']['2nd'].append(second)
-                self.metrics[f'q{question}']['order']['3rd'].append(third) 
-                self.metrics[f'q{question}']['order']['4th'].append(fourth)
-                self.metrics[f'q{question}']['order']['5th'].append(fifth)
-                self.metrics[f'q{question}']['order']['Other'].append(other)
-                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nUSW', 'IA', 'EF', 'EF', '', '']
-                for key in self.metrics[f'q{question}']['allocations']:
-                    self.metrics[f'q{question}']['allocations'][key].append(0)
-                self.metrics[f'q{question}']['alloc_labels'] = ['EF,RMM\nUSW', 'EF (RR)', 'EF (SRR)', '-', '-', '-', '-', '-', '-', '-', '-']
-                
-                other += fifth
+                other = 100 - best - second - third - fourth
                 self.metrics[f'q{question}']['options']['1st'].append(best) 
                 self.metrics[f'q{question}']['options']['2nd'].append(second)
                 self.metrics[f'q{question}']['options']['3rd'].append(third) 
                 self.metrics[f'q{question}']['options']['4th'].append(fourth)
                 self.metrics[f'q{question}']['options']['Other'].append(other)
-                self.metrics[f'q{question}']['option_labels'] = ['EF\nRMM\nUSW', 'EQ', 'EF', 'EF', 'Oth.']
+                self.metrics[f'q{question}']['option_labels'] = ['EF\nRMM\nUSW', r'EQ$^*$', 'EF', 'EF', 'Oth.']
                 
                 for idx in range(len(data)):
                     alloc = data.iloc[idx].values[-6:] 
@@ -2702,26 +2884,6 @@ class OutputAnalyzer():
                     #     pos = len(self.metrics[f'q{question}']['allocations'][key])-1
                     #     self.metrics[f'q{question}']['allocations'][payoff_string] = [0]*pos + [1]
                     #     self.metrics[f'q{question}']['alloc_labels'].append('-')
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') & (data['Good E'] == '1') & (data['Good F'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2') |
-                        (data['Good A'] == '2') & (data['Good B'] == '3') & (data['Good C'] == '1') & (data['Good D'] == '2') & (data['Good E'] == '3') & (data['Good F'] == '1') |
-                        (data['Good A'] == '2') & (data['Good B'] == '0') & (data['Good C'] == '1') & (data['Good D'] == '0') & (data['Good E'] == '3') & (data['Good F'] == '0')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '1') & (data['Good D'] == '3') & (data['Good E'] == '3') & (data['Good F'] == '2')
-                    ].shape[0])
                 
             elif question in [51,52]:
                 for key in self.metrics[f'q{question}']['allocations']:
@@ -2761,9 +2923,7 @@ class OutputAnalyzer():
                 fourth = data[
                     (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '3') 
                 ].shape[0]
-                fifth = data[
-                    (data['Good A'] == '1') & (data['Good B'] == '1') & (data['Good C'] == '2') & (data['Good D'] == '3') 
-                ].shape[0]
+                fifth = num_po - second - fourth
                 other = 100 - best - second - third - fourth - fifth
                 self.metrics[f'q{question}']['order']['1st'].append(best) 
                 self.metrics[f'q{question}']['order']['2nd'].append(second)
@@ -2771,7 +2931,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['order']['4th'].append(fourth)
                 self.metrics[f'q{question}']['order']['5th'].append(fifth)
                 self.metrics[f'q{question}']['order']['Other'].append(other)
-                self.metrics[f'q{question}']['labels'] = ['IA', 'EF\nRMM\nPO', 'EF', 'USW', 'PO', '']
+                self.metrics[f'q{question}']['labels'] = [r'EQ$^*$', 'EF\nRMM\nPO', 'EF', 'USW', 'PO', '']
                 
                 other += fifth
                 self.metrics[f'q{question}']['options']['1st'].append(best) 
@@ -2779,11 +2939,11 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['options']['3rd'].append(third) 
                 self.metrics[f'q{question}']['options']['4th'].append(fourth)
                 self.metrics[f'q{question}']['options']['Other'].append(other)
-                self.metrics[f'q{question}']['option_labels'] = ['EQ', 'EF\nRMM\nPO', 'EF', 'USW', 'Oth.']
+                self.metrics[f'q{question}']['option_labels'] = [r'EQ$^*$', 'EF\nRMM\nPO', 'EF', 'USW', 'Oth.']
                 
                 for key in self.metrics[f'q{question}']['allocations']:
                     self.metrics[f'q{question}']['allocations'][key].append(0)
-                self.metrics[f'q{question}']['alloc_labels'] = ['EQ', 'EF,RMM\nPO', 'EF', 'PO', 'USW', 'PO', '']
+                self.metrics[f'q{question}']['alloc_labels'] = [r'EQ$^*$', 'EF,RMM\nPO', 'EF', 'PO', 'USW', 'PO', '']
                 total = 0
                 for idx in range(len(data)):
                     alloc = data.iloc[idx].values[-4:] 
@@ -2804,27 +2964,7 @@ class OutputAnalyzer():
                     #     pos = len(self.metrics[f'q{question}']['allocations'][key])-1
                     #     self.metrics[f'q{question}']['allocations'][payoff_string] = [0]*pos + [1]
                     #     self.metrics[f'q{question}']['alloc_labels'].append('-')
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        (data['Good A'] == '2') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '1')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2') & (data['Good D'] == '3') |
-                        (data['Good A'] == '1') & (data['Good B'] == '0') & (data['Good C'] == '2') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2') & (data['Good D'] == '3') |
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '3'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '2') & (data['Good D'] == '3')
-                    ].shape[0])
-
+                
             elif question in [61,62]:
                 for key in self.metrics[f'q{question}']['allocations']:
                     self.metrics[f'q{question}']['allocations'][key].append(0)
@@ -2855,10 +2995,10 @@ class OutputAnalyzer():
                     (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Person 1 money'] == '0') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '5')
                 ].shape[0]
                 third = data[
-                    (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Person 1 money'] == '5') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '0')
+                    (data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Person 1 money'] == '1') & (data['Person 2 money'] == '3') & (data['Person 3 money'] == '1')
                 ].shape[0]
                 fourth = data[
-                    (data['Good A'] == '3') & (data['Good B'] == '2') & (data['Good C'] == '1') & (data['Person 1 money'] == '0') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '5')
+                    (data['Good A'] == '3') & (data['Good B'] == '2') & (data['Good C'] == '1') & (data['Person 1 money'] == '5') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '0')
                 ].shape[0]
                 fifth = data[
                     (data['Good A'] == '3') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Person 1 money'] == '5') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '0')
@@ -2881,16 +3021,17 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['order']['4th'].append(second)
                 self.metrics[f'q{question}']['order']['5th'].append(usw)
                 self.metrics[f'q{question}']['order']['Other'].append(others)
-                self.metrics[f'q{question}']['labels'] = ['IA', 'EF', '-', '-', 'USW', '-']
+                self.metrics[f'q{question}']['labels'] = [r'EQ$^*$'+'\nRMM\nPO', 'PO', 'EF\nPO', 'USW', '', '']
                 
                 other = 100 - (eq + ef + third + fourth + fifth)
-                self.metrics[f'q{question}']['options']['1st'].append(eq) 
-                self.metrics[f'q{question}']['options']['2nd'].append(ef)
-                self.metrics[f'q{question}']['options']['3rd'].append(third) 
-                self.metrics[f'q{question}']['options']['4th'].append(fourth)
-                self.metrics[f'q{question}']['options']['5th'].append(fifth)
-                self.metrics[f'q{question}']['options']['Other'].append(other)
-                self.metrics[f'q{question}']['option_labels'] = ['EQ\nRMM\nPO', 'EF\nPO', 'NA', 'NA', 'USW', 'Oth.']
+                if not humans:
+                    self.metrics[f'q{question}']['options']['1st'].append(eq) 
+                    self.metrics[f'q{question}']['options']['2nd'].append(ef)
+                    self.metrics[f'q{question}']['options']['3rd'].append(third) 
+                    self.metrics[f'q{question}']['options']['4th'].append(fourth)
+                    self.metrics[f'q{question}']['options']['5th'].append(fifth)
+                    self.metrics[f'q{question}']['options']['Other'].append(other)
+                    self.metrics[f'q{question}']['option_labels'] = [r'EQ$^*$'+'\nRMM\nPO', 'EF\nPO', 'PO', 'NA', 'USW', 'Oth.']
 
                 first = data[
                     (data['Good A'] == '2') & (data['Good B'] == '1') & (data['Good C'] == '3') & (data['Person 1 money'] == '5') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '0')
@@ -2918,17 +3059,6 @@ class OutputAnalyzer():
                     self.metrics[f'q{question}']['bads']['Other'].append(other)
                     self.metrics[f'q{question}']['ranges'] = ['10', '15', '20', '25', '30', 'Oth.']
                 
-                self.metrics[f'q{question}']['notions']['IA'].append(eq)
-                self.metrics[f'q{question}']['notions']['EF'].append(ef)
-                self.metrics[f'q{question}']['notions']['USW'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == '2') & (data['Good C'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        ((data['Good A'] == '1') & (data['Good B'] == '2') & (data['Good C'] == '3') & (data['Person 1 money'] == '0') & (data['Person 2 money'] == '0') & (data['Person 3 money'] == '5') |
-                        (data['Good A'] == '3') & (data['Good B'] == '2') & (data['Good C'] == '3'))
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(eq)
 
             elif question == 8:
                 best = data[
@@ -2955,13 +3085,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['order']['4th'].append(fourth)
                 self.metrics[f'q{question}']['order']['5th'].append(fifth) 
                 self.metrics[f'q{question}']['order']['Other'].append(other) 
-                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nPO', 'IA', '-', 'USW', '~IA', '-']
-                self.metrics[f'q{question}']['notions']['IA'].append(second)
-                self.metrics[f'q{question}']['notions']['EF'].append(best)
-                self.metrics[f'q{question}']['notions']['USW'].append(fourth)
-                self.metrics[f'q{question}']['notions']['PO'].append(best+fourth)
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(best)            
+                self.metrics[f'q{question}']['labels'] = ['EF', 'EF\nPO', r'EQ$^*$', 'USW', 'PO', '']         
 
             elif question == 9:
                 best = data[
@@ -2988,22 +3112,7 @@ class OutputAnalyzer():
                 self.metrics[f'q{question}']['order']['4th'].append(usw) 
                 self.metrics[f'q{question}']['order']['5th'].append(fifth) 
                 self.metrics[f'q{question}']['order']['Other'].append(other) 
-                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nPO', 'IA', 'EF', 'USW', 'PO', '-']
-                self.metrics[f'q{question}']['notions']['IA'].append(data[
-                        (data['Good A'] == 'You') & (data['Good B'] == '2') & (data['Good C'] == 'You') & (data['Good D'] == '3')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['EF'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == 'You') & (data['Good C'] == 'You') & (data['Good D'] == '2') |
-                        (data['Good A'] == '3') & (data['Good B'] == 'You') & (data['Good C'] == '0') & (data['Good D'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['USW'].append(0)
-                self.metrics[f'q{question}']['notions']['PO'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == 'You') & (data['Good C'] == 'You') & (data['Good D'] == '2')
-                    ].shape[0])
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(data[
-                        (data['Good A'] == '3') & (data['Good B'] == 'You') & (data['Good C'] == 'You') & (data['Good D'] == '2')
-                    ].shape[0])
+                self.metrics[f'q{question}']['labels'] = ['EF\nRMM\nPO', r'EQ$^*$', 'EF', 'USW', 'PO', '']
                 
                 total = 0
                 for key in self.metrics[f'q{question}']['allocations']:
@@ -3026,7 +3135,7 @@ class OutputAnalyzer():
                         self.metrics[f'q{question}']['allocations'][','.join([str(p) for p in payoff])][-1] += 1
                         total += 1
                 self.metrics[f'q{question}']['allocations']['Others'][-1] += (100-total)
-                self.metrics[f'q{question}']['alloc_labels'] = ['EF,RMM\nPO', 'EQ', 'EF', 'PO', 'USW', 'PO', '']
+                self.metrics[f'q{question}']['alloc_labels'] = [r'EQ$^*$', 'EF,RMM\nPO', 'EF', 'PO', 'USW', 'PO', '']
 
             elif question == 91:
                 total
@@ -3065,18 +3174,12 @@ class OutputAnalyzer():
                 ].shape[0]
                 others -= (eq + ef)
                 other = 100-eq-ef-others-second
-                self.metrics[f'q{question}']['order']['Best+EQ'].append(eq) 
-                self.metrics[f'q{question}']['order']['Best+EF'].append(ef)
-                self.metrics[f'q{question}']['order']['Best+Other'].append(others) 
-                self.metrics[f'q{question}']['order']['2nd'].append(second) 
-                self.metrics[f'q{question}']['order']['Other'].append(other) 
-                self.metrics[f'q{question}']['labels'] = ['IA', 'EF', '-', '-', '-']
-                self.metrics[f'q{question}']['notions']['IA'].append(eq)
-                self.metrics[f'q{question}']['notions']['USW'].append(0)
-                self.metrics[f'q{question}']['notions']['EF'].append(ef)
-                self.metrics[f'q{question}']['notions']['PO'].append(0)
-                self.metrics[f'q{question}']['notions']['RMM'].append(0)
-                self.metrics[f'q{question}']['notions']['MAX'].append(0)                
+                self.metrics[f'q{question}']['order']['1st'].append(eq) 
+                self.metrics[f'q{question}']['order']['2nd'].append(ef)
+                self.metrics[f'q{question}']['order']['3rd'].append(others) 
+                self.metrics[f'q{question}']['order']['4th'].append(second) 
+                self.metrics[f'q{question}']['order']['5th'].append(other) 
+                self.metrics[f'q{question}']['labels'] = ['PO', r'EQ$^*$', 'USW', r'EQ$^*$'+'\nRMM\nPO', r'EQ$^*$'+'EF', '']             
 
     def plot_comparion(self, question=1, variation="valuation", prefix_string = ''):
         num_options = len(self.variation_dict[variation])
@@ -3114,18 +3217,12 @@ class OutputAnalyzer():
             figsize=(12,6), 
             title_fontsize = 18, 
             labels_fontsize=16,
-            ticks_fontsize=14,
+            xticks_fontsize=14,
+            yticks_fontsize=14,
             graph_labels_fontsize=12,
             legend_fontsize=12,
             question_ordering = {
-                1: [0,1,2,3,4],
-                2: [0,1,2,3,4],
-                3: [0,1,2,3,4],
-                4: [0,1,2,3,4],
-                5: [0,1,2,3,4],
-                6: [0,1,2,3,4],
-                7: [0,1,2,3,4],
-                9: [0,1,2,3,4],
+                o: [0,1,2,3,4,5] for o in range (1,10)
             },
             humans=True,
             legend_pos=(0.97, 0.8),
@@ -3135,6 +3232,7 @@ class OutputAnalyzer():
         f, axes = plt.subplots(nrows=1, ncols=len(questions), sharey=True, figsize=figsize)
         for j, question in enumerate(questions):
             self.get_comparison(question, option, humans=humans)
+            print(question, question_ordering[question])
             ques_index = [self.index[ind] for ind in question_ordering[question]]
             new_order = {}
             for key in self.metrics[f'q{question}']['order']:
@@ -3153,7 +3251,7 @@ class OutputAnalyzer():
             qtext = '{'+str(question)+'}'
             ax.set_xlabel(fr'$I_{qtext}$', fontsize=labels_fontsize)
             ax.set_ylabel('Percentage of Responses', fontsize=labels_fontsize)
-            ax.set_yticklabels([t*20 for t in range(6)], fontsize=ticks_fontsize)
+            ax.set_yticklabels([t*20 for t in range(6)], fontsize=yticks_fontsize)
             # print(f"labels = {self.metrics[f'q{question}']['labels']}")
             for i, c in enumerate(ax.containers):
                 labels = []
@@ -3161,12 +3259,78 @@ class OutputAnalyzer():
                 for k in question_ordering[question]:
                     labels.append(self.metrics[f'q{question}']['labels'][i] if list(self.metrics[f'q{question}']['order'].values())[i][k] > lim else '')
                 ax.bar_label(c, labels=labels, label_type='center', fontsize=graph_labels_fontsize)
-                ax.set_xticklabels(ques_index, fontsize=ticks_fontsize, rotation=45)
+                ax.set_xticklabels(ques_index, fontsize=xticks_fontsize, rotation=45)
             
             handles, labels = ax.get_legend_handles_labels()
                 
 
-        if common_legend: f.legend(handles, labels, bbox_to_anchor=legend_pos, fontsize=legend_fontsize)
+        if common_legend: f.legend(handles, labels, bbox_to_anchor=legend_pos, fontsize=legend_fontsize, ncol=6)
+
+        # f.supxlabel("Top-k allocations", y=-0.14, fontsize=title_fontsize-2) 
+        # f.suptitle(f"{title}", fontsize=title_fontsize)
+        title_name = '_'.join(title.lower().split(' '))
+        title_name = ''.join(letter for letter in title_name if letter.isalnum() or letter == '_')
+        f.savefig(f"../Graphs/{title_name}.pdf", bbox_inches="tight")
+
+    def plot_stacked_graph2(
+            self, 
+            questions=[1], 
+            option='word', 
+            title = 'Comparison between LLM and Human Responses', 
+            figsize=(12,6), 
+            title_fontsize = 18, 
+            labels_fontsize=16,
+            xticks_fontsize=14,
+            yticks_fontsize=14,
+            graph_labels_fontsize=12,
+            legend_fontsize=12,
+            humans=True,
+            legend_pos=(0.97, 0.8),
+            common_legend = True,
+
+        ):
+        keys = ['1st', '2nd', '3rd', '4th', '5th', 'Other']
+        f, axes = plt.subplots(nrows=1, ncols=len(questions), sharey=True, figsize=figsize)
+        for j, question in enumerate(questions):
+            self.get_comparison(question, option, humans=humans)
+            # print(f"new_order = {new_order}\nindex={ques_index}")
+
+            with open('notionsq.pickle', 'rb') as handle:
+                notions, stored_labels = pkl.load(handle)
+            
+            new_order = {}
+
+            for key in self.metrics[f'q{question}']['order']:
+                new_order[key] = [self.metrics[f'q{question}']['order'][key][0]] + notions[question][key]          
+
+            df = pd.DataFrame(data=new_order, index=self.index)
+            ax = df.plot(
+                kind="bar", 
+                ax=axes[j], 
+                stacked=True, 
+                rot=0, 
+                width=0.85, 
+                legend=False, 
+                color=['limegreen', 'palegreen', 'yellow', 'gold', 'orange', 'orangered'],
+            ) 
+            qtext = '{'+str(question)+'}'
+            ax.set_xlabel(fr'$I_{qtext}$', fontsize=labels_fontsize)
+            ax.set_ylabel('Percentage of Responses', fontsize=labels_fontsize)
+            ax.set_yticklabels([t*20 for t in range(6)], fontsize=yticks_fontsize)
+            # print(f"labels = {self.metrics[f'q{question}']['labels']}")
+            for i, c in enumerate(ax.containers):
+                lim = 12 if self.metrics[f'q{question}']['labels'][i].count('\n') < 2 else 15
+                labels = [self.metrics[f'q{question}']['labels'][i] if list(self.metrics[f'q{question}']['order'].values())[i][0] > lim else '']
+                for k in range(4):
+                    lim = 12 if stored_labels[question][keys[i]][k].count('\n') < 2 else 15
+                    labels.append(stored_labels[question][keys[i]][k] if notions[question][keys[i]][k] > lim else '')
+                ax.bar_label(c, labels=labels, label_type='center', fontsize=graph_labels_fontsize)
+                ax.set_xticklabels(self.index, fontsize=xticks_fontsize, rotation=45)
+            
+            handles, labels = ax.get_legend_handles_labels()
+                
+
+        if common_legend: f.legend(handles, labels, bbox_to_anchor=legend_pos, fontsize=legend_fontsize, ncol=len(questions))
 
         # f.supxlabel("Top-k allocations", y=-0.14, fontsize=title_fontsize-2) 
         # f.suptitle(f"{title}", fontsize=title_fontsize)
@@ -3192,6 +3356,8 @@ class OutputAnalyzer():
     def pairwise_iou(self, questions=[1], option="word", prefix_string = '', humans=True):
         vector_dict = {}
         similarity = {}
+        dps = []
+        ious = []
         for i, question in enumerate(questions):
             print('----------------------------------------------------------')
             print(question)
@@ -3208,6 +3374,8 @@ class OutputAnalyzer():
                     # print(vector_dict[question][self.model_paths[j]], vector_dict[question][self.model_paths[k]])
                     chi = self.get_iou(vector_dict[question][self.model_paths[k]], vector_dict[question][self.model_paths[j]])
                     dp = self.get_dp(vector_dict[question][self.model_paths[k]], vector_dict[question][self.model_paths[j]])
+                    dps.append(dp)
+                    ious.append(chi)
                     similarity[question][(self.model_paths[j],self.model_paths[k])] = (chi, dp)
                     print(question, self.model_paths[j], self.model_paths[k], vector_dict[question][self.model_paths[j]], vector_dict[question][self.model_paths[k]], chi, dp)
 
@@ -3223,6 +3391,9 @@ class OutputAnalyzer():
                     print(v1, v2, stat, pval)
 
             if humans: self.model_paths = self.model_paths[1:]
+
+        print("DP SCORE: ", round(sum(dps)/len(dps), 4))
+        print("IOU SCORE: ", round(sum(ious)/len(ious), 4))
 
         return similarity
     
@@ -3395,7 +3566,7 @@ class OutputAnalyzer():
 
         human_data = {
             6: [32.6, 28.1, 18.4, 2.6, 7.9, 0.4, 10],
-            9: [34.1, 30, 17.6, 2.2, 4.1, 0, 12]
+            9: [30, 34.1, 17.6, 2.2, 4.1, 0, 12]
         }
 
         for j, question in enumerate(questions):
@@ -3456,7 +3627,11 @@ class OutputAnalyzer():
                 handles, labels = ax.get_legend_handles_labels()
 
         if common_legend:
-            f.legend(handles, labels, loc='upper right', fontsize=legend_fontsize, bbox_to_anchor=legend_pos)
+            custom_lines = [Line2D([0], [0], color='limegreen', lw=4),
+                Line2D([0], [0], color='palegreen', lw=4),
+                Line2D([0], [0], color='yellow', lw=4)]
+
+            f.legend(custom_lines, ['1st', '2nd', '3rd'], loc='upper right', fontsize=legend_fontsize, bbox_to_anchor=legend_pos)
 
         # f.supxlabel("Top-k allocations", y=-0.14, fontsize=title_fontsize-2) 
         # f.suptitle(title, fontsize=title_fontsize)
@@ -3496,7 +3671,8 @@ class OutputAnalyzer():
             title_fontsize = 18, 
             xlabels_fontsize=16,
             ylabels_fontsize=16,
-            ticks_fontsize=14,
+            xticks_fontsize=14,
+            yticks_fontsize=14,
             graph_labels_fontsize=12,
             yticks = None,
             xticks = True,
@@ -3510,6 +3686,8 @@ class OutputAnalyzer():
             }, 
             option_type = 'fair'
         ):
+        values = {}
+
         self.index = self.index[1:]
         f, axes = plt.subplots(nrows=1, ncols=len(questions), sharey=True, figsize=figsize)
         if option_type == 'fair':
@@ -3528,24 +3706,38 @@ class OutputAnalyzer():
             qtext = '{'+str(question)+'}' if question != 19 else '{0}'
             ax.set_xlabel(fr'$I_{qtext}$', fontsize=xlabels_fontsize)
             ax.set_ylabel('Percentage of Responses', fontsize=ylabels_fontsize)
-            ax.set_yticklabels([t*20 for t in range(6)], fontsize=ticks_fontsize)
+            ax.set_yticklabels([t*20 for t in range(6)], fontsize=yticks_fontsize)
             if yticks:
                 ax.set_yticks([t*yticks[1] for t in range(yticks[0])])
-                ax.set_yticklabels([t*yticks[1] for t in range(yticks[0])], fontsize=ticks_fontsize)
+                ax.set_yticklabels([t*yticks[1] for t in range(yticks[0])], fontsize=yticks_fontsize)
             for i, c in enumerate(ax.containers):
                 labels = []
                 for k in range(len(self.model_paths)):
                     # print(question, self.index[k], list(self.metrics[f'q{question}'][source].values())[i][k])
-                    lim = 10 if self.metrics[f'q{question}'][label_list][i].count('\n') < 1 else 15
+                    lim = 10 if self.metrics[f'q{question}'][label_list][i].count('\n') < 1 else 20
                     graph_label =  f"{self.metrics[f'q{question}'][label_list][i]}" if list(self.metrics[f'q{question}'][source].values())[i][k] > lim else ''
-                    
+                    print(self.index[k], list(self.metrics[f'q{question}'][source].values())[i][k], self.metrics[f'q{question}'][label_list][i])
+                    notions = self.metrics[f'q{question}'][label_list][i].split()
+                    if self.index[k] not in values:
+                        values[self.index[k]] = {}
+                    if 'PO' not in values[self.index[k]]:
+                        values[self.index[k]]['PO'] = [0]*len(questions)
+                    for notion in notions:
+                        if notion not in values[self.index[k]]:
+                            values[self.index[k]][notion] = [0]*len(questions)
+                        values[self.index[k]][notion][j] += list(self.metrics[f'q{question}'][source].values())[i][k]
+                        if notion == "USW":
+                            values[self.index[k]]['PO'][j] += list(self.metrics[f'q{question}'][source].values())[i][k]
+                    # labels.append(list(self.metrics[f'q{question}'][source].values())[i][k])
                     labels.append(graph_label)
                 ax.bar_label(c, labels=labels, label_type='center', fontsize=graph_labels_fontsize)
                 if xticks: 
-                    ax.set_xticklabels(self.index, rotation=45, fontsize=ticks_fontsize)
+                    ax.set_xticklabels(self.index, rotation=45, fontsize=xticks_fontsize)
                 else:
                     ax.set_xticklabels(['']*len(self.index))
+                print("------------------------------")
 
+        print(values)
         # f.suptitle(title, fontsize=title_fontsize)
         title_name = '_'.join(title.lower().split(' '))
         title_name = ''.join(letter for letter in title_name if letter.isalnum() or letter == '_')
@@ -3771,7 +3963,24 @@ class OutputAnalyzer():
 
         return results
                     
-
+    def get_computation_performance(self):
+        combined = {}
+        for i, model_path in enumerate(self.model_paths):
+            folder = f'results/{model_path[0]}/repeat/'
+            questions = os.listdir(folder)
+            combined[self.index[i+1]] = defaultdict(list)
+            for question in questions:
+                if 'DS' in question: continue
+                notions = os.listdir(f"{folder}/{question}/")
+                for notion in notions:
+                    result = pd.read_csv(f"{folder}/{question}/{notion}")
+                    score = sum(result['Correctness'])
+                    combined[self.index[i+1]][notion].append(score)
+                    print(self.index[i+1], question, notion, score)
+        print("---------------")
+        for model in combined:
+            for notion in combined[model]:
+                print(model, notion, round(sum(combined[model][notion])/len(combined[model][notion]), 2))
 
 
 
